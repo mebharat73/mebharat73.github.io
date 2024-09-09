@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm 
-from django.http import HttpResponse
+#from django.contrib.auth.forms import UserCreationForm 
+#from django.http import HttpResponse
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
+from .models import Profile
+from django.contrib.auth.views import logout_then_login
 
 
 def home(request):
@@ -15,6 +17,7 @@ def login_view(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
+        remember_me = request.POST.get('remember_me')
 
         try:
             user = authenticate(request, username=username, password=password)
@@ -25,6 +28,8 @@ def login_view(request):
                 return render(request, 'main/login.html', {'error':'Invalid parameter'})
             else:
                 login(request, user)
+                if remember_me:
+                    request.session.set_expiry(7*24*60*60)
                 return redirect("home_page")
     else:
         return render(request, 'main/login.html')
@@ -57,8 +62,7 @@ def signup_view(request):
 
                 if profile_pic:
                     Profile.objects.create(profile_pic=profile_pic, user=user)
-                    user.save()
-                    return redirect('login_page')
+                return redirect('login_page')
     else:
         return render(request, 'main/signup.html')
 
@@ -71,6 +75,7 @@ def contact_view(request):
     return render (request, 'main/contact.html')
 
 #...................................................................................................................................
+
 
 def logout_view(request):
     logout(request)
