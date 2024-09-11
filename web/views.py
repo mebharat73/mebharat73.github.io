@@ -3,12 +3,50 @@ from django.shortcuts import render, redirect
 #from django.http import HttpResponse
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
-from .models import Profile
-from django.contrib.auth.views import logout_then_login
+from .models import Profile, Post
+from .forms import CreateBlogForm, CategoryForm
+
+
+def add_category(request):
+    if request.method == "POST":
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("home_page")
+        else:
+            return render(request, "main/add_category.html", {'form':form})
+        
+    else:
+        form = CategoryForm()
+        return render(request, "main/add_category.html", {'form':form})
+
+
+def create_post(request):
+    if request.method == "POST":
+        form = CreateBlogForm(request.POST)
+        if form.is_valid():
+            form.save(author = request.user)
+            return redirect("home_page")
+        
+        else:
+            return render(request, "main/create_blog.html", {'form':form})
+        
+    else:
+        form = CreateBlogForm()
+        return render(request, "main/create_blog.html", {'form':form})
+
 
 
 def home(request):
-    return render(request,'main/home.html')
+    latest_blogs = Post.objects.all().order_by('-created_at')
+
+    context={
+        'blogs':latest_blogs
+    }
+    return render(request,'main/home.html', context)
+
+def post_view(request):
+    return render(request, 'main/post.html')
 
 
 #............................................................................................................................

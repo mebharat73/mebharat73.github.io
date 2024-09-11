@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile
+from .models import Profile, Post, Tag, Comment, Likes, Posttag
 from django.contrib.auth.models import User
 
 class ProfileInline(admin.TabularInline):
@@ -15,6 +15,11 @@ class UserAdmin(admin.ModelAdmin):
 admin.site.unregister(User)
 admin.site.register(User,UserAdmin)
 admin.site.register (Profile)
+admin.site.register (Post)
+admin.site.register (Tag)
+admin.site.register (Comment)
+admin.site.register (Likes)
+admin.site.register (Posttag)
 
 
 
