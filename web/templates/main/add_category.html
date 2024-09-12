@@ -5,13 +5,8 @@
 
 {% block main_content %}
     <form action="" method="post">
-        {{ form.errors }}
+        {{ form.error }}
         {% csrf_token %} <br><br><br><br>
-
-
-
-
-
         {{ form }}
         <button type="submit">Add</button>
     </form>

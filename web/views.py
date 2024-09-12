@@ -22,10 +22,12 @@ def add_category(request):
 
 
 def create_post(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         form = CreateBlogForm(request.POST)
         if form.is_valid():
+            
             form.save(author = request.user)
+    
             return redirect("home_page")
         
         else:
