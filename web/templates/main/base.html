@@ -61,12 +61,6 @@
                         <a href="{% url 'create_post_page' %}">Create Blog</a>
                     </li>
                     <li>
-                        <a href="{% url 'post_page' %}">Post</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'contact_page' %}">Contact</a>
-                    </li>       
-                    <li>
                     {% if request.user.is_authenticated %}
                         <a href="{% url 'logout_page' %}">logout</a>
                     {% else %}
@@ -84,21 +78,9 @@
         <!-- /.container -->
     </nav>
     <!-- Page Header -->
-    <!-- Set your background image for this header on the line below. -->
-    <!-- it's the part  of <header class="intro-header" style="background-image:  url('{% static 'main/image/home-bg.jpg' %}')">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <div class="site-heading">
-                        <h1>Clean Blog</h1>
-                        <hr class="small">
-                        <span class="subheading">A Clean Blog Theme by Start Bootstrap</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>                
--->
+
+
+
     {% block main_content %}
 
     {% endblock main_content %}
@@ -136,7 +118,7 @@
                             </a>
                         </li>
                     </ul>
-                    <p class="copyright text-muted">Copyright &copy; Your Website 2016</p>
+                    <p class="copyright text-muted">Copyright &copy; Your Website 2024</p>
                 </div>
             </div>
         </div>
