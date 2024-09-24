@@ -1,5 +1,5 @@
-from django.urls import path, include
-from django.contrib import admin
+from django.urls import path
+from django.views.decorators.http import require_http_methods
 from .import views
 
 
@@ -12,9 +12,11 @@ urlpatterns= [
     path('accounts/post/', views.post_view, name="post_page"),
     path('blog/category/add/', views.add_category, name="add_category_page"),
     path('blog/create/', views.create_post, name="create_post_page"),
-    path('blog/<int:blog_id>/', views.blog_detail, name="blog_detail_page"),
-    path('comment/', views.add_comment, name="add_comment"),
-    path('blog/like/<int:blog_id>/', views.add_like, name="add_like"),
-    path('summernote/', include('django_summernote.urls')),
+    path('blog/<int:blog_id>/', views.blog_detail, name='blog_detail'),
+    path('comment', views.add_comment, name="add_comment"),
+    path('blog/<int:blog_id>/like/', views.add_like, name='add_like'),
+
+
+    path('comment/<int:comment_id>/like/', views.add_like_comment, name='add_like_comment'),
     path('', views.home, name="home_page"),
 ]

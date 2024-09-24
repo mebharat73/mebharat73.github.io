@@ -26,9 +26,9 @@
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
             {% for blog in page_obj.object_list %}
                 <div class="post-preview">
-                    <a href="{% url 'blog_detail_page' blog.id %}">
+                    <a href="{% url 'blog_detail' blog.id %}">
                         <h2 class="post-title">{{ blog.title }}</h2>
-                        <h3 class="post-subtitle">{{ blog.content|truncatechars:100|safe }}</h3>
+                        <h3 class="post-subtitle">{{ blog.content|striptags|truncatechars:100 }}</h3>
                     </a>
                     <p class="post-meta">Posted by <a href="#">{{ blog.author }}</a> on {{ blog.created_at}}</p>
                 </div>

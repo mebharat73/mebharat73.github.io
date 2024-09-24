@@ -20,41 +20,47 @@
     <title>Django Blog | login</title>
   </head>
   <body>
-  
+
+    
+  <body style="background-image: url('{% static 'main/image/deep-dusk-003.jpg' %}');">
 
   <div class="d-lg-flex half">
-    <div class="bg order-1 order-md-2" style="background-image: url('{% static 'main/image/Bharat_Photo.jpg' %}');"></div>
+    <div class="bg order-1 order-md-2" ></div>
     <div class="contents order-2 order-md-1">
 
       <div class="container">
         <div class="row align-items-center justify-content-center">
           <div class="col-md-7">
-            <h3>Login to <strong>Django Blog</strong></h3>
+            <!--<h3><span style="font-weight: bold; color: #FFFFFF;">Login to</span> <strong>Django Blog</strong></h3>-->
+            <h3><span style="font-weight: bold; color: #FFFFFF;">Login to</span> <span style="font-weight: bold; color: #FFFFFF;"><strong>Django Blog</strong></span></h3>
             <p class="mb-4">Enter your Credentials</p>
             <form action="#" method="post">
               {% csrf_token %}
               {{ error|default:'' }}
-              <div class="form-group first">
-                <label for="username">Username</label>
-                <input type="text" class="form-control" placeholder="Your Name" id="username" name="username" name="username">
+              <div class="form-group text-center">
+                <label for="username" style="color: #FFFFFF;">Username</label>
+                
+                <input type="text" class="form-control" placeholder="Your Name" id="username" name="username" style="padding-left: 10px;>
               </div>
-              <div class="form-group last mb-3">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" placeholder="Your Password" id="password" name="password" name="password">
+              <div class="form-group text-center">
+                <label for="password" style="color: #FFFFFF;">Password</label>
+                <input type="password" class="form-control" placeholder="Your Password" id="password" name="password" style="padding-left: 10px;">
               </div>
               
               <div class="d-flex mb-5 align-items-center">
-                <label class="control control--checkbox mb-0"><span class="caption">Remember me</span>
+                <label class="control control--checkbox mb-0"><span class="caption" style="color: #FFFFFF;">Remember me</span>
                   <input type="checkbox" name="remember_me"/>
                   <div class="control__indicator"></div>
                 </label>
-                <span class="ml-auto"><a href="#" class="forgot-pass">Forgot Password</a></span> 
+                <span class="ml-auto"><a href="#" class="forgot-pass" style="color: #FFFFFF;">Forgot Password</a></span> 
               </div>
 
               <input type="submit" value="Log In" class="btn btn-block btn-primary">
 
+              <a href="{% url 'home_page' %}" class="btn btn-block btn-success text-center" style="margin-top: 1.0rem; color: red;">Back to home</a>
+
             </form>
-            <a href="{% url 'home_page' %}" class="btn btn-block btn-success" style="margin-top: 1rem; text-decoration: none; color: white;"> Back to home</a>
+            
           </div>
         </div>
       </div>
