@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.db import models
 
 
 
@@ -34,6 +37,10 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")  
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="posts")
+    likes_count = models.IntegerField(default=0)
+    @property
+    def likes_count(self):
+        return Like.objects.filter(content_type=ContentType.objects.get_for_model(self), object_id=self.id).count()
     
 #........................................................................................................................................    
 
@@ -43,18 +50,22 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")  
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
-
+    likes_count = models.IntegerField(default=0)
+    @property
+    def likes_count(self):
+        return Like.objects.filter(content_type=ContentType.objects.get_for_model(self), object_id=self.id).count()
 #.........................................................................................................................................    
-   
+
 
 
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, blank=True)
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True, blank=True)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+
     class Meta:
-        verbose_name_plural = "Like"
-        unique_together = ('user', 'post'), ('user', 'comment')
+        unique_together = ('user', 'content_type', 'object_id')
 
 #...........................................................................................................................................

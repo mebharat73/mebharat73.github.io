@@ -7,33 +7,51 @@ from .forms import CreateBlogForm, CategoryForm, CommentForm
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_GET
 from django.shortcuts import get_object_or_404
+from django.contrib.contenttypes.models import ContentType
+from django.http import JsonResponse
 
-@require_GET
+
 @login_required
-def add_like_comment(request, comment_id):
-    comment = get_object_or_404(Comment, id=comment_id)
-    post = comment.post  # Get the post associated with the comment
-    if Like.objects.filter(user=request.user, post=post, comment=comment).exists():
-        # If the user has already liked the comment, delete the existing like
-        Like.objects.filter(user=request.user, post=post, comment=comment).delete()
-    else:
-        # If the user hasn't liked the comment, create a new like
-        Like.objects.create(user=request.user, post=post, comment=comment)
-    return redirect("blog_detail", blog_id=comment.post.id)
+def like_unlike(request):
+    print("like_unlike view called")
+    obj_id = request.POST.get("obj_id")
+    obj_type = request.POST.get("obj_type")
 
+    # Get the content object
+    if obj_type == 'post':
+        content_object = get_object_or_404(Post, id=obj_id)
+    elif obj_type == 'comment':
+        content_object = get_object_or_404(Comment, id=obj_id)
 
+    # Check if a like already exists for the content object
+    like, created = Like.objects.get_or_create(user=request.user, content_type=ContentType.objects.get_for_model(content_object), object_id=obj_id)
 
-
-@require_GET
-@login_required
-def add_like(request, blog_id):
-    blog = get_object_or_404(Post, id=blog_id)
-    like, created = Like.objects.get_or_create(user=request.user, post=blog)
     if not created:
         like.delete()
-    return redirect("blog_detail", blog_id=blog_id)
+        liked = False
+    else:
+        liked = True
+
+    # Update the likes count property
+    total_likes = Like.objects.filter(content_type=ContentType.objects.get_for_model(content_object), object_id=obj_id).count()
+
+    # Return the updated likes count
+    return JsonResponse({"likes_count": total_likes, "liked": liked, "obj_type": obj_type, "obj_id": obj_id})
+
+
+
+def blog_detail(request, blog_id):
+    blog = get_object_or_404(Post, id=blog_id)
+    
+    context = {
+        'blog': blog,
+        'content': blog.content,
+        'comment_form': CommentForm(),
+        'comments': blog.comments.all()
+    }
+    return render(request, 'main/blog_detail.html', context)
+
 
 @require_POST
 @login_required
@@ -56,18 +74,6 @@ def add_comment(request):
             'comments': comments
         }
         return render(request, 'main/blog_detail.html', context)
-    
-
-def blog_detail(request, blog_id):
-    blog = get_object_or_404(Post, id=blog_id)
-    
-    context = {
-        'blog': blog,
-        'content': blog.content,
-        'comment_form': CommentForm(),
-        'comments': blog.comments.all()
-    }
-    return render(request, 'main/blog_detail.html', context)
 
 
 
@@ -197,4 +203,7 @@ def logout_view(request):
     logout(request)
     return redirect("home_page")
 
-#....................................................................
+#....................................................................jSon type like and unlike
+
+
+
