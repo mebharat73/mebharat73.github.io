@@ -81,7 +81,10 @@ function getCookie(name) {
 }
 
 $(document).ready(function() {
-  $(".like-btn").click(function() {
+  console.log("JavaScript code executed");
+  $(".like-btn").click(async function(event) {
+      event.preventDefault();
+      console.log("Like button clicked");
       var obj_id = $(this).data("obj-id");
       var obj_type = $(this).data("obj-type");
       console.log("{% url 'like_unlike' %}");
@@ -89,35 +92,36 @@ $(document).ready(function() {
           "obj_id": obj_id,
           "obj_type": obj_type
       });
-      $.ajax({
-          type: "POST",
-          url: "{% url 'like_unlike' %}",
-          data: {
-              "obj_id": obj_id,
-              "obj_type": obj_type
-          },
-          headers: {
-              'X-CSRFToken': csrftoken
-          },
-          success: function(data) {
-              if (data.liked) {
-                  $(this).text("Unlike (" + data.likes_count + ")");
-              } else {
-                  $(this).text("Like (" + data.likes_count + ")");
-              }
-              if (data.obj_type == "post") {
-                  $("#likes-count-post").text("Likes: " + data.likes_count);
-              } else {
-                  $("#likes-count-" + data.obj_id).text("Likes: " + data.likes_count);
-              }
-          },
-          error: function(xhr, errmsg, err) {
-              console.log(xhr.status + ": " + xhr.responseText);
-              alert("Error liking/unliking: " + errmsg);
+      try {
+          const response = await $.ajax({
+              type: "POST",
+              url: "{% url 'like_unlike' %}",
+              data: {
+                  "obj_id": obj_id,
+                  "obj_type": obj_type
+              },
+              headers: {
+                  'X-CSRFToken': csrftoken
+              },
+              dataType: "json"
+          });
+          console.log("AJAX request successful");
+          if (response.liked) {
+              $(this).text("Unlike");
+          } else {
+              $(this).text("Like");
           }
-      });
+          if (response.obj_type == "post") {
+              $("#likes-count-post").text("Likes: " + response.likes_count);
+          } else {
+              $("#likes-count-" + response.obj_id).text("Likes: " + response.likes_count);
+          }
+      } catch (error) {
+          console.log("AJAX request failed");
+          console.log(error);
+          alert("Error liking/unliking: " + error);
+      }
   });
 });
 </script>
-
 {% endblock %}

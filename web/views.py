@@ -10,9 +10,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.http import JsonResponse
+from rest_framework.decorators import api_view
 
 
 @login_required
+@api_view(['POST'])
 def like_unlike(request):
     print("like_unlike view called")
     obj_id = request.POST.get("obj_id")
@@ -36,8 +38,13 @@ def like_unlike(request):
     # Update the likes count property
     total_likes = Like.objects.filter(content_type=ContentType.objects.get_for_model(content_object), object_id=obj_id).count()
 
-    # Return the updated likes count
-    return JsonResponse({"likes_count": total_likes, "liked": liked, "obj_type": obj_type, "obj_id": obj_id})
+    # Return the updated likes count and the link to the like button as a JSON response
+    if liked:
+        link = "Unlike"
+    else:
+        link = "Like"
+    return JsonResponse({"likes_count": total_likes, "link": link, "obj_type": obj_type, "obj_id": obj_id})
+
 
 
 

@@ -14,6 +14,5 @@ urlpatterns= [
     path('blog/<int:blog_id>/', views.blog_detail, name='blog_detail'),
     path('comment', views.add_comment, name="add_comment"),
     path('like_unlike/', views.like_unlike, name='like_unlike'),
-
     path('', views.home, name="home_page"),
 ]
