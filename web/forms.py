@@ -2,7 +2,7 @@ from .models import Post, Comment
 from django import forms 
 from .models import Category
 from django_summernote.widgets import SummernoteWidget
-
+from .models import CommentReply
 
 
 
@@ -44,5 +44,19 @@ class CommentForm(forms.ModelForm):
 
 
 
-        
+
+
+class CommentReplyForm(forms.ModelForm):
+    
+    class Meta:
+        model = CommentReply
+        fields = ['content']
+
+    def save(self, commit=True, **kwargs):
+        reply = super().save(commit=False)
+        reply.author = kwargs.get('replier')
+        reply.comment = kwargs.get('comment')
+        if commit:
+            reply.save()
+        return reply
     

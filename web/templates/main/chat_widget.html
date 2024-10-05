@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat with us</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        #chat-container {
+            width: 380px;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #chat-header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 0px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            margin-top: -20px; /* Add this line */
+        }
+
+        #chat-messages {
+            padding: 1px;
+            height: 200px;
+            overflow-y: scroll;
+        }
+
+        #message-input {
+            width: calc(90% - 70px);
+            padding: 0.5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #send-button {
+            width: 70px;
+            padding: 0.3px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .message {
+            margin-bottom: 5px; /* Reduced margin */
+            padding: 0px; /* Reduced padding */
+            border-radius: 5px;
+            max-width: 110%; /* Added max-width */
+        }
+
+        .sent {
+            background-color: #e2f0cb;
+            text-align: right;
+            float: right;
+            clear: both;
+        }
+
+        .received {
+            background-color: #f0f0f0;
+            text-align: left;
+            float: left;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-header">
+            <h2>Chat with us</h2>
+        </div>
+        <div id="chat-messages">
+
+        </div>
+        <div>
+
+            <input id="message-input" type="text" placeholder="Type your message here...">
+            <input id="receiver-id" type="hidden" value="{{ receiver_id }}">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#send-button').click(function() {
+                var messageText = $('#message-input').val();
+                var receiverId = $('#receiver-id').val();
+        
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'send_message' %}',
+                    data: {
+                        'message': messageText,
+                        'receiver_id': receiverId
+                    },
+                    success: function() {
+                        $('#message-input').val('');
+                    }
+                });
+            });
+        
+
+            $('#message-input').keypress(function(e) {
+                if (e.which === 13) {  // Enter key
+                    e.preventDefault();
+                    var messageText = $('#message-input').val().trim();
+                    if (messageText !== "") {
+                        sendMessage(messageText);
+                        $('#message-input').val('');
+                    }
+                }
+            });
+
+            function sendMessage(message) {
+                var messageElement = $('<div class="message sent">' + message + '</div>');
+                $('#chat-messages').append(messageElement);
+                $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+
+                // Here you would typically send the message to your backend
+                // using AJAX or a similar technique. 
+            }
+
+            // Function to receive messages (simulated for demonstration)
+            function receiveMessage(message) {
+                var messageElement = $('<div class="message received">' + message + '</div>');
+                $('#chat-messages').append(messageElement);
+                $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+            }
+
+            // Simulate receiving a message after a delay
+            setTimeout(function() {
+                receiveMessage('Hello! How can we help you today?');
+            }, 1000); 
+        });
+    </script>
+</body>
+</html>

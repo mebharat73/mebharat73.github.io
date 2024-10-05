@@ -4,7 +4,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models
 
-
+class Message(models.Model):
+    text = models.TextField()
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages', null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
 
 class Profile(models.Model):
@@ -24,6 +28,8 @@ class Category(models.Model):
     description = models.TextField(blank=True)
     class Meta:
         verbose_name_plural = "Category"
+    def __str__(self):
+        return self.name
 
    
     
@@ -37,7 +43,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")  
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="posts")
-    likes_count = models.IntegerField(default=0)
+    #likes_count = models.IntegerField(default=0)
     @property
     def likes_count(self):
         return Like.objects.filter(content_type=ContentType.objects.get_for_model(self), object_id=self.id).count()
@@ -50,10 +56,12 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")  
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
-    likes_count = models.IntegerField(default=0)
+    #likes_count = models.IntegerField(default=0)
     @property
     def likes_count(self):
         return Like.objects.filter(content_type=ContentType.objects.get_for_model(self), object_id=self.id).count()
+    
+    
 #.........................................................................................................................................    
 
 
@@ -67,5 +75,13 @@ class Like(models.Model):
 
     class Meta:
         unique_together = ('user', 'content_type', 'object_id')
-
+    def __str__(self):
+        return self.content_type
 #...........................................................................................................................................
+
+class CommentReply(models.Model):
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)

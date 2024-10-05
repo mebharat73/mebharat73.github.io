@@ -7,17 +7,17 @@
 {% block main_content %}
 <!-- Set your background image for this header on the line below. -->
 <header class="intro-header" style="background-image:  url('{% static 'main/image/home-bg.jpg' %}'); background-size: cover; background-position:center; height: 65vh;">
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <div class="site-heading">
-                <h1>Clean Blog</h1>
-                <hr class="small">
-                <span class="subheading">A Clean Blog Theme by Start Bootstrap</span>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading">
+                    <h1>Blog page</h1>
+                    <hr class="small">
+                    <span class="subheading">Blog website presented by Bharat karki</span>
+                </div>
             </div>
         </div>
-     </div>
-</div>
+    </div>
 </header>          
     
 <!-- Main Content -->
@@ -32,7 +32,7 @@
                     </a>
                     <p class="post-meta">Posted by <a href="#">{{ blog.author }}</a> on {{ blog.created_at}}</p>
                 </div>
-                <hr />
+                <hr>
             {% endfor %}
 
 
@@ -41,17 +41,19 @@
             <ul class="pager">
                 {% if page_obj.has_next %}
                 <li class="next">
-                    <a href="?page={{page_obj.next_page_number}}">Older Posts &rarr;</a>
+                    <a href="?page={{page_obj.next_page_number}}" class="btn btn-default btn-xs btn-block border border-secondary border-resize">Older Posts &rarr;</a>
                 </li>
                 {% endif %}
                 {% if page_obj.has_previous %}
-                <li class="next">
-                    <a href="?page={{page_obj.previous_page_number}}">Newest Posts &larr;</a>
+                <li class="previous">
+                    <a href="?page={{page_obj.previous_page_number}}" class="btn btn-default btn-xs btn-block border border-secondary border-resize">Newest Posts &larr;</a>
                 </li>
                 {% endif %}
             </ul>
-        </div>
+            
     </div>
 </div>
+
+<hr>
  
 {% endblock main_content %}

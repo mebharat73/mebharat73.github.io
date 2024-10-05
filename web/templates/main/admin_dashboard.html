@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Admin Dashboard</h1>
+  <h2>Messages</h2>
+  {% for message in messages %}
+    <div>
+      <p>{{ message.text }}</p>
+      <p>From: {{ message.sender.username }}</p>
+      <p>Timestamp: {{ message.timestamp }}</p>
+      <form>
+        <input type="text" id="response-input" placeholder="Type your response here...">
+        <button id="response-button" data-message-id="{{ message.id }}">Send</button>
+      </form>
+    </div>
+  {% endfor %}
+
+  <script>
+    $(document).ready(function() {
+      $('#response-button').click(function() {
+        var responseText = $('#response-input').val();
+        var messageId = $(this).data('message-id');
+
+        $.ajax({
+          type: 'POST',
+          url: '{% url 'send_response' %}',
+          data: {
+            'response': responseText,
+            'message_id': messageId
+          },
+          success: function() {
+            $('#response-input').val('');
+          }
+        });
+      });
+    });
+  </script>
+{% endblock %}

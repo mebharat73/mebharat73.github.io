@@ -1,49 +1,35 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
+    
     <title>
     {% block title %}
-    Django Blog
+        Django Blog
     {% endblock %}
     </title>
 
+
     <!-- Bootstrap Core CSS -->
     <link href="{% static 'main/css/bootstrap.min.css' %}" rel="stylesheet">
-
     <!-- Theme CSS -->
-    <link href="{% static 'main/css/clean-blog.min.css' %}">
-    
+    <link href="{% static 'main/css/clean-blog.min.css' %}" rel="stylesheet">
     <!-- Custom Fonts -->
-    <link href="{% static 'main/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    {% comment "" %}<link href="{% static 'main/css/fontawesome.min.css' %}" rel="stylesheet">{% endcomment %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-</head>
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/styles.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>                         
 
 <body> 
-    
-
-
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
         <div class="container-fluid">
@@ -53,9 +39,8 @@
                     <span class="sr-only">Toggle navigation</span>
                     Menu <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="{% url 'home_page' %}">Start Bootstrap</a>
+                <a class="navbar-brand" href="{% url 'home_page' %}">Start Blog</a>
             </div>
-
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
@@ -75,60 +60,50 @@
                     <li>
                         <a href="{% url 'signup_page' %}">signup</a>
                     </li>
-                
+                    <li>
+                        <a href="{% url 'contact_us' %}">Contact us</a>
+                    </li>
                 </ul>
             </div>
-            <!-- /.navbar-collapse -->
         </div>
-        <!-- /.container -->
     </nav>
     <!-- Page Header -->
-
-
-
     {% block main_content %}
-    
-
+   
     {% endblock main_content %}
-
-    <hr>
-
-    <!-- Footer -->
+    <style>
+        .fa {
+            font-size: 50px; /* or any other size of footer icon you prefer */
+          }
+    </style>  
     <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <ul class="list-inline text-center">
-                        <li>
-                            <a href="https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2F">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2F">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://www.facebook.com/login/?next=https%3A%2F%2Fwww.facebook.com%2F">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                    <p class="copyright text-muted">Copyright &copy; Your Website 2024</p>
-                </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </li>
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; bharat.karki.com.np</p>
             </div>
         </div>
+    </div>
     </footer>
+
+
 
     <!-- jQuery -->
     <script src="{% static 'main/js/jquery.min.js' %}"></script>

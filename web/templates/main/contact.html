@@ -1,59 +1,106 @@
-   {% load static %}
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}
+    Contact us
+{% endblock %}
+{% block main_content %}
 
-<!DOCTYPE html>
-<!-- Website - www.codingnepalweb.com -->
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Responsive Contact Us Form | CodingLab</title>
-    <link rel="stylesheet" href="{% static 'main/css/contactcss/style.css' %}"/>
-    <!-- Fontawesome CDN Link -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  </head>
-  <body>
+
+<body>
+
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header class="intro-header" style="background-image: url('{% static 'main/image/home-bg.jpg' %}')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="page-heading">
+                        <h1>Contact us</h1>
+                        <hr class="small">
+                        <span class="subheading">Have questions? I have answers (maybe).</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
     <div class="container">
-      <div class="content">
-        <div class="left-side">
-          <div class="address details">
-            <i class="fas fa-map-marker-alt"></i>
-            <div class="topic">Address</div>
-            <div class="text-one">Surkhet, NP12</div>
-            <div class="text-two">Birendranagar 06</div>
-          </div>
-          <div class="phone details">
-            <i class="fas fa-phone-alt"></i>
-            <div class="topic">Phone</div>
-            <div class="text-one">+0098 9893 5647</div>
-            <div class="text-two">+0096 3434 5678</div>
-          </div>
-          <div class="email details">
-            <i class="fas fa-envelope"></i>
-            <div class="topic">Email</div>
-            <div class="text-one">codinglab@gmail.com</div>
-            <div class="text-two">info.codinglab@gmail.com</div>
-          </div>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p>Want to get in touch with us? Fill out the form below to send us a message and we will try to get back to you within 24 hours!</p>
+                <!-- Contact Form - Enter your email address on line 19 of the mail/contact_me.php file to make this form work. -->
+                <!-- WARNING: Some web hosts do not allow emails to be sent through forms to common mail hosts like Gmail or Yahoo. It's recommended that you use a private domain email address! -->
+                <!-- NOTE: To use the contact form, your site must be on a live web host with PHP! The form will not work locally! -->
+                <div class="row">
+                    <div class="col-lg-9">
+                        <form action="{% url 'contact_us' %}" method="post">
+                            {% csrf_token %}
+                            <div class="row control-group">
+                                <div class="form-group col-xs-12 floating-label-form-group controls">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" placeholder="Name" id="name" name="name" required data-validation-required-message="Please enter your name.">
+                                    
+                                </div>
+                            </div>
+                            <div class="row control-group">
+                                <div class="form-group col-xs-12 floating-label-form-group controls">
+                                    <label>Email Address</label>
+                                    <input type="email" class="form-control" placeholder="Email Address" id="email" name="email" required data-validation-required-message="Please enter your email address.">
+                                    
+                                </div>
+                            </div>
+                            <div class="row control-group">
+                                <div class="form-group col-xs-12 floating-label-form-group controls">
+                                    <label>Phone Number</label>
+                                    <input type="tel" class="form-control" placeholder="Phone Number" id="phone" name="phone" required data-validation-required-message="Please enter your phone number.">
+                                    
+                                </div>
+                            </div>
+                            <div class="row control-group">
+                                <div class="form-group col-xs-12 floating-label-form-group controls">
+                                    <label>Message</label>
+                                    <textarea rows="5" class="form-control" placeholder="Message" id="message" name="message" required data-validation-required-message="Please enter a message."></textarea>
+                                    
+                                </div>
+                            </div>
+                            <br>
+                            <div id="success"></div>
+                            <div class="row">
+                                <div class="form-group col-xs-12">
+                                    <button type="submit" class="btn btn-success btn-sm custom-border" style="border-width: 7px !important; font-size: 12px !important; padding: 5px 10px !important;">Send</button>
+                                    
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-3">
+                        <!-- Chat Section -->
+                        <!-- ... (rest of the code remains the same) -->
+
+                        <!-- Chat Section -->
+                        <div class="chat-section" style="position: fixed; right: 0; top: 60%; transform: translateY(-50%);">
+                            
+                            <div class="chat-widget" style="width: 360px; height: 150px;">
+                                {% include 'main/chat_widget.html' %}
+                            </div>
+                        </div>
+
+<!-- ... (rest of the code remains the same) -->
+                    </div>
+                </div>
+                {% if success %}
+                <p>Thank you for contacting us, {{ name }}! We will get back to you soon.</p>
+                {% endif %}
+            </div>
+            
+                
         </div>
-        <div class="right-side">
-          <div class="topic-text">Send us a message</div>
-          <p>If you have any work from me or any types of quries related to my tutorial, you can send me message from here. It's my pleasure to help you.</p>
-          <form action="#">
-            <div class="input-box">
-              <input type="text" placeholder="Enter your name" />
-            </div>
-            <div class="input-box">
-              <input type="text" placeholder="Enter your email" />
-            </div>
-            <div class="input-box message-box">
-              <textarea placeholder="Enter your message"></textarea>
-            </div>
-            <div class="button">
-              <input type="button" value="Send Now" style="position: relative; top: 10px; left: 450px;" />
-              <a href="{% url 'home_page' %}" class="btn btn-success resize-btn" style="float: left; text-decoration: none; color: blue; margin-left: 10px; border: 4px solid #ccc;">Back to home</a>
-            </div>
-          </form>
-        </div>
-      </div>
     </div>
-  </body>
-</html>
+
+    <hr>
+
+
+</body>
+{% endblock main_content %}
+

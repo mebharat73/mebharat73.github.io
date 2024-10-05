@@ -4,65 +4,396 @@
     Blog Detail
 {% endblock %}
 {% block main_content %}
-<br>
-<br>
-<br>
-<!-- Post Content -->
+<header class="intro-header" style="background-image:  url('{% static 'main/image/home-bg.jpg' %}'); background-size: cover; background-position:center; height: 65vh;">
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+              <div class="site-heading">
+                  <h1>Clean Blog</h1>
+                  <hr class="small">
+                  <span class="subheading">A Clean Blog Theme by Start Bootstrap</span>
+              </div>
+          </div>
+      </div>
+  </div>
+</header>   
 
 <!-- Post Content -->
 <article>
+  <header class="intro-header" >
   <div class="container">
     <div class="row">
       <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
         <h2 class="section-heading">{{ blog.title }}</h2>
-        <p>{{ blog.content|striptags }}</p>
-
+          <p>{{ blog.content|striptags }}</p>
         <hr>
         <div class="" style="display: flex; justify-content: space-between;">
           <div class="post-meta" style="font-size: 1.2rem;">
             Posted by <a href="#">{{ blog.author }}</a> on {{ blog.created_at}}
           </div>
-          <div>
-            <!-- Display the like count -->
-            <p id="likes-count-post">Likes: {{ blog.likes_count }} </p>
-
+        <div>
             <!-- Like button -->
-            <button class="like-btn" data-obj-type="post" data-obj-id="{{ blog.id }}">Like</button>
-            
-            
-
-          </div>
+          <button class="like-btn" data-obj-type="post" data-obj-id="{{ blog.id }}">Like</button>
+          <span id="likes-count-post">Likes: {{ blog.likes_count }} </span>
+        </div>
         </div>
         <hr />
- 
 
+        
         <section>
-          <h5>Comments</h5>
-          <!--dfd................................................................................................ddfd-->
-          <form action="{% url 'add_comment' %}" method="post" enctype="multipart/form-data">
-          <!--dfd................................................................................................ddfd-->
-            {% csrf_token %}
-            <input type="hidden" name="blog_id" value="{{ blog.id }}"/>
-              {{ comment_form }}
-            <button type="submit">Comment</button>
-          </form>
-          <hr>
-          {% for comment in blog.comments.all %}
-            <li>
-              <button class="like-btn" data-obj-type="comment" data-obj-id="{{ comment.id }}">Like</button>
-              <span id="likes-count-{{ comment.id }}" class="likes-count">Likes: {{ comment.likes_count }}</span>
-              {{ comment.content }}
-            </li>
-          {% endfor %}
-          </hr>
+            <!-- Comment icon -->
+            <button class="comment-toggle-btn" id="comment-toggle-btn">
+              <i class="fa fa-pencil" aria-hidden="true"></i>
+              <span>Comment</span>
+            </button>
+            <!-- Comment form -->
+            <div class="comment-form-container">
+              <form action="{% url 'add_comment' %}" method="post" enctype="multipart/form-data" class="comment-form">
+                {% csrf_token %}
+                <input type="hidden" name="blog_id" value="{{ blog.id }}"/>
+                <div class="form-group">
+                  <textarea name="content" class="form-control" placeholder="Write a comment..."></textarea>
+                  <span class="char-counter"></span>
+                </div>
+                <button type="submit" class="btn btn-comment">Comment</button>
+              </form>
+            </div>
+
+
+          <ul class="comment-list">
+            <div class="container mb-5 mt-5">
+              <div class="card">
+                  <div class="row">
+                      <div class="col-md-12">
+                          
+                          <div class="row">
+                              <div class="col-md-12">
+                                {% for comment in blog.comments.all %}
+                                  <div class="media">
+                                      <!-- Display the profile picture of the user who made the comment -->
+                                      <img src="{% if comment.author.profile.profile_pic %}{{ comment.author.profile.profile_pic.url }}{% else %}{% static 'main/image/default-profile-pic.jpg' %}{% endif %}" alt="Profile Picture" class="profile-pic">
+                                      <div class="media-body">
+                                          <div class="row">
+                                              <div class="col-8 d-flex">
+                                                  <h5>{{ comment.author }}<span>-- {{ comment.created_at }}</span></h5>
+                                              </div>
+                                              <div class="col-4" style="margin-left: 5px;">
+                                                  <div class="pull-right reply">
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          {{ comment.content }}
+                                          <a href="#" class="reply-btn" data-comment-id="{{ comment.id }}">Reply</a>
+                                          
+                                          <!-- Comment reply form -->
+                                          <div class="reply-form-container">
+                                              <form method="post" action="{% url "add_comment_reply" comment.id %}" data-comment-id="{{ comment.id }}">
+                                                  {% csrf_token %}
+                                                  <div class="form-group">
+                                                      <textarea name="content" class="form-control" placeholder="Write a reply..."></textarea>
+                                                      <span class="char-counter"></span>
+                                                  </div>
+                                                  <button type="submit" class="btn btn-reply">Reply</button>
+                                              </form>
+                                          </div>
+                                          <!-- blog_detail.html -->
+
+                                          <!-- ... -->
+
+                                          <div class="reply-container">
+                                            {% for reply in comment.commentreply_set.all %}
+                                                {% if forloop.counter <= 2 %}
+                                                    <div class="media mt-4">
+                                                        <!-- Display the profile picture of the user who made the reply -->
+                                                        <img src="{% if reply.author.profile.profile_pic %}{{ reply.author.profile.profile_pic.url }}{% endif %}" alt="Profile Picture" class="profile-pic">
+                                                        <div class="media-body">
+                                                            <div class="row">
+                                                                <div class="col-12 d-flex">
+                                                                    <h5>
+                                                                        <cite class="author">{{ reply.author }}</cite>
+                                                                        <time class="created-at" datetime="{{ reply.created_at }}">{{ reply.created_at }}</time>
+                                                                    </h5>
+                                                                </div>
+                                                            </div>
+                                                            <span class="reply-content">Reply: {{ reply.content }}</span>
+                                                        </div>
+                                                        <span class="reply-divider"></span>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="media mt-4 hidden-reply">
+                                                        <!-- Display the profile picture of the user who made the reply -->
+                                                        <img src="{% if reply.author.profile.profile_pic %}{{ reply.author.profile.profile_pic.url }}{% endif %}" alt="Profile Picture" class="profile-pic">
+                                                        <div class="media-body">
+                                                            <div class="row">
+                                                                <div class="col-12 d-flex">
+                                                                    <h5>
+                                                                        <cite class="author">{{ reply.author }}</cite>
+                                                                        <time class="created-at" datetime="{{ reply.created_at }}">{{ reply.created_at }}</time>
+                                                                    </h5>
+                                                                </div>
+                                                            </div>
+                                                            <span class="reply-content">Reply: {{ reply.content }}</span>
+                                                        </div>
+                                                        <span class="reply-divider"></span>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if comment.commentreply_set.count > 2 %}
+                                            <button class="more-replies btn btn-primary">
+                                              
+                                              More replies ({{ comment.commentreply_set.count|add:-2 }})
+                                            </button>
+                                            {% endif %}
+                                          </div>
+
+                                          <!-- ... -->
+
+                                          
+                                  </div>
+                                  <span class="comment-divider"></span>
+                              {% endfor %}
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>      
+
+        
+          
+          </ul>
         </section>
       </div>
     </div>
   </div>
 </article>
+
+{% comment "" %}**********STYLE**************{% endcomment %}
+<style>
+
+  .comment-toggle-btn {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 1px 2px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 17px;
+    transition: background-color 0.3s ease-in-out;
+  }
+
+  .comment-toggle-btn i {
+      margin-right: 5px;
+  }
+
+  .comment-toggle-btn:hover {
+      background-color: #3e8e41;
+      transform: scale(1.1);
+  }
+
+  .more-replies {
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #337ab7;
+    color: #fff;
+    border: none;
+    font-size: 8px;
+    
+  }
+
+  .more-replies:hover {
+      background-color: #23527c;
+  }
+
+  .more-replies i {
+      margin-right: 3px;
+  }
+  
+
+  .hidden-reply {
+    display: none;
+  }
+
+
+  .btn-comment {
+    background-color: #03A9F4;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 10px;
+  }
+  
+  .btn-comment:hover {
+    background-color: #039BE5;
+  }
+  
+  .btn-reply {
+    background-color: #03A9F4;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 10px;
+  }
+  
+  .btn-reply:hover {
+    background-color: #039BE5;
+  }
+
+  .comment-form-container {
+    background-color: #fff;
+    display: none;
+    padding: 10px;
+    border: 5px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .comment-form {
+    margin-bottom: 1px;
+  }
+  
+  .reply-form-container {
+    background-color: #fff;
+    padding: 5px;
+    display: none;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .reply-form {
+    margin-bottom: 1px;
+  }
+
+  #comment-section {
+    display: none;
+  }
+
+  .author {
+    font-size: 16px;
+    color: #800000;
+    font-weight: bold;
+  }
+  
+  .created-at {
+    font-size: 12px;
+    color: #666;
+    font-style: italic;
+  }
+
+  .reply-container {
+    margin-left: 30px; /* move the container to the left */
+  }
+
+  .comment-divider {
+    display: block;
+    height: 2px;
+    background-color: #FF00FF;
+    margin: 0px 0;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .reply-divider {
+    display: block;
+    height: 1px;
+    background-color: #6495ED;
+    margin: 3px 0;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .reply-content {
+    font-size: 15px; /* adjust the font size to your liking */
+    color: #808000; /* adjust the text color to your liking */
+    margin-left: 40px; /* add some margin to the left */
+    margin-top: 20px; /* add some margin to the top */
+    padding-left: 30px; /* add some padding to the left */
+  }
+
+  .col-8 {
+    offset-md-1; /* add an offset of 1 column to the left */
+  }
+
+  .card {
+    position: relative;
+    right: 5%;
+    display: flex;
+    padding: 3em;
+    flex-direction: column;
+    width: 66%; /* set the width to 80% of the parent container */
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid #d2d2dc;
+    border-radius: 11px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgb(249, 249, 250);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(212, 182, 212, 1);
+    box-shadow: 0px 0px 5px 0px rgb(161, 163, 164)
+  }
+
+  .media img{
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      
+  }
+    /* For author name full display */
+  .media-body h5 {
+    margin-left: 10px; /* add some margin to the left */
+    padding-left: 10px; /* add some padding to the left */
+  }
+
+  .media-body {
+    position: relative; /* set the position to relative */
+  }
+
+  .reply-btn {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  
+  .reply-btn:hover {
+    background-color: #3e8e41;
+  }
+ 
+  .likes-count {
+    font-size: 1.5rem;
+    display: inline-block;
+    margin-right: 10px;
+    
+  }
+
+  .likes-count::before {
+    content: " ";
+    font-size: 0.2rem;
+    
+  }
+
+  .like-btn {
+    font-size: 1.2rem;
+    padding: 3px 6px;
+    display: inline-block;
+    margin-right: 5px;
+    border: none;
+    border-radius: 7px;
+  }
+  
+</style>
+{% comment "" %}***************JSON****************{% endcomment %}
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
   // JavaScript code
+// JavaScript code
 var csrftoken = getCookie('csrftoken');
 
 function getCookie(name) {
@@ -82,6 +413,7 @@ function getCookie(name) {
 
 $(document).ready(function() {
   console.log("JavaScript code executed");
+  
   $(".like-btn").click(async function(event) {
       event.preventDefault();
       console.log("Like button clicked");
@@ -122,6 +454,89 @@ $(document).ready(function() {
           alert("Error liking/unliking: " + error);
       }
   });
+  // Comment form toggle
+  $("#comment-toggle-btn").click(function() {
+    console.log("Comment toggle button clicked");
+    var commentForm = $("#comment-section");
+    commentForm.toggle();
+  });
+
+  // Comment button click
+  $('.comment-toggle-btn').on('click', function(event) {
+    event.preventDefault();
+    var commentFormContainer = $('.comment-form-container');
+    if (commentFormContainer.is(':visible')) {
+      commentFormContainer.slideUp();
+    } else {
+      commentFormContainer.slideDown();
+    }
+  });
+
+  // Reply form toggle
+  // Reply button click
+  $('.reply-btn').on('click', function(event) {
+    event.preventDefault();
+    var replyFormContainer = $(this).closest('.media').find('.reply-form-container');
+    if (replyFormContainer.is(':visible')) {
+      replyFormContainer.slideUp();
+    } else {
+      replyFormContainer.slideDown();
+    }
+  });
+
+  // script.js
+
+// ... JavaScript code ...
+
+  $('.more-replies').on('click', function(event) {
+    event.preventDefault();
+    if ($(this).text() === 'More replies') {
+        $(this).closest('.reply-container').find('.hidden-reply').slideDown();
+        $(this).text('Less replies');
+    } else {
+        $(this).closest('.reply-container').find('.hidden-reply').slideUp();
+        $(this).text('More replies');
+    }
+  });
+
+
+  // Reply form submission
+  $('.reply-form-container form').on('submit', function(event) {
+    event.preventDefault();
+    var form = $(this);
+    var commentId = form.data('comment-id');
+    var replyContent = form.find('textarea').val();
+    var author = '{{ request.user }}';
+    var profilePic = '{% if request.user.profile.profile_pic %}{{ request.user.profile.profile_pic.url }}{% endif %}';
+    $.ajax({
+      type: 'POST',
+      url: form.attr('action'),
+      data: {
+        'content': replyContent,
+        'csrfmiddlewaretoken': form.find('input[name="csrfmiddlewaretoken"]').val()
+      },
+      success: function(data) {
+        // Append the reply content to the page
+        var replyHtml = '<div class="media mt-4">';
+        replyHtml += '<img src="' + profilePic + '" alt="Profile Picture" class="profile-pic">';
+        replyHtml += '<div class="media-body">';
+        replyHtml += '<div class="row">';
+        replyHtml += '<div class="col-12 d-flex">';
+        replyHtml += '<h5><cite class="author">' + author + '</cite><time class="created-at" datetime="">Now</time></h5>';
+        replyHtml += '</div>';
+        replyHtml += '</div>';
+        replyHtml += '<span class="reply-content">Reply: ' + data.reply + '</span>';
+        replyHtml += '</div>';
+        replyHtml += '</div>';
+        var replyContainer = form.closest('.media').find('.reply-container');
+        replyContainer.append(replyHtml);
+        // Clear the reply form
+        form.find('textarea').val('');
+        // Hide the reply form
+        form.closest('.reply-form-container').slideUp();
+      }
+    });
+  });
 });
 </script>
-{% endblock %}
+{% endblock main_content %}

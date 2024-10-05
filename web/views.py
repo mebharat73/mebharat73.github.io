@@ -11,6 +11,113 @@ from django.shortcuts import get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
+from .forms import CommentForm, CommentReplyForm
+from django.core.mail import send_mail
+from .models import Message
+from django.views.decorators.http import require_http_methods
+from django.shortcuts import HttpResponse
+
+
+
+
+def admin_dashboard(request):
+    messages = Message.objects.all()
+    return render(request, 'admin_dashboard.html', {'messages': messages})
+
+@require_http_methods(["POST"])
+def send_message(request):
+    message_text = request.POST.get('message')
+    sender = request.user
+    receiver_id = request.POST.get('receiver_id')
+    receiver = User.objects.get(id=receiver_id)
+
+    message = Message(text=message_text, sender=sender, receiver=receiver)
+    message.save()
+
+    return JsonResponse({'message': 'Message sent successfully'})
+
+
+@require_http_methods(["GET"])
+def receive_messages(request):
+    receiver_id = request.GET.get('receiver_id')
+    receiver = User.objects.get(id=receiver_id)
+
+    messages = Message.objects.filter(receiver=receiver).order_by('-timestamp')
+
+    messages_list = []
+    for message in messages:
+        messages_list.append({
+            'text': message.text,
+            'sender': message.sender.username,
+            'timestamp': message.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+        })
+
+    return JsonResponse(messages_list, safe=False)
+
+@require_http_methods(["POST"])
+def send_response(request):
+    response_text = request.POST.get('response')
+    message_id = request.POST.get('message_id')
+    message = Message.objects.get(id=message_id)
+    sender = request.user
+
+    response = Message(text=response_text, sender=sender, receiver=message.sender)
+    response.save()
+
+    return JsonResponse({'message': 'Response sent successfully'})
+
+
+
+def chat_widget(request):
+    return render(request, 'main/chat_widget.html', {})
+
+def contact_us(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        message = request.POST.get('message')
+
+        # Send an email to the admin's email address
+        send_mail(
+            'New Contact Form Submission',
+            f'Name: {name}\nEmail: {email}\nPhone: {phone}\nMessage: {message}',
+            'mebharat73@gmail.com',
+            ['mebharat73@gmail.com'],
+            fail_silently=False,
+        )
+
+        # Send a confirmation email to the user
+        send_mail(
+            'Thank you for contacting us!',
+            f'Dear {name},\n\nThank you for reaching out to us. We will get back to you soon.\n\nBest regards,\n[Your Name]',
+            'mebharat73@gmail.com',
+            [email],
+            fail_silently=False,
+        )
+
+        # Render the template with a success message
+        context = {'success': True, 'name': name}
+        return render(request, 'main/contact.html', context)
+    else:
+        return render(request, 'main/contact.html')
+
+
+
+
+@require_POST
+@login_required
+def add_comment_reply(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    form = CommentReplyForm(request.POST)
+    if form.is_valid():
+        reply = form.save(commit=False)
+        reply.comment = comment
+        reply.author = request.user
+        reply.save()
+        return JsonResponse({"reply": reply.content, "id": reply.id})
+    else:
+        return JsonResponse({"error": "Invalid form data"})
 
 
 @login_required
@@ -47,14 +154,15 @@ def like_unlike(request):
 
 
 
-
 def blog_detail(request, blog_id):
     blog = get_object_or_404(Post, id=blog_id)
+
     
     context = {
         'blog': blog,
         'content': blog.content,
         'comment_form': CommentForm(),
+        'comment_reply_form': CommentReplyForm(),
         'comments': blog.comments.all()
     }
     return render(request, 'main/blog_detail.html', context)
@@ -63,6 +171,7 @@ def blog_detail(request, blog_id):
 @require_POST
 @login_required
 def add_comment(request):
+    print("add_comment view called")
     blog_id = request.POST.get('blog_id')
     blog = get_object_or_404(Post, id=blog_id)
     form_data = CommentForm(request.POST)
@@ -191,7 +300,7 @@ def signup_view(request):
 
                 if profile_pic:
                     Profile.objects.create(profile_pic=profile_pic, user=user)
-                    return redirect("login_page")
+                return redirect("login_page")
     else:
         return render(request, 'main/signup.html')
 
@@ -200,8 +309,6 @@ def signup_view(request):
 #...................................................................................................................................
 
 
-def contact_view(request):
-    return render (request, 'main/contact.html')
 
 #...................................................................................................................................
 
