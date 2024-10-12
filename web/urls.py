@@ -17,9 +17,9 @@ urlpatterns= [
     path('add_comment_reply/<int:comment_id>', views.add_comment_reply, name='add_comment_reply'),
     path('', views.home, name="home_page"),
     path('accounts/contact_us/', views.contact_us, name='contact_us'),
-    path('chat_widget/', views.chat_widget, name='chat_widget'),
-    path('send_message/', views.send_message, name='send_message'),
-    path('receive_messages/', views.receive_messages, name='receive_messages'),
-    path('send_response/', views.send_response, name='send_response'),
-    path('admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path("chat/<str:room_name>/", views.room, name="room"),
+    path("chat/", views.index, name="index"),
+   
+   
 ]
+

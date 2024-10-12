@@ -4,11 +4,14 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models
 
+
 class Message(models.Model):
-    text = models.TextField()
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages', null=True, blank=True)
+    room = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+
+
 
 
 class Profile(models.Model):

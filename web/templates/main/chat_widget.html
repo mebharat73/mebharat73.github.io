@@ -1,141 +1,172 @@
-<!DOCTYPE html>
-<html>
+<!-- Chat Section -->
 <head>
-    <title>Chat with us</title>
-    <style>
-        body {
-            font-family: sans-serif;
-        }
+    <!-- ... other CSS files ... -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  </head>
 
-        #chat-container {
-            width: 380px;
-            margin: 0 auto;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        #chat-header {
-            background-color: #007bff;
-            color: #fff;
-            padding: 0px;
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px;
-            margin-top: -20px; /* Add this line */
-        }
-
-        #chat-messages {
-            padding: 1px;
-            height: 200px;
-            overflow-y: scroll;
-        }
-
-        #message-input {
-            width: calc(90% - 70px);
-            padding: 0.5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        #send-button {
-            width: 70px;
-            padding: 0.3px;
-            background-color: #28a745;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .message {
-            margin-bottom: 5px; /* Reduced margin */
-            padding: 0px; /* Reduced padding */
-            border-radius: 5px;
-            max-width: 110%; /* Added max-width */
-        }
-
-        .sent {
-            background-color: #e2f0cb;
-            text-align: right;
-            float: right;
-            clear: both;
-        }
-
-        .received {
-            background-color: #f0f0f0;
-            text-align: left;
-            float: left;
-            clear: both;
-        }
-    </style>
-</head>
-<body>
-    <div id="chat-container">
-        <div id="chat-header">
-            <h2>Chat with us</h2>
+    <div class="chat-widget">
+        <div class="chat-header">
+            <span>Chat with our support team</span>
+            <button class="chat-close-btn">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-        <div id="chat-messages">
-
+        <div class="chat-messages">
+            <div id="chat-box">
+                <ul class="message-list">
+                    <!-- message list will be rendered here -->
+                </ul>
+            </div>
         </div>
-        <div>
-
-            <input id="message-input" type="text" placeholder="Type your message here...">
-            <input id="receiver-id" type="hidden" value="{{ receiver_id }}">
-            <button id="send-button">Send</button>
+        <div class="chat-input">
+            <input type="text" id="chat-input" placeholder="Type a message...">
+            <button class="chat-send-btn">
+                <i class="fas fa-paper-plane"></i>
+                Send
+            </button>
         </div>
     </div>
+  
+  
 
-    <script>
-        $(document).ready(function() {
-            $('#send-button').click(function() {
-                var messageText = $('#message-input').val();
-                var receiverId = $('#receiver-id').val();
-        
-                $.ajax({
-                    type: 'POST',
-                    url: '{% url 'send_message' %}',
-                    data: {
-                        'message': messageText,
-                        'receiver_id': receiverId
-                    },
-                    success: function() {
-                        $('#message-input').val('');
-                    }
-                });
-            });
-        
+  <script>
+    var roomName = 'my_room';
+    var socket = new WebSocket('ws://localhost:8000/ws/chat/' + roomName + '/');
 
-            $('#message-input').keypress(function(e) {
-                if (e.which === 13) {  // Enter key
-                    e.preventDefault();
-                    var messageText = $('#message-input').val().trim();
-                    if (messageText !== "") {
-                        sendMessage(messageText);
-                        $('#message-input').val('');
-                    }
-                }
-            });
+    // Handle incoming messages
+    socket.onmessage = function(event) {
+        console.log('Received message:', event.data);
+        var messageData = JSON.parse(event.data);
+        console.log('Message data:', messageData);
+        // Update your chat box with the new message
+        var chatBox = document.getElementById('chat-box');
+        var messageElement = document.createElement('p');
+        messageElement.textContent = `${messageData.sender}: ${messageData.message}`;
+        chatBox.appendChild(messageElement);
+    };
 
-            function sendMessage(message) {
-                var messageElement = $('<div class="message sent">' + message + '</div>');
-                $('#chat-messages').append(messageElement);
-                $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+    // Handle WebSocket connection open
+    socket.onopen = function(event) {
+        console.log('WebSocket connection established');
+    };
 
-                // Here you would typically send the message to your backend
-                // using AJAX or a similar technique. 
-            }
+    // Handle WebSocket connection close
+    socket.onclose = function(event) {
+        console.log('WebSocket connection closed');
+    };
 
-            // Function to receive messages (simulated for demonstration)
-            function receiveMessage(message) {
-                var messageElement = $('<div class="message received">' + message + '</div>');
-                $('#chat-messages').append(messageElement);
-                $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
-            }
+    // Handle WebSocket connection error
+    socket.onerror = function(event) {
+        console.error('WebSocket connection error:', event);
+    };
 
-            // Simulate receiving a message after a delay
-            setTimeout(function() {
-                receiveMessage('Hello! How can we help you today?');
-            }, 1000); 
-        });
-    </script>
-</body>
-</html>
+    // Send message when "Send" button is clicked
+    document.querySelector('.chat-send-btn').addEventListener('click', function() {
+        var messageInput = document.getElementById('chat-input');
+        var message = messageInput.value;
+        var messageData = {
+            'message': message
+        };
+        try {
+            socket.send(JSON.stringify(messageData));
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+        messageInput.value = ''; // Clear the input field
+    });
+  </script>
+
+
+  
+  <style>
+    .chat-widget {
+      background-color: #f7f7f7;
+      border: 1px solid #ddd;
+      padding: 5px;
+      border-radius: 10px;
+      width: 310px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .chat-header {
+      background-color: #333;
+      color: #fff;
+      padding: 2px;
+      border-bottom: 1px solid #333;
+      display: flex;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .chat-header span {
+      font-size: 17px;
+      font-weight: bold;
+      padding: 6px;
+    }
+    
+    .chat-close-btn {
+      background-color: transparent;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+    }
+    
+    .chat-close-btn i {
+      font-size: 10px;
+      color: #fff;
+    }
+    
+    .chat-messages {
+      padding: 0px;
+    }
+    
+    .message-list {
+      list-style: none;
+      padding: 3px;
+      margin: 0;
+    }
+    
+    .message-list li {
+      padding: 5px;
+      border-bottom: 1px solid #ccc;
+    }
+    
+    .message-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .chat-input {
+      padding: 3px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .chat-input input[type="text"] {
+      width: 73%;
+      padding: 3px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    
+    .chat-send-btn {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 2px 3px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    
+    .chat-send-btn i {
+      font-size: 10px;
+      margin-right: 3px;
+    }
+    
+    .chat-send-btn:hover {
+      background-color: #3e8e41;
+    }  
+  
+  </style>

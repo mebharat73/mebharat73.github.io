@@ -1,0 +1,307 @@
+<!-- chat/templates/chat/room.html -->
+<!-- chat/templates/chat/room.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Chat Room</title>
+    <style>
+        .username {
+            background-color: #56d41d; /* a light gray background */
+            padding: 2px 4px; /* add some padding to make it look nicer */
+            border-radius: 4px; /* add a subtle border radius */
+            margin-right: 10px; /* add some space between the username and the message */
+            
+            position: relative; /* add this to position the username relative to the picture */
+            top: -3px; /* move the username up by 2 pixels */
+            margin-left: -20px; /* reduce the space between the picture and the username */
+        }
+
+        
+        
+        
+        .chat-input-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 92%;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #ccc;
+        }
+
+        
+        
+        .chat-input-container input[type="text"] {
+            width: 90%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+
+        .chat-container {
+            width: 430px;
+            height: 650px;
+            position: relative;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            background-color: #f9f9f9;
+            margin: 30px auto; /* add this line */
+            max-height: 650px; /* adjust the height to your liking */
+            overflow-y: auto;
+        }
+        
+        
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+}
+
+        .chat-header {
+            background-color: #4CAF50; /* Green */
+            border: 1px solid #4CAF50; /* Green */
+            color: gray;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            font-size: 19px;
+            margin-top: -10px;
+            margin-left: 20px;
+        }
+        
+        .message {
+            margin-bottom: 3px;
+            padding: 5px;
+            border-radius: 10px;
+            width: 80%;
+            line-height: 1.2; /* add this line */
+            word-wrap: break-word;  /* Allow long words to wrap */
+            word-break: break-all;  /* Break words if necessary */
+            
+        }
+        
+        .left {
+            float: left;
+            background-color: #999999;
+            transform: translateX(-1px); /* add this line */
+        }
+        
+        .right {
+            float: right;
+            background-color: #C0C0C0;
+            transform: translateX(1px); /* add this line */
+        }
+        
+        .message img {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+        
+        .time {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        
+        .chat-messages {
+            overflow-y: auto;
+            height: calc(100% - 80px); /* adjust the height to make room for the chat input */
+        }
+        
+        .profile-pic {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        
+        #chat-message-input {
+            width: 77%;
+            height: 16px;
+            padding: 5px;
+            font-size: 14px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+        }
+        
+        #chat-message-submit {
+            width: 18%;
+            height: 25px;
+            padding: 5px;
+            font-size: 14px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        #chat-message-submit:hover {
+            background-color: #3e8e41;
+        }
+        
+        .no-messages {
+            margin-top: 5px;
+        }
+        
+        
+        
+        .chat-input {
+            position: absolute;
+            bottom: 0;
+            left: 9;
+            width: 100%;
+            padding: 0px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2>Chat Room</h2>
+            <div class="user-info">
+                
+            </div>
+        </div>
+        <hr>
+
+        <div class="chat-messages" id="chat-log">
+    {% for message in messages %}
+        <div class="message {% if message.user == request.user %}right{% else %}left{% endif %}">
+            <img src="{{ message.user.profile.profile_pic.url }}" alt="Profile Picture">
+            <span class="username">{{ message.user.username }}:</span>
+            <span>{{ message.message }}</span>
+            <span class="time">{{ message.timestamp }}</span>
+        </div>
+    {% endfor %}
+</div>
+            
+    
+
+        <div class="chat-input-container">
+            <div class="chat-input">
+                <input id="chat-message-input" type="text" size="100">
+                <input id="chat-message-submit" type="button" value="Send">
+            </div>
+        </div>
+
+    {{ room_name|json_script:"room-name" }}
+    <script>
+
+        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/'
+            + roomName
+            + '/'
+        );
+
+        // ... (rest of the code remains the same)
+
+        const chatContainer = document.querySelector('.chat-messages');
+
+        function appendMessage(message) {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = message;
+            chatContainer.appendChild(messageElement);
+
+            // scroll to the bottom of the chat container
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+
+
+        const chatMessages = document.querySelector('.chat-messages');
+
+        // Function to add a new message to the chat log
+        // Function to add a new message to the chat log
+        function addNewMessage(message) {
+            const messageHTML = `<div class="message">${message}</div>`;
+            chatMessages.innerHTML += messageHTML;
+            const messageElements = chatMessages.children;
+            if (messageElements.length > 25) {
+                // Remove the oldest messages
+                while (messageElements.length > 25) {
+                    chatMessages.removeChild(messageElements[0]);
+                }
+            }
+            chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom
+        }
+        
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const message = data.message;
+            let username = data.username ? data.username : 'Anonymous';
+        
+            // Create the message element dynamically
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            if (username === "{{ user.username }}") {
+                messageElement.classList.add('right');
+            } else {
+                messageElement.classList.add('left');
+            }
+        
+            // Add the message content
+            messageElement.innerHTML = `
+                <img src="${data.profile_pic_url}" alt="${username}'s Avatar">
+                <span class="username">${username}:</span>
+                <span>${message}</span>
+            `;
+        
+            // Append the message to the bottom of the chat container
+            chatContainer.appendChild(messageElement);
+        
+            // Scroll to the bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        };
+    
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        // get the chat log element
+        const chatLog = document.getElementById('chat-log');
+
+        document.getElementById('chat-message-submit').addEventListener('click', () => {
+            const chatMessages = document.getElementById('chat-log');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        
+        document.querySelector('#chat-message-submit').addEventListener('click', function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            const username = "{{ user.username }}"; // Assuming you're using Django's template engine
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'username': username
+            }));
+            messageInputDom.value = '';
+            console.log('Input field value after submit:', messageInputDom.value);
+        });
+        
+    </script>
+    
+</body>
+</html>

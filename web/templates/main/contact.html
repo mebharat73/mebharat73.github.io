@@ -74,20 +74,36 @@
                             </div>
                         </form>
                     </div>
-                    <div class="col-lg-3">
-                        <!-- Chat Section -->
-                        <!-- ... (rest of the code remains the same) -->
+                    <!-- ... (rest of the code remains the same) -->
 
-                        <!-- Chat Section -->
-                        <div class="chat-section" style="position: fixed; right: 0; top: 60%; transform: translateY(-50%);">
-                            
-                            <div class="chat-widget" style="width: 360px; height: 150px;">
-                                {% include 'main/chat_widget.html' %}
+                    <!-- Contact Form - Enter your email address on line 19 of the mail/contact_me.php file to make this form work. -->
+                    <!-- WARNING: Some web hosts do not allow emails to be sent through forms to common mail hosts like Gmail or Yahoo. It's recommended that you use a private domain email address! -->
+                    <!-- NOTE: To use the contact form, your site must be on a live web host with PHP! The form will not work locally! -->
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <form action="{% url 'contact_us' %}" method="post">
+                                <!-- ... (rest of the form code remains the same) -->
+                            </form>
+                        </div>
+                        <div class="col-lg-3">
+                            <!-- Chat Section -->
+                            <!-- Chat Section -->
+                            <!-- Chat Section -->
+                            <!-- Chat Section -->
+                            <div class="chat-section" style="position: relative; margin-top: 20px;">
+                                <h4>Live Chat</h4>
+                                <div class="chat-widget">
+                                    <input type="text" id="chat-input" placeholder="Type a message...">
+                                    <button id="chat-send">Send</button>
+                                    <div class="chat-log">
+                                        <ul id="messages-list"></ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-<!-- ... (rest of the code remains the same) -->
                     </div>
+
+                    <!-- ... (rest of the code remains the same) -->
                 </div>
                 {% if success %}
                 <p>Thank you for contacting us, {{ name }}! We will get back to you soon.</p>
@@ -101,6 +117,122 @@
     <hr>
 
 
+<style>
+    .chat-section {
+        background-color: #f7f7f7;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        width: 400px;
+    }
+    
+    .chat-log {
+        padding: 10px;
+        overflow-y: auto;
+        height: 200px;
+    }
+    
+    .chat-widget {
+        margin-top: 10px;
+    }
+    
+    #chat-input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+    }
+    
+    #chat-send {
+        background-color: #4CAF50;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    
+    #chat-send:hover {
+        background-color: #3e8e41;
+    }
+</style>
+<!-- ... (rest of the code remains the same) -->
+
+<!-- Load the channels library -->
+
+
+<!-- Use the channels library to establish a WebSocket connection -->
+<!-- Load the channels library -->
+<!-- Load the channels library -->
+<script type="module">
+    // Establish a WebSocket connection
+    const roomToken = 'actual_room_token'; // Replace with the actual room token
+    var socket = new WebSocket(`ws://localhost:8000/ws/chat/${roomToken}/`);
+
+    // Handle the connection opening
+    socket.onopen = function(event) {
+        console.log('Connected to the WebSocket server');
+    };
+
+    // Handle the connection closing
+    socket.onclose = function(event) {
+        console.log('Disconnected from the WebSocket server');
+        // Try reconnecting to the WebSocket server
+        setTimeout(function() {
+            socket = new WebSocket(`ws://localhost:8000/ws/chat/${roomToken}/`);
+        }, 1000); // Delay for 1 second
+    };
+
+    // Handle incoming messages
+    socket.onmessage = function(event) {
+        console.log('Received message:', event.data);
+        const message = JSON.parse(event.data);
+        const messagesList = document.getElementById('messages-list');
+        const messageElement = document.createElement('li');
+        messageElement.textContent = message.message;
+        messagesList.appendChild(messageElement);
+    };
+
+    // Handle errors
+    socket.onerror = function(event) {
+        console.log('Error occurred:', event);
+        // Add error handling code here
+        // For example, you can try reconnecting to the WebSocket server
+        setTimeout(function() {
+            socket = new WebSocket(`ws://localhost:8000/ws/chat/${roomToken}/`);
+        }, 1000); // Delay for 1 second
+    };
+
+    // Check the WebSocket connection state
+    if (socket.readyState === WebSocket.OPEN) {
+        console.log('WebSocket connection is open');
+    } else if (socket.readyState === WebSocket.CONNECTING) {
+        console.log('WebSocket connection is connecting');
+    } else if (socket.readyState === WebSocket.CLOSING) {
+        console.log('WebSocket connection is closing');
+    } else if (socket.readyState === WebSocket.CLOSED) {
+        console.log('WebSocket connection is closed');
+        // Try reconnecting to the WebSocket server
+        setTimeout(function() {
+            socket = new WebSocket(`ws://localhost:8000/ws/chat/${roomToken}/`);
+        }, 1000); // Delay for 1 second
+    }
+
+    // Send a message to the server
+    document.getElementById('chat-send').addEventListener('click', function() {
+        if (socket.readyState === WebSocket.OPEN) {
+            const message = document.getElementById('chat-input').value;
+            socket.send(JSON.stringify({
+                'message': message
+            }));
+            document.getElementById('chat-input').value = '';
+        } else {
+            console.log('WebSocket connection is not open');
+        }
+    });
+    
+</script>
 </body>
 {% endblock main_content %}
+
 

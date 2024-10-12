@@ -13,63 +13,21 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from .forms import CommentForm, CommentReplyForm
 from django.core.mail import send_mail
+from django.http import JsonResponse
 from .models import Message
-from django.views.decorators.http import require_http_methods
-from django.shortcuts import HttpResponse
 
 
 
 
-def admin_dashboard(request):
-    messages = Message.objects.all()
-    return render(request, 'admin_dashboard.html', {'messages': messages})
 
-@require_http_methods(["POST"])
-def send_message(request):
-    message_text = request.POST.get('message')
-    sender = request.user
-    receiver_id = request.POST.get('receiver_id')
-    receiver = User.objects.get(id=receiver_id)
+def room(request, room_name):
+    messages = Message.objects.filter(room=room_name).select_related('user__profile').order_by('timestamp')[:25]
+    return render(request, 'main/room.html', {'messages': messages, 'room_name': room_name, 'user': request.user})
 
-    message = Message(text=message_text, sender=sender, receiver=receiver)
-    message.save()
-
-    return JsonResponse({'message': 'Message sent successfully'})
+def index(request):
+    return render(request, "main/index.html")
 
 
-@require_http_methods(["GET"])
-def receive_messages(request):
-    receiver_id = request.GET.get('receiver_id')
-    receiver = User.objects.get(id=receiver_id)
-
-    messages = Message.objects.filter(receiver=receiver).order_by('-timestamp')
-
-    messages_list = []
-    for message in messages:
-        messages_list.append({
-            'text': message.text,
-            'sender': message.sender.username,
-            'timestamp': message.timestamp.strftime('%Y-%m-%d %H:%M:%S')
-        })
-
-    return JsonResponse(messages_list, safe=False)
-
-@require_http_methods(["POST"])
-def send_response(request):
-    response_text = request.POST.get('response')
-    message_id = request.POST.get('message_id')
-    message = Message.objects.get(id=message_id)
-    sender = request.user
-
-    response = Message(text=response_text, sender=sender, receiver=message.sender)
-    response.save()
-
-    return JsonResponse({'message': 'Response sent successfully'})
-
-
-
-def chat_widget(request):
-    return render(request, 'main/chat_widget.html', {})
 
 def contact_us(request):
     if request.method == 'POST':
