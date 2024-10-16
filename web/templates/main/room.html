@@ -6,6 +6,19 @@
     <meta charset="utf-8"/>
     <title>Chat Room</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://picsum.photos/2000/1000'); /* Add a background image */
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+        
         .username {
             background-color: #56d41d; /* a light gray background */
             padding: 2px 4px; /* add some padding to make it look nicer */
@@ -13,7 +26,7 @@
             margin-right: 10px; /* add some space between the username and the message */
             
             position: relative; /* add this to position the username relative to the picture */
-            top: -3px; /* move the username up by 2 pixels */
+            top: -3.2px; /* move the username up by 2 pixels */
             margin-left: -20px; /* reduce the space between the picture and the username */
         }
 
@@ -56,22 +69,18 @@
         
         
 
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-        }
-}
-
+        
         .chat-header {
-            background-color: #4CAF50; /* Green */
-            border: 1px solid #4CAF50; /* Green */
-            color: gray;
-            padding: 10px 20px;
+            background-color: #fb6fef;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); 
+            color: springgreen;
             text-align: center;
-            text-decoration: none;
+            text-decoration: fuchsia;
             display: block;
             font-size: 19px;
             margin-top: -10px;
-            margin-left: 20px;
+            margin-left: 5px;
         }
         
         .message {
@@ -260,6 +269,9 @@
                 <span class="username">${username}:</span>
                 <span>${message}</span>
             `;
+            
+
+            
         
             // Append the message to the bottom of the chat container
             chatContainer.appendChild(messageElement);

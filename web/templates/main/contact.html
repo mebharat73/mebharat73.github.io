@@ -8,16 +8,17 @@
 
 <body>
 
+
     <!-- Page Header -->
     <!-- Set your background image for this header on the line below. -->
-    <header class="intro-header" style="background-image: url('{% static 'main/image/home-bg.jpg' %}')">
+    <header class="intro-header" style="background-image: url('{% static 'main/image/nature4.jpg' %}')">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="page-heading">
                         <h1>Contact us</h1>
                         <hr class="small">
-                        <span class="subheading">Have questions? I have answers (maybe).</span>
+                        <span class="subheading">Have questions? I have answers...</span>
                     </div>
                 </div>
             </div>
@@ -68,8 +69,7 @@
                             <div id="success"></div>
                             <div class="row">
                                 <div class="form-group col-xs-12">
-                                    <button type="submit" class="btn btn-success btn-sm custom-border" style="border-width: 7px !important; font-size: 12px !important; padding: 5px 10px !important;">Send</button>
-                                    
+                                  <button type="submit" class="btn btn-success btn-sm custom-button custom-border">Send</button>
                                 </div>
                             </div>
                         </form>
@@ -85,154 +85,61 @@
                                 <!-- ... (rest of the form code remains the same) -->
                             </form>
                         </div>
-                        <div class="col-lg-3">
-                            <!-- Chat Section -->
-                            <!-- Chat Section -->
-                            <!-- Chat Section -->
-                            <!-- Chat Section -->
-                            <div class="chat-section" style="position: relative; margin-top: 20px;">
-                                <h4>Live Chat</h4>
-                                <div class="chat-widget">
-                                    <input type="text" id="chat-input" placeholder="Type a message...">
-                                    <button id="chat-send">Send</button>
-                                    <div class="chat-log">
-                                        <ul id="messages-list"></ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                        
                     <!-- ... (rest of the code remains the same) -->
                 </div>
                 {% if success %}
                 <p>Thank you for contacting us, {{ name }}! We will get back to you soon.</p>
                 {% endif %}
             </div>
-            
-                
         </div>
     </div>
+        <!-- Chat Icon -->
+        <a href="{% url 'index' %}">
+            <div class="chat-icon" id="chat-icon">
+                <i class="fa fa-comment" aria-hidden="true"></i>
+            </div>
+        </a>
 
-    <hr>
-
-
-<style>
-    .chat-section {
-        background-color: #f7f7f7;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        width: 400px;
-    }
+          
     
-    .chat-log {
-        padding: 10px;
-        overflow-y: auto;
-        height: 200px;
-    }
-    
-    .chat-widget {
-        margin-top: 10px;
-    }
-    
-    #chat-input {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-    }
-    
-    #chat-send {
-        background-color: #4CAF50;
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-    }
-    
-    #chat-send:hover {
-        background-color: #3e8e41;
-    }
-</style>
-<!-- ... (rest of the code remains the same) -->
+    <style>
+        .custom-button {
+            background-color: #4CAF50; /* Green */
+            color: #ffffff; /* White text */
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer; /* Pointer cursor on hover */
+            padding: 1px 12px; /* Minimal padding */
+            border-width: 5px; /* Thinner border */
+            font-size: 15px; /* Same font size */
+          }
+          
+          .custom-button:hover {
+            background-color: #3e8e41; /* Darker green on hover */
+          }
 
-<!-- Load the channels library -->
+        
 
-
-<!-- Use the channels library to establish a WebSocket connection -->
-<!-- Load the channels library -->
-<!-- Load the channels library -->
-<script type="module">
-    // Establish a WebSocket connection
-    const roomToken = 'actual_room_token'; // Replace with the actual room token
-    var socket = new WebSocket(`ws://localhost:8000/ws/chat/${roomToken}/`);
-
-    // Handle the connection opening
-    socket.onopen = function(event) {
-        console.log('Connected to the WebSocket server');
-    };
-
-    // Handle the connection closing
-    socket.onclose = function(event) {
-        console.log('Disconnected from the WebSocket server');
-        // Try reconnecting to the WebSocket server
-        setTimeout(function() {
-            socket = new WebSocket(`ws://localhost:8000/ws/chat/${roomToken}/`);
-        }, 1000); // Delay for 1 second
-    };
-
-    // Handle incoming messages
-    socket.onmessage = function(event) {
-        console.log('Received message:', event.data);
-        const message = JSON.parse(event.data);
-        const messagesList = document.getElementById('messages-list');
-        const messageElement = document.createElement('li');
-        messageElement.textContent = message.message;
-        messagesList.appendChild(messageElement);
-    };
-
-    // Handle errors
-    socket.onerror = function(event) {
-        console.log('Error occurred:', event);
-        // Add error handling code here
-        // For example, you can try reconnecting to the WebSocket server
-        setTimeout(function() {
-            socket = new WebSocket(`ws://localhost:8000/ws/chat/${roomToken}/`);
-        }, 1000); // Delay for 1 second
-    };
-
-    // Check the WebSocket connection state
-    if (socket.readyState === WebSocket.OPEN) {
-        console.log('WebSocket connection is open');
-    } else if (socket.readyState === WebSocket.CONNECTING) {
-        console.log('WebSocket connection is connecting');
-    } else if (socket.readyState === WebSocket.CLOSING) {
-        console.log('WebSocket connection is closing');
-    } else if (socket.readyState === WebSocket.CLOSED) {
-        console.log('WebSocket connection is closed');
-        // Try reconnecting to the WebSocket server
-        setTimeout(function() {
-            socket = new WebSocket(`ws://localhost:8000/ws/chat/${roomToken}/`);
-        }, 1000); // Delay for 1 second
-    }
-
-    // Send a message to the server
-    document.getElementById('chat-send').addEventListener('click', function() {
-        if (socket.readyState === WebSocket.OPEN) {
-            const message = document.getElementById('chat-input').value;
-            socket.send(JSON.stringify({
-                'message': message
-            }));
-            document.getElementById('chat-input').value = '';
-        } else {
-            console.log('WebSocket connection is not open');
+        .chat-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #FF00FF;
+            color: #00FF00;
+            border-radius: 50%;
+            padding: 10px;
+            font-size: 24px;
+            cursor: pointer;
         }
-    });
     
-</script>
-</body>
+        .chat-icon:hover {
+            background-color: #FF0000;
+        }
+
+        
+    </style>
+</body>    
 {% endblock main_content %}
+
 
 

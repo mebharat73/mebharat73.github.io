@@ -1,85 +1,141 @@
+{% extends 'main/base.html' %}
 {% load static %}
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+{% block title %}
+  Sign up
+{% endblock %}
 
-    <link rel="stylesheet" href="{% static 'main/css/logincss/style.css' %}">
-                                                           
-    <link rel="stylesheet" href="{% static 'main/css/logincss/owl.carousel.min.css' %}">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'main/css/logincss/bootstrap.min.css' %}">
+{% block main_content %}
+
+<style>
+  
+
+  
+
+  /* Add some whitespace between form groups */
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  /* Style the input fields */
+  .form-control {
+    height: 36px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 60%; /* Add this line to set the width */
+  }
+
+  /* Style the labels */
+  form .col-form-label {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: greenyellow;
+    font-size: 18px; /* Add this line to set the font size */
+  }
+
+  /* Style the placeholder text */
+  .form-control::placeholder {
+    color: #C0C0C0;
+  }
+
+  /* Style the submit button */
+  .resize-btn {
+    width: 20%;
+    height: 30px;
+    padding: 0px;
+    font-size: 13px;
+    border-radius: 10px;
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+  }
+
+  .resize-btn:hover {
+    background-color: #c82333;
+  }
+
+  /* Add some padding to the container */
+  .container {
+    padding: 40px;
+  }
+
+  /* Make the form more compact */
+  .form-group.row {
+    margin-bottom: 10px;
+  }
+
+  /* Add some margin to the top of the form */
+  .form-group:first-child {
+    margin-top: 20px;
+  }
+  
+</style>
+ 
+
+
+
+<body style="background-image: url('{% static 'main/image/leaf.jpg' %}'); background-size: cover; background-position: center;">
+
+
+<div class="container">
+
+  
+    <br><br>
     
-    <!-- Style -->
-    <link rel="stylesheet" href="{% static 'main/css/login.css' %}">
-
-    <title>Django Blog | signup</title>
-    
-  </head>
-  <body>
-    <div class="d-lg-flex half">
-    <div class="bg order-1 order-md-2" style="background-image: url('{% static 'main/image/bg_1.jpg' %}');"></div>
-    <div class="contents order-2 order-md-1">
-
-      <div class="container">
-        <div class="row align-items-center justify-content-center">
-          <div class="col-md-7">
-            <h3>Signup to <strong>Django Blog</strong></h3>
-            <p class="mb-2">Please fill the below form inorder to register</p>
-            <form action="#" method="post" enctype="multipart/form-data">
-              {% csrf_token %}
-              {{ error|default:'' }}
-              <div class="form-group first">
-                <label for="username" style="margin-top: -10px">Username</label>
-                <input type="text" class="form-control" minlength="6" placeholder="Your-Name" id="username" name="username" required style="height: 20px; padding: 0.1rem 1rem;">
-              </div>
-              <div class="form-group last mb-3">
-                <label for="password" style="margin-top: -10px;">Password</label>
-                <input type="password" class="form-control" minlength="6" placeholder="Your Password" id="password" name="password" required style="height: 15px; padding: 0.5rem 1rem;">
-              </div>
-              <div class="form-group last mb-3">
-                <label for="password" style="margin-top: -10px;">Confirm Password</label>
-                <input type="password" class="form-control" minlength="6" placeholder="Your Password" id="password_confirm" name="password_confirm" required style="height: 15px; padding: 0.5rem 1rem;">
-              </div>
-              <hr />
-              <div class="form-group first">
-                <label for="first_name" style="margin-top: -10px;">First name</label>
-                <input type="text" class="form-control" minlength="3" placeholder="john" id="first_name" name="first_name" requied style="height: 21px; padding: 0.5rem 1rem;">
-              </div>
-              <div class="form-group first">
-                <label for="last_name" style="margin-top: -10px;">Last name</label>
-                <input type="text" class="form-control" minlength="3" placeholder="kue" id="last_name" name="last_name" required style="height: 21px; padding: 0.5rem 1rem;">
-              </div>
-              <div class="form-group first">
-                <label for="last_name" style="margin-top: -10px;">Email address</label>
-                <input type="text" class="form-control" minlength="4" placeholder="kue" id="email_address" name="email_address" style="height: 21px; padding: 0.5rem 1rem;">
-              </div>
-              <div class="form-group first">
-                <label for="profile_picture" style="margin-top: -10px;">Profile picture</label>
-                <input type="file" class="form-control resize-input" id="profile_picture" name="profile_picture">
-              </div>
-    
-              <input type="submit" value="sign up" class="btn btn-danger resize-btn" style="margin-right: 195px; text-decoration: none; color: white; height: 35px; padding: 0.2rem 1.0rem;">
-              <a href="{% url 'home_page' %}" class="btn btn-success resize-btn" style="margin-top: 0.0rem; text-decoration: none; color: white; height: 35px; padding: 0.2rem 1.0rem;"> Back to home</a>
-            </form>
-            
+      <h3>Signup to <strong>access this website</strong></h3>
+      <p class="mb-2">Please fill the below form, inorder to register</p>
+      <form action="#" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ error|default:'' }}
+        <div class="form-group row">
+          <label for="username" class="col-sm-3 col-form-label">Username</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" minlength="6" placeholder="Your-Name" id="username" name="username" required>
           </div>
         </div>
-      </div>
-    </div>
+        <div class="form-group row">
+          <label for="password" class="col-sm-3 col-form-label">Password</label>
+          <div class="col-sm-9">
+            <input type="password" class="form-control" minlength="6" placeholder="Your Password" id="password" name="password" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="password_confirm" class="col-sm-3 col-form-label">Confirm Password</label>
+          <div class="col-sm-9">
+            <input type="password" class="form-control" minlength="6" placeholder="Your Password" id="password_confirm" name="password_confirm" required>
+          </div>
+        </div>
+        <hr />
+        <div class="form-group row">
+          <label for="first_name" class="col-sm-3 col-form-label">First name</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" minlength="3" placeholder="Bharat" id="first_name" name="first_name" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="last_name" class="col-sm-3 col-form-label">Last name</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" minlength="3" placeholder="karki" id="last_name" name="last_name" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="email_address" class="col-sm-3 col-form-label">Email address</label>
+          <div class="col-sm-9">
+            <input type="email" class="form-control" minlength="4" placeholder="......@gmail.com" id="email_address" name="email_address" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="profile_picture" class="col-sm-3 col-form-label">Profile picture</label>
+          <div class="col-sm-9">
+            <input type="file" class="form-control-file" id="profile_picture" name="profile_picture">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-9 offset-sm-3">
+            <input type="submit" value="Sign up" class="btn btn-danger resize-btn">
+          </div>
+        </div>
+      </form>
 
-    
-  </div>
-    
-    
-
-    <script src="{% static 'main/image/js/jquery-3.3.1.min.js' %}"></script>
-    <script src="{% static 'main/image/js/popper.min.js' %}"></script>
-    <script src="{% static 'main/image/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'main/image/js/main.js' %}"></script>
-  </body>
-</html>
+{% endblock main_content %}

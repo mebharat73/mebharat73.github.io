@@ -8,85 +8,121 @@
 
 {% block main_content %}
 
-<header class="intro-header" style="background-image:  url('{% static 'main/image/home-bg.jpg' %}'); background-size: cover; background-position:center; height: 65vh;">
+<header class="intro-header" style="background-image:  url('{% static 'main/image/bird1.jpg' %}'); background-size: cover; background-position:center; height: 65vh;">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <div class="site-heading">
                     <h1>Blog page</h1>
                     <hr class="small">
-                    <span class="subheading">Blog website presented by Bharat karki</span>
+                    <span class="subheading">Let's create a blog..</span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 <style>
-    .centered-form {
-        margin: 0 auto;
-        width: 70%; /* adjust the width as needed */
-        text-align: center;
+    .form-group a {
+        display: inline-block;
+        margin-left: 10px;
+        padding: 5px 10px;
+        font-size: 14px;
+        background-color: blueviolet;
+        color: #fff;
         border: none;
-        border-radius: 7px;
-        background: radial-gradient(#ff99cc, #ff66b3); /* radial gradient color */
-        padding: 10px; /* add some padding to make the form elements visible */
+        border-radius: 5px;
+        cursor: pointer;
     }
+    
+    .form-group a:hover {
+        background-color: #7a288a;
+    }
+
 
     .form-group {
-        margin-bottom: 2px; /* add some margin between form elements */
+        margin-bottom: 20px;
     }
-
+    
     .form-group label {
-        display: block; /* make labels block elements */
-        margin-bottom: 1px; /* add some margin between label and input */
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
     }
-
-    .form-group input, .form-group textarea, .form-group select {
-        width: 30%; /* make inputs full-width */
-        padding: 1px; /* add some padding to inputs */
-        margin-bottom: 2px; /* add some margin between inputs */
-        border: none;
-        border-radius: 5px; /* add some rounded corners to submit button */
+    
+    .form-group input, .form-group select, .form-group textarea {
+        width: 75%;
+        height: 35px;
+        padding: 1px;
+        font-size: 16px;
+        border: 2px solid #56fe70;
+        border-radius: 10px;
     }
-
+    
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+        border-color: #aaa;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
     .form-group button[type="submit"] {
-        width: 10%; /* make submit button full-width */
-        padding: 2px; /* add some padding to submit button */
-        background-color: #4CAF50; /* add some color to submit button */
-        color: #ffffff; /* add some color to submit button text */
-        border: none; /* remove border from submit button */
-        border-radius: 5px; /* add some rounded corners to submit button */
-        cursor: pointer; /* change cursor shape on hover */
+        width: 17%;
+        height: 30px;
+        padding: 0px;
+        font-size: 20px;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    
+    .form-group button[type="submit"]:hover {
+        background-color: #3e8e41;
     }
 
-    .form-group button[type="submit"]:hover {
-        background-color: #3e8e41; /* change background color on hover */
+
+    .form-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 17px;
+        background-color: #f9f9f9;
+        border: 3px solid #6dfc69;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
+    
+    .form-container .centered-form {
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+
+    
 </style>
 
-<form action="" method="post" enctype="multipart/form-data" class="centered-form">
-    {% csrf_token %}
+<div class="form-container">
+    <form action="" method="post" enctype="multipart/form-data" class="centered-form">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.title.label }}
+            {{ form.title }}
+        </div>
 
-    <div class="form-group">
-        {{ form.title.label }}
-        {{ form.title }}
-    </div>
+        <div class="form-group">
+            {{ form.content.label }}
+            {{ form.content }}
+        </div>
 
-    <div class="form-group">
-        {{ form.content.label }}
-        {{ form.content }}
-    </div>
+        <div class="form-group">
+            {{ form.category.label }}
+            {{ form.category }} 
+            <a href="{% url 'add_category_page' %}" style="background-color: blueviolet border-radius: 5px; ">Add</a>
+        </div>
 
-    <div class="form-group">
-        {{ form.category.label }}
-        {{ form.category }} 
-        <a href="{% url 'add_category_page' %}" style="background-color: blueviolet border-radius: 5px; ">Add</a>
-    </div>
-
-    <div class="form-group">
-        <button type="submit">Post</button>
-    </div>
-</form>
+        <div class="form-group">
+            <button type="submit">Post</button>
+        </div>
+    </form>
+</div>
  
 
 {% endblock %}

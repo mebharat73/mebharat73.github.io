@@ -4,12 +4,83 @@
 <head>
     <meta charset="utf-8"/>
     <title>Chat Rooms</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://picsum.photos/2000/1000'); /* Add a background image */
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+        
+        .container {
+            background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        #room-name-input {
+            padding: 10px;
+            font-size: 15px;
+            border: none;
+            border-radius: 5px;
+            width: 80%;
+        }
+        
+        #room-name-submit {
+            padding: 10px 20px;
+            font-size: 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+        }
+        
+        #room-name-submit:hover {
+            background-color: #3e8e41;
+        }
+        
+        .options {
+            margin-top: 20px;
+        }
+        
+        .option {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        
+        .option:hover {
+            background-color: #3e8e41;
+        }
+    </style>
 </head>
 <body>
-    What chat room would you like to enter?<br>
-    <input id="room-name-input" type="text" size="100"><br>
-    <input id="room-name-submit" type="button" value="Enter">
-
+    <div class="container">
+        <h1>Chat Rooms</h1>
+        <p>What chat room would you like to enter?</p>
+        <input id="room-name-input" type="text" size="100" placeholder="Enter room name">
+        <input id="room-name-submit" type="button" value="Enter">
+        
+        <div class="options">
+            <h2>Or select from the following options:</h2>
+            <button class="option" onclick="window.location.pathname = '/chat/lobby/';">General</button>
+            <button class="option" onclick="window.location.pathname = '/chat/general/';">Technical</button>
+            <button class="option" onclick="window.location.pathname = '/chat/tech/';">Administration</button>
+        </div>
+    </div>
+    
     <script>
         document.querySelector('#room-name-input').focus();
         document.querySelector('#room-name-input').onkeyup = function(e) {

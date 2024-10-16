@@ -14,7 +14,7 @@ class CategoryForm(forms.ModelForm):
         fields = "__all__"
 
 class CreateBlogForm(forms.ModelForm):
-    content = forms.CharField(widget=SummernoteWidget(attrs={'height':300, 'width':800}))
+    content = forms.CharField(widget=SummernoteWidget(attrs={'height':300, 'width':500}))
     class Meta:
         model = Post
         fields = ['title', 'content', 'category']

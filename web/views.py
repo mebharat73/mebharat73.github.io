@@ -19,9 +19,29 @@ from .models import Message
 
 
 
+def get_latest_messages(request, room_name):
+    latest_messages = Message.objects.filter(room=room_name).order_by('-timestamp')[:25]
+    messages = []
+    for message in latest_messages:
+        messages.append({
+            'message': message.message,
+            'username': message.user.username,
+            'profile_pic_url': message.user.profile.profile_pic.url
+        })
+    return JsonResponse(messages, safe=False)
 
+
+def my_view(request):
+    popup_msg_text = 'This is a beautiful popup message!'
+    return render(request, 'main/contact.html', {'popup_msg_text': popup_msg_text})
+
+
+@login_required
 def room(request, room_name):
-    messages = Message.objects.filter(room=room_name).select_related('user__profile').order_by('timestamp')[:25]
+    # Fetch the latest 25 messages in descending order
+    messages = Message.objects.filter(room=room_name).select_related('user__profile').order_by('-timestamp')[:25]
+    # Reverse the list to display from oldest to newest
+    messages = list(messages)[::-1]  # This will reverse the list
     return render(request, 'main/room.html', {'messages': messages, 'room_name': room_name, 'user': request.user})
 
 def index(request):

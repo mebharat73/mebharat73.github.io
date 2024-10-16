@@ -20,60 +20,169 @@
     <title>Django Blog | login</title>
   </head>
   <body>
+    <body style="background-image: url('{% static 'main/image/leaf.jpg' %}'); background-size: cover; background-position: center; height: 100vh; margin: 0;">
+      
 
-    
-  <body style="background-image: url('{% static 'main/image/deep-dusk-003.jpg' %}');">
-
-  <div class="d-lg-flex half">
-    <div class="bg order-1 order-md-2" ></div>
-    <div class="contents order-2 order-md-1">
-
-      <div class="container">
-        <div class="row align-items-center justify-content-center">
-          <div class="col-md-7">
-            <!--<h3><span style="font-weight: bold; color: #FFFFFF;">Login to</span> <strong>Django Blog</strong></h3>-->
-            <h3><span style="font-weight: bold; color: #FFFFFF;">Login to</span> <span style="font-weight: bold; color: #FFFFFF;"><strong>Django Blog</strong></span></h3>
-            <p class="mb-4">Enter your Credentials</p>
+          <br><br>
+          <div class="form-container">
+            <h2>Login</h2>
+              <p>Please fill the fields</p>
             <form action="#" method="post">
               {% csrf_token %}
               {{ error|default:'' }}
-              <div class="form-group text-center">
-                <label for="username" style="color: #FFFFFF;">Username</label>
-                
-                <input type="text" class="form-control" placeholder="Your Name" id="username" name="username" style="padding-left: 10px;>
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="form-control">
               </div>
-              <div class="form-group text-center">
-                <label for="password" style="color: #FFFFFF;">Password</label>
-                <input type="password" class="form-control" placeholder="Your Password" id="password" name="password" style="padding-left: 10px;">
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-control">
               </div>
-              
-              <div class="d-flex mb-5 align-items-center">
-                <label class="control control--checkbox mb-0"><span class="caption" style="color: #FFFFFF;">Remember me</span>
-                  <input type="checkbox" name="remember_me"/>
+              <div class="form-group">
+                <label class="control control--checkbox">
+                  <input type="checkbox" name="remember_me">
                   <div class="control__indicator"></div>
+                  <span class="caption">Remember me</span>
                 </label>
-                <span class="ml-auto"><a href="#" class="forgot-pass" style="color: #FFFFFF;">Forgot Password</a></span> 
+                <span class="ml-auto"><a href="#" class="forgot-pass">Forgot Password</a></span>
               </div>
-
               <input type="submit" value="Log In" class="btn btn-block btn-primary">
-
-              <a href="{% url 'home_page' %}" class="btn btn-block btn-success text-center" style="margin-top: 1.0rem; color: red;">Back to home</a>
-
             </form>
+            <br>
+            <p>Don't have an account? <a href="{% url 'signup_page' %}">Sign up</a></p>
             
           </div>
-        </div>
+
+
+          </div>
       </div>
-    </div>
+      </div>
+      
+      <script src="{% static 'main/image/js/jquery-3.3.1.min.js' %}"></script>
+      <script src="{% static 'main/image/js/popper.min.js' %}"></script>
+      <script src="{% static 'main/image/js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'main/image/js/main.js' %}"></script>
+      <style>
 
-    
-  </div>
-    
-    
+        .form-container {
+          text-align: center;
+        }
+        
+        h2 {
+          font-weight: bold;
+          font-size: 25px;
+          color: #0000FF;
+          margin-bottom: 10px;
+        }
+        
+        p {
+          margin-bottom: 20px;
+          font-size: 16px;
+          color: #666;
+        }
 
-    <script src="{% static 'main/image/js/jquery-3.3.1.min.js' %}"></script>
-    <script src="{% static 'main/image/js/popper.min.js' %}"></script>
-    <script src="{% static 'main/image/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'main/image/js/main.js' %}"></script>
+        .form-container {
+          max-width: 500px;
+          margin: 0 auto;
+          padding: 20px;
+          background-color: #fff;
+          border-radius: 10px;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Add this to maintain the form container size */
+        .form-container {
+          width: 60%; /* adjust the width percentage as needed */
+          height: 90vh; /* adjust the height as needed */
+        }
+
+        /* Style the form */
+        form {
+          background-color: #fff;
+          padding: 80px;
+          border-radius: 10px;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Style the form group */
+        .form-group {
+          margin-bottom: 10px;
+        }
+
+        /* Style the labels */
+        label {
+          font-weight: bold;
+          margin-bottom: 5px;
+          display: block;
+          color: #5956fe;
+        }
+
+        /* Style the inputs */
+        input[type="text"], input[type="password"] {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 20px;
+          border: 2px solid #ccc;
+          border-radius: 10px;
+          font-size: 15px;
+        }
+
+        .control--checkbox {
+          display: flex;
+          align-items: center;
+          padding-left: 1;
+          margin-bottom: 5px;
+          cursor: pointer;
+          font-size: 12px;
+        }
+        
+        .control__indicator {
+          width: 15px;
+          height: 15px;
+          background-color: #45fe40;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          margin-right: 5px;
+        }
+        
+        .control--checkbox input {
+          position: absolute;
+          z-index: 1;
+          opacity: 0;
+          left: 0;
+          top: 0;
+        }
+        
+        .control--checkbox label {
+          margin-left: 20px;
+        }
+        
+        /* Style the forgot password link */
+        .forgot-pass {
+          text-decoration: none;
+          color: #007bff;
+          font-size: 13px;
+        }
+
+        /* Style the submit button */
+        .btn-block {
+          width: 20%;
+          padding: 8px;
+          background-color: #007bff;
+          color: #fff;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 14px;
+        }
+
+        .btn-block:hover {
+          background-color: #0056b3;
+        }
+
+               
+        
+      
+      </style>
   </body>
 </html>
