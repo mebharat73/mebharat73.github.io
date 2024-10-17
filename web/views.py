@@ -18,6 +18,24 @@ from .models import Message
 
 
 
+# your_app/apps.py
+from django.apps import AppConfig
+import redis
+
+class YourAppConfig(AppConfig):
+    name = 'web'
+
+    def ready(self):
+        # Create a Redis client
+        self.redis_client = redis.StrictRedis(host='red-cs8c4dm8ii6s73c81j00', port=6379, decode_responses=True)
+        try:
+            self.redis_client.ping()
+            print("Connected to Redis!")
+        except redis.ConnectionError:
+            print("Could not connect to Redis.")
+
+
+
 
 def get_latest_messages(request, room_name):
     latest_messages = Message.objects.filter(room=room_name).order_by('-timestamp')[:25]
