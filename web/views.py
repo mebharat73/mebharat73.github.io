@@ -18,13 +18,13 @@ from .models import Message
 import redis
 
 
-# your_app/views.py
+# web/views.py
 from django.http import JsonResponse
 from .apps import WebConfig
 
 def test_redis_connection(request):
     # Get the Redis client from the app configuration class
-    redis_client = WebConfig.redis_client
+    redis_client = WebConfig.get_redis_client()
 
     # Test the connection
     try:
@@ -32,9 +32,6 @@ def test_redis_connection(request):
         return JsonResponse({"message": "Connected to Redis!"})
     except redis.ConnectionError:
         return JsonResponse({"error": "Could not connect to Redis."}, status=500)
-
-
-
 
 
 def get_latest_messages(request, room_name):
