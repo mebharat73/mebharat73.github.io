@@ -15,7 +15,7 @@ import dj_database_url
 import os
 import redis
 
-
+print(os.environ.get('DATABASE_URL'))
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -43,10 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'web',
     'debug_toolbar',
     'django_summernote',
-    
+    'web.apps.WebConfig',
 
 ]
 
@@ -55,7 +54,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [("redis://red-cs8c4dm8ii6s73c81j00:6379")],
         },
     },
 }
