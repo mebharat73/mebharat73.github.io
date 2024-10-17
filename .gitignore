@@ -1,2 +1,53 @@
-db.sqlite3
+# Python cache files
 __pycache__/
+*.py[cod]
+
+# Django migrations
+*/migrations/*.py
+*/migrations/*.pyc
+!*/migrations/__init__.py
+
+# Environment variables
+.env
+*.env
+
+# Database files
+*.sqlite3
+
+# Static files
+/static/
+media/
+
+# VS Code settings
+.vscode/
+
+# PyCharm settings
+.idea/
+
+# Python virtual environment
+venv/
+env/
+ENV/
+.venv/
+
+# Jupyter Notebook files
+.ipynb_checkpoints/
+
+# Log files
+*.log
+
+# Coverage reports
+coverage/
+*.cover
+*.coverage
+
+# Pytest cache
+.cache/
+pytest_cache/
+
+# macOS specific
+.DS_Store
+
+# Other
+*.swp
+*.swo
