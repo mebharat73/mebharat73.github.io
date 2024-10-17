@@ -15,24 +15,24 @@ from .forms import CommentForm, CommentReplyForm
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from .models import Message
-
-
-
-# your_app/apps.py
-from django.apps import AppConfig
 import redis
 
-class YourAppConfig(AppConfig):
-    name = 'web'
 
-    def ready(self):
-        # Create a Redis client
-        self.redis_client = redis.StrictRedis(host='red-cs8c4dm8ii6s73c81j00', port=6379, decode_responses=True)
-        try:
-            self.redis_client.ping()
-            print("Connected to Redis!")
-        except redis.ConnectionError:
-            print("Could not connect to Redis.")
+# your_app/views.py
+from django.http import JsonResponse
+from .apps import WebConfig
+
+def test_redis_connection(request):
+    # Get the Redis client from the app configuration class
+    redis_client = WebConfig.redis_client
+
+    # Test the connection
+    try:
+        redis_client.ping()
+        return JsonResponse({"message": "Connected to Redis!"})
+    except redis.ConnectionError:
+        return JsonResponse({"error": "Could not connect to Redis."}, status=500)
+
 
 
 
