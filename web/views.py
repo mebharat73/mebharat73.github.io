@@ -22,7 +22,7 @@ import redis
 from django.http import JsonResponse
 from .apps import WebConfig
 
-def test_redis_connection(request):
+def test_redis_connection():
     # Get the Redis client from the app configuration class
     redis_client = WebConfig.get_redis_client()
 
