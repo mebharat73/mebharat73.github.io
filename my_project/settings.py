@@ -96,7 +96,7 @@ TEMPLATES = [
 
 
 
-database_url = os.environ.get('DATABASE_URL','')
+
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -112,11 +112,11 @@ database_url = os.environ.get('DATABASE_URL','')
 # }
 
 
+
+
 DATABASES = {
     'default': dj_database_url.config(
-        # Replace this value with your local database's connection string.
-        default=database_url,
-        conn_max_age=600
+        default='postgresql://bharat_user:NRafOKXSQeQ58ZkQ8l6WMiu7xacOQtpP@dpg-cs7ks7tumphs73a85arg-a.oregon-postgres.render.com/bharat'
     )
 }
 
@@ -162,7 +162,7 @@ if not DEBUG:
     # Enable the WhiteNoise storage backend, which compresses static files to reduce disk use
     # and renames the files with unique names for each version to support long-term caching
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-    
+
 STATIC_ROOT = 'static/'
 
 
