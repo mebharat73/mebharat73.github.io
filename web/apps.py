@@ -8,7 +8,7 @@ class WebConfig(AppConfig):
 
     def ready(self):
         # Create a Redis client
-        self.redis_client = redis.StrictRedis(host='redis://red-cs8c4dm8ii6s73c81j00', port=6379, decode_responses=True)
+        self.redis_client = redis.StrictRedis(host='red-cs8c4dm8ii6s73c81j00', port=6379, decode_responses=True)
         try:
             self.redis_client.ping()
             print("Connected to Redis!")
