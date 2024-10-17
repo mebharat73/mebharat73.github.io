@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import dj_database_url
 import os
+
+print(os.environ.get('DATABASE_URL'))
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -115,9 +117,14 @@ TEMPLATES = [
 
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgresql://bharat_user:NRafOKXSQeQ58ZkQ8l6WMiu7xacOQtpP@dpg-cs7ks7tumphs73a85arg-a.oregon-postgres.render.com/bharat'
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'bharat',
+        'USER': 'bharat_user',
+        'PASSWORD': 'NRafOKXSQeQ58ZkQ8l6WMiu7xacOQtpP',
+        'HOST': 'dpg-cs7ks7tumphs73a85arg-a.oregon-postgres.render.com',  # Ensure this is correct
+        'PORT': '5432',       # Ensure this is the correct port
+    }
 }
 
 # Password validation
