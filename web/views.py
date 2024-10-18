@@ -15,36 +15,7 @@ from .forms import CommentForm, CommentReplyForm
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from .models import Message
-import redis
 
-from django.http import JsonResponse
-from .apps import WebConfig
-
-
-import asyncio  # Import asyncio to use its functionalities
-from django.http import StreamingHttpResponse
-
-async def async_generator():
-    for i in range(10):
-        yield f"Data chunk {i}\n"
-        await asyncio.sleep(1)  # Simulate an I/O operation
-
-async def my_view(request):
-    response = StreamingHttpResponse(async_generator())
-    return response
-
-
-
-def test_redis_connection():
-    # Get the Redis client from the app configuration class
-    redis_client = WebConfig.get_redis_client()
-
-    # Test the connection
-    try:
-        redis_client.ping()
-        return JsonResponse({"message": "Connected to Redis!"})
-    except redis.ConnectionError:
-        return JsonResponse({"error": "Could not connect to Redis."}, status=500)
 
 
 def get_latest_messages(request, room_name):
