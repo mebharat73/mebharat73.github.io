@@ -3,7 +3,6 @@
 import asyncio
 import http
 import signal
-
 from websockets.asyncio.server import serve
 
 
@@ -13,8 +12,11 @@ async def echo(websocket):
 
 
 def health_check(connection, request):
+    # Respond to health check only if the path matches
     if request.path == "/healthz":
         return connection.respond(http.HTTPStatus.OK, "OK\n")
+    # For other requests, do not respond (to avoid HEAD requests)
+    return connection.respond(http.HTTPStatus.METHOD_NOT_ALLOWED, "Method Not Allowed\n")
 
 
 async def main():
