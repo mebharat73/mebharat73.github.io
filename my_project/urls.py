@@ -11,6 +11,13 @@ urlpatterns = [
     path('__debug__/', include('debug_toolbar.urls')),
  
     
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+
+# Serve media files
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Serve static files
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 
