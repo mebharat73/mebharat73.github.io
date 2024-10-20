@@ -251,6 +251,7 @@
         
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
+            console.log('Received data:', data); // Debugging line
             const message = data.message;
             let username = data.username ? data.username : 'Anonymous';
         
