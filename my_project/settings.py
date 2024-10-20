@@ -50,7 +50,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [("localhost", 6379)],
         },
     },
 }
@@ -208,5 +208,5 @@ DEBUG_TOOLBAR_CONFIG = {
         'django.views.decorators',
         'django.views.generic',
     ),
-    'INTERNAL_IPS': ['127.0.0.1'],  # or your local IP address
+    'INTERNAL_IPS': ['localhost'],  # or your local IP address
 }
