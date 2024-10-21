@@ -16,6 +16,19 @@ from django.core.mail import send_mail
 from django.http import JsonResponse
 from .models import Message
 
+from django.http import HttpResponse
+from .redis_client import get_redis_client
+
+
+
+def my_view(request):
+    client = get_redis_client()
+    # Example operation
+    if client.ping():
+        return HttpResponse("Connected to Redis!")
+    else:
+        return HttpResponse("Failed to connect to Redis.")
+
 
 
 def get_latest_messages(request, room_name):
