@@ -52,16 +52,12 @@ CHANNEL_LAYERS = {
         "CONFIG": {
             "hosts": [
                 {
-                    "address": ("oregon-redis.render.com", 6379),
-                    "password": "lZfHPBbmg8jwbrF0hmauCvJ0nAGQRJM4",
-                    "username": "red-csauologph6c73a6k100",
-                    "ssl": True,
+                    "address": "rediss://red-csauologph6c73a6k100:lZfHPBbmg8jwbrF0hmauCvJ0nAGQRJM4@oregon-redis.render.com:6379",
                 }
             ],
         },
     },
 }
-
 
 
 
