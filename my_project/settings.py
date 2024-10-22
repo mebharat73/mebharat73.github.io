@@ -51,7 +51,7 @@ ALLOWED_HOSTS = ['127.0.0.1', 'my-project-wa3s.onrender.com']
 INSTALLED_APPS = [
     'daphne',
     
-    #'channels',
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'web',
+    'django_extensions',
     'debug_toolbar',
     'django_summernote',
 
@@ -115,6 +116,11 @@ TEMPLATES = [
 ]
 
 #WSGI_APPLICATION = 'my_project.wsgi.application'
+
+
+SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
+SESSION_COOKIE_SECURE = True  # Use secure cookies
+CSRF_COOKIE_SECURE = True  # Use secure CSRF cookies
 
 
 
