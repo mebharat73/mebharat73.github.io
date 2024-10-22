@@ -30,28 +30,27 @@ ALLOWED_HOSTS = ['*']
 
 
 # Ensure your application is aware it's running on HTTPS
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-USE_X_FORWARDED_HOST = True
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#USE_X_FORWARDED_HOST = True
 # Redirect all HTTP requests to HTTPS
-SECURE_SSL_REDIRECT = True
+#SECURE_SSL_REDIRECT = True
 
 # Set the session cookie to be secure
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
 
 
 # Optionally allow all origins (not recommended for production)
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "https://my-project-wa3s.onrender.com",
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://127.0.0.1:8000",
+#     ]
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'daphne',
-    'corsheaders',
+    
     #'channels',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -72,7 +71,7 @@ CHANNEL_LAYERS = {
         "CONFIG": {
             "hosts": [
                 {
-                    "address": "rediss://red-csauologph6c73a6k100:lZfHPBbmg8jwbrF0hmauCvJ0nAGQRJM4@oregon-redis.render.com:6379",
+                    "address": "rediss://red-csbjk3dds78s73b8pcrg:hN9mjW2HVaa3RTQh9KHwXffkWi2eLVRa@oregon-redis.render.com:6379",
                 }
             ],
         },
@@ -86,7 +85,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
