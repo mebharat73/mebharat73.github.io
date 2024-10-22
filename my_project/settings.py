@@ -28,6 +28,18 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
+
+# Ensure your application is aware it's running on HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = True
+
+# Set the session cookie to be secure
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+
 # Application definition
 
 INSTALLED_APPS = [
