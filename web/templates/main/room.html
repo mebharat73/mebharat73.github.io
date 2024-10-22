@@ -280,6 +280,10 @@
             // Scroll to the bottom
             chatContainer.scrollTop = chatContainer.scrollHeight;
         };
+
+        chatSocket.onopen = function(e) {
+            console.log("WebSocket connection established!");
+        };
     
 
         chatSocket.onclose = function(e) {
