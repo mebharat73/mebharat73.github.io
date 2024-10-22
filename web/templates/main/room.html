@@ -210,12 +210,10 @@
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
         const chatSocket = new WebSocket(
-            'ws://'
-            + window.location.host
-            + '/ws/chat/'
-            + roomName
-            + '/'
+            'wss://' + window.location.host + '/ws/chat/' + roomName + '/'
         );
+
+        // ... (rest of the code remains the same)
 
         // ... (rest of the code remains the same)
 
@@ -286,7 +284,13 @@
     
 
         chatSocket.onclose = function(e) {
-            console.error('Chat socket closed unexpectedly');
+            console.error('Chat socket closed unexpectedly:', e);
+            alert('Connection to the chat server has been lost. Please refresh the page to reconnect.');
+        };
+        
+        chatSocket.onerror = function(error) {
+            console.error('WebSocket error:', error);
+            alert('An error occurred while communicating with the chat server. Please refresh the page to try again.');
         };
 
         // get the chat log element
@@ -304,15 +308,22 @@
             }
         };
 
-        
-        document.querySelector('#chat-message-submit').addEventListener('click', function(e) {
-            const messageInputDom = document.querySelector('#chat-message-input');
-            const message = messageInputDom.value;
+        function sendMessage(message) {
             const username = "{{ user.username }}"; // Assuming you're using Django's template engine
             chatSocket.send(JSON.stringify({
                 'message': message,
                 'username': username
             }));
+        }
+        
+        document.querySelector('#chat-message-submit').addEventListener('click', function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value.trim(); // Remove leading and trailing whitespace
+            if (message.length === 0) {
+                console.log('Cannot send empty message');
+                return;
+            }
+            sendMessage(message);
             messageInputDom.value = '';
             console.log('Input field value after submit:', messageInputDom.value);
         });
