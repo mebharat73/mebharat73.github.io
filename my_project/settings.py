@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ['*']
 
 # Ensure your application is aware it's running on HTTPS
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
+USE_X_FORWARDED_HOST = True
 # Redirect all HTTP requests to HTTPS
 SECURE_SSL_REDIRECT = True
 
@@ -40,10 +40,15 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 
+# Optionally allow all origins (not recommended for production)
+CORS_ALLOW_ALL_ORIGINS = True
+
+
 # Application definition
 
 INSTALLED_APPS = [
     'daphne',
+    'corsheaders',
     #'channels',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -77,6 +82,7 @@ CHANNEL_LAYERS = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
