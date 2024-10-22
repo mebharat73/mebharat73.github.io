@@ -219,6 +219,8 @@
         // Listen for the 'open' event
         chatSocket.onopen = function(e) {
             console.log('WebSocket connection opened');
+            const roomName = JSON.parse(document.getElementById('room-name').textContent);
+            chatSocket.send(JSON.stringify({ type: 'join', room: roomName }));
             // Now you can safely send messages
             document.querySelector('#chat-message-input').focus();
             document.querySelector('#chat-message-input').onkeyup = function(e) {
@@ -292,9 +294,6 @@
                 <span class="username">${username}:</span>
                 <span>${message}</span>
             `;
-            
-
-            
         
             // Append the message to the bottom of the chat container
             chatContainer.appendChild(messageElement);
@@ -335,9 +334,11 @@
 
         function sendMessage(message) {
             const username = "{{ user.username }}"; // Assuming you're using Django's template engine
+            const roomName = JSON.parse(document.getElementById('room-name').textContent); // Get the room name
             chatSocket.send(JSON.stringify({
                 'message': message,
-                'username': username
+                'username': username,
+                'room': roomName // Include the room name
             }));
         }
         
