@@ -118,9 +118,9 @@ TEMPLATES = [
 #WSGI_APPLICATION = 'my_project.wsgi.application'
 
 
-# SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
-# SESSION_COOKIE_SECURE = True  # Use secure cookies
-# CSRF_COOKIE_SECURE = True  # Use secure CSRF cookies
+SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
+SESSION_COOKIE_SECURE = True  # Use secure cookies
+CSRF_COOKIE_SECURE = True  # Use secure CSRF cookies
 
 
 
@@ -132,12 +132,12 @@ TEMPLATES = [
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "my_project_q45u",  # Your database name
-        "USER": "my_project",        # Your database user
+        "ENGINE": "django.db.backends.postgresql",  # Correct engine for PostgreSQL
+        "NAME": "my_project_q45u",                  # Your database name
+        "USER": "my_project",                        # Your database user
         "PASSWORD": "LY45kgR48mIcjj5YrFy9pRycwK9HMXM4",  # Your database password
         "HOST": "dpg-csbjk3dds78s73b8pcsg-a.oregon-postgres.render.com",  # Your database host
-        "PORT": "5432",              # Default PostgreSQL port
+        "PORT": "5432",                              # Default PostgreSQL port
     }
 }
 
