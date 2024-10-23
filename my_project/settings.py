@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ir)0&nac$$0nprx(&00yp3$9qr-s#d3mst&6))p@%_g0sr^7n%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'my-project-wa3s.onrender.com']
+ALLOWED_HOSTS = ['127.0.0.1:8000/', 'my-project-wa3s.onrender.com']
 
 
 
@@ -118,9 +118,9 @@ TEMPLATES = [
 #WSGI_APPLICATION = 'my_project.wsgi.application'
 
 
-SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
-SESSION_COOKIE_SECURE = True  # Use secure cookies
-CSRF_COOKIE_SECURE = True  # Use secure CSRF cookies
+# SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
+# SESSION_COOKIE_SECURE = True  # Use secure cookies
+# CSRF_COOKIE_SECURE = True  # Use secure CSRF cookies
 
 
 
