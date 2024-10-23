@@ -128,13 +128,16 @@ CSRF_COOKIE_SECURE = True  # Use secure CSRF cookies
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+
+
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-        "TEST": {
-            "NAME": BASE_DIR / "db.sqlite3",
-        },
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "my_project_q45u",  # Your database name
+        "USER": "my_project",        # Your database user
+        "PASSWORD": "LY45kgR48mIcjj5YrFy9pRycwK9HMXM4",  # Your database password
+        "HOST": "dpg-csbjk3dds78s73b8pcsg-a.oregon-postgres.render.com",  # Your database host
+        "PORT": "5432",              # Default PostgreSQL port
     }
 }
 
