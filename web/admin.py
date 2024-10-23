@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile, Post, Comment, Like, Category, CommentReply, Message
+from .models import Profile, Post, Comment, Like, Category, CommentReply, Message, Room
 from django.contrib.auth.models import User
 
 class ProfileInline(admin.TabularInline):
@@ -21,6 +21,7 @@ admin.site.register (Like)
 admin.site.register (Category)
 admin.site.register (CommentReply)
 admin.site.register (Message)
+admin.site.register(Room)
 
 
 
