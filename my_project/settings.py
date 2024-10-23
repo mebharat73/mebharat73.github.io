@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -72,7 +73,7 @@ CHANNEL_LAYERS = {
         "CONFIG": {
             "hosts": [
                 {
-                    "address": "rediss://red-csbjk3dds78s73b8pcrg:hN9mjW2HVaa3RTQh9KHwXffkWi2eLVRa@oregon-redis.render.com:6379",
+                    "address": "redis://red-csbjk3dds78s73b8pcrg:6379",
                 }
             ],
         },
@@ -130,16 +131,24 @@ CSRF_COOKIE_SECURE = True  # Use secure CSRF cookies
 
 
 
+
+
+
+import os
+import dj_database_url
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Database configuration
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",  # Correct engine for PostgreSQL
-        "NAME": "my_project_q45u",                  # Your database name
-        "USER": "my_project",                        # Your database user
-        "PASSWORD": "LY45kgR48mIcjj5YrFy9pRycwK9HMXM4",  # Your database password
-        "HOST": "dpg-csbjk3dds78s73b8pcsg-a.oregon-postgres.render.com",  # Your database host
-        "PORT": "5432",                              # Default PostgreSQL port
-    }
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL')
+    )
 }
+
+
 
 
 # Password validation
