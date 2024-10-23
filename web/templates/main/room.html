@@ -206,29 +206,27 @@
 
     {{ room_name|json_script:"room-name" }}
     <script>
-
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
-
-                // ... (rest of the code remains the same)
-
-        let chatSocket;
-
+        
         // Create the WebSocket connection
-        chatSocket = new WebSocket('wss://websockets-echo.onrender.com/'); // Replace with your actual URL
-
+        const chatSocket = new WebSocket('wss://websockets-echo.onrender.com/'); // Replace with your actual URL
+    
+        // Declare chatContainer once
+        const chatContainer = document.querySelector('.chat-messages');
+    
         // Listen for the 'open' event
         chatSocket.onopen = function(e) {
             console.log('WebSocket connection opened');
-            const roomName = JSON.parse(document.getElementById('room-name').textContent);
             chatSocket.send(JSON.stringify({ type: 'join', room: roomName }));
-            // Now you can safely send messages
+    
+            // Setup event listeners for message input
             document.querySelector('#chat-message-input').focus();
             document.querySelector('#chat-message-input').onkeyup = function(e) {
                 if (e.keyCode === 13) {  // enter, return
                     document.querySelector('#chat-message-submit').click();
                 }
             };
-
+    
             document.querySelector('#chat-message-submit').onclick = function(e) {
                 const messageInput = document.querySelector('#chat-message-input');
                 const message = messageInput.value;
@@ -238,125 +236,97 @@
                 }
             };
         };
-
-        
-
-        // ... (rest of the code remains the same)
-
-        const chatContainer = document.querySelector('.chat-messages');
-
-        function appendMessage(message) {
+    
+        // Function to append a message to the chat container
+        function appendMessage(data) {
             const messageElement = document.createElement('div');
-            messageElement.textContent = message;
+            messageElement.classList.add('message');
+    
+            // Check if the message is from the current user
+            if (data.username === "{{ user.username }}") {
+                messageElement.classList.add('right');
+            } else {
+                messageElement.classList.add('left');
+            }
+    
+            // Add message content
+            messageElement.innerHTML = `
+                <img src="${data.profile_pic_url}" alt="${data.username}'s Avatar">
+                <span class="username">${data.username}:</span>
+                <span>${data.message}</span>
+            `;
+    
             chatContainer.appendChild(messageElement);
-
-            // scroll to the bottom of the chat container
+            chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to the bottom
+        }
+    
+        // Function to add a new message to the chat log
+        function addNewMessage(data) {
+            appendMessage(data);
+    
+            // Limit to the latest 25 messages
+            const messageElements = chatContainer.children;
+            if (messageElements.length > 25) {
+                // Remove the oldest messages
+                while (messageElements.length > 25) {
+                    chatContainer.removeChild(messageElements[0]);
+                }
+            }
+        }
+    
+        // Handle incoming messages
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            console.log('Received message:', data);
+            addNewMessage(data);
+        };
+    
+        // Handle errors
+        chatSocket.onerror = function(error) {
+            console.error('WebSocket error:', error);
+            alert('An error occurred while communicating with the chat server. Please refresh the page to try again.');
+        };
+    
+        // Handle disconnections
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly:', e);
+            alert('Connection to the chat server has been lost. Please refresh the page to reconnect.');
+        };
+    
+        // Send a message function
+        function sendMessage(message) {
+            const username = "{{ user.username }}"; // Assuming you're using Django's template engine
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'username': username,
+                'room': roomName
+            }));
+        }
+    
+        // Event listeners for sending messages
+        document.querySelector('#chat-message-submit').addEventListener('click', function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value.trim();
+            if (message.length === 0) {
+                console.log('Cannot send empty message');
+                return;
+            }
+            sendMessage(message);
+            messageInputDom.value = ''; // Clear input after sending
+        });
+    
+        // Allow sending messages with Enter key
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // Enter key
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+    
+        // Automatically scroll to the bottom on load
+        window.onload = function() {
             chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-
-
-        const chatContainer = document.querySelector('.chat-messages');
-
-// Function to append a message to the chat container
-function appendMessage(data) {
-    const messageElement = document.createElement('div');
-    messageElement.classList.add('message');
-    
-    // Check if the message is from the current user
-    if (data.username === "{{ user.username }}") {
-        messageElement.classList.add('right');
-    } else {
-        messageElement.classList.add('left');
-    }
-
-    // Add message content
-    messageElement.innerHTML = `
-        <img src="${data.profile_pic_url}" alt="${data.username}'s Avatar">
-        <span class="username">${data.username}:</span>
-        <span>${data.message}</span>
-    `;
-    
-    chatContainer.appendChild(messageElement);
-    chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to the bottom
-}
-
-// Function to add a new message to the chat log
-function addNewMessage(data) {
-    appendMessage(data);
-    
-    // Limit to the latest 25 messages
-    const messageElements = chatContainer.children;
-    if (messageElements.length > 25) {
-        // Remove the oldest messages
-        while (messageElements.length > 25) {
-            chatContainer.removeChild(messageElements[0]);
-        }
-    }
-}
-
-// Create the WebSocket connection
-const chatSocket = new WebSocket('wss://your-backend-server.com/ws/'); // Update with your actual URL
-
-chatSocket.onopen = function(e) {
-    console.log('WebSocket connection opened');
-    const roomName = JSON.parse(document.getElementById('room-name').textContent);
-    chatSocket.send(JSON.stringify({ type: 'join', room: roomName }));
-};
-
-// Handle incoming messages
-chatSocket.onmessage = function(e) {
-    const data = JSON.parse(e.data);
-    console.log('Received message:', data);
-    addNewMessage(data);
-};
-
-// Handle errors
-chatSocket.onerror = function(error) {
-    console.error('WebSocket error:', error);
-    alert('An error occurred while communicating with the chat server. Please refresh the page to try again.');
-};
-
-// Handle disconnections
-chatSocket.onclose = function(e) {
-    console.error('Chat socket closed unexpectedly:', e);
-    alert('Connection to the chat server has been lost. Please refresh the page to reconnect.');
-};
-
-// Send a message function
-function sendMessage(message) {
-    const username = "{{ user.username }}"; // Assuming you're using Django's template engine
-    const roomName = JSON.parse(document.getElementById('room-name').textContent);
-    chatSocket.send(JSON.stringify({
-        'message': message,
-        'username': username,
-        'room': roomName
-    }));
-}
-
-// Event listeners for sending messages
-document.querySelector('#chat-message-submit').addEventListener('click', function(e) {
-    const messageInputDom = document.querySelector('#chat-message-input');
-    const message = messageInputDom.value.trim();
-    if (message.length === 0) {
-        console.log('Cannot send empty message');
-        return;
-    }
-    sendMessage(message);
-    messageInputDom.value = ''; // Clear input after sending
-});
-
-// Allow sending messages with Enter key
-document.querySelector('#chat-message-input').onkeyup = function(e) {
-    if (e.keyCode === 13) {  // Enter key
-        document.querySelector('#chat-message-submit').click();
-    }
-};
-
-// Automatically scroll to the bottom on load
-window.onload = function() {
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-};
-</script>
+        };
+           
+    </script>
 </body>
 </html>
