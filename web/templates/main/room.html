@@ -187,7 +187,7 @@
         <div class="chat-messages" id="chat-log">
     {% for message in messages %}
         <div class="message {% if message.user == request.user %}right{% else %}left{% endif %}">
-            <img src="{{ message.user.profile.profile_pic.url }}" alt="Profile Picture">
+            <img src="{{ message.user.profile.profile_pic.url|default:'/path/to/default/image.png' }}" alt="Profile Picture">
             <span class="username">{{ message.user.username }}:</span>
             <span>{{ message.message }}</span>
             <span class="time">{{ message.timestamp }}</span>
@@ -256,105 +256,107 @@
 
 
 
-        const chatMessages = document.querySelector('.chat-messages');
+        const chatContainer = document.querySelector('.chat-messages');
 
-        // Function to add a new message to the chat log
-        // Function to add a new message to the chat log
-        function addNewMessage(message) {
-            const messageHTML = `<div class="message">${message}</div>`;
-            chatMessages.innerHTML += messageHTML;
-            const messageElements = chatMessages.children;
-            if (messageElements.length > 25) {
-                // Remove the oldest messages
-                while (messageElements.length > 25) {
-                    chatMessages.removeChild(messageElements[0]);
-                }
-            }
-            chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom
-        }
-        
-        chatSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-            console.log('Received data:', data); // Debugging line
-            const message = data.message;
-            let username = data.username ? data.username : 'Anonymous';
-        
-            // Create the message element dynamically
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message');
-            if (username === "{{ user.username }}") {
-                messageElement.classList.add('right');
-            } else {
-                messageElement.classList.add('left');
-            }
-        
-            // Add the message content
-            messageElement.innerHTML = `
-                <img src="${data.profile_pic_url}" alt="${username}'s Avatar">
-                <span class="username">${username}:</span>
-                <span>${message}</span>
-            `;
-        
-            // Append the message to the bottom of the chat container
-            chatContainer.appendChild(messageElement);
-        
-            // Scroll to the bottom
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        };
-
-        
-        
+// Function to append a message to the chat container
+function appendMessage(data) {
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message');
     
+    // Check if the message is from the current user
+    if (data.username === "{{ user.username }}") {
+        messageElement.classList.add('right');
+    } else {
+        messageElement.classList.add('left');
+    }
 
-        chatSocket.onerror = function(error) {
-            console.error('WebSocket error:', error);
-            alert('An error occurred while communicating with the chat server. Please refresh the page to try again.');
-        };
-        
-        chatSocket.onclose = function(e) {
-            console.error('Chat socket closed unexpectedly:', e);
-            alert('Connection to the chat server has been lost. Please refresh the page to reconnect.');
-            // Optionally, you could attempt to reconnect here
-        };
-
-        // get the chat log element
-        const chatLog = document.getElementById('chat-log');
-
-        document.getElementById('chat-message-submit').addEventListener('click', () => {
-            const chatMessages = document.getElementById('chat-log');
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        });
-
-        document.querySelector('#chat-message-input').focus();
-        document.querySelector('#chat-message-input').onkeyup = function(e) {
-            if (e.keyCode === 13) {  // enter, return
-                document.querySelector('#chat-message-submit').click();
-            }
-        };
-
-        function sendMessage(message) {
-            const username = "{{ user.username }}"; // Assuming you're using Django's template engine
-            const roomName = JSON.parse(document.getElementById('room-name').textContent); // Get the room name
-            chatSocket.send(JSON.stringify({
-                'message': message,
-                'username': username,
-                'room': roomName // Include the room name
-            }));
-        }
-        
-        document.querySelector('#chat-message-submit').addEventListener('click', function(e) {
-            const messageInputDom = document.querySelector('#chat-message-input');
-            const message = messageInputDom.value.trim(); // Remove leading and trailing whitespace
-            if (message.length === 0) {
-                console.log('Cannot send empty message');
-                return;
-            }
-            sendMessage(message);
-            messageInputDom.value = '';
-            console.log('Input field value after submit:', messageInputDom.value);
-        });
-        
-    </script>
+    // Add message content
+    messageElement.innerHTML = `
+        <img src="${data.profile_pic_url}" alt="${data.username}'s Avatar">
+        <span class="username">${data.username}:</span>
+        <span>${data.message}</span>
+    `;
     
+    chatContainer.appendChild(messageElement);
+    chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to the bottom
+}
+
+// Function to add a new message to the chat log
+function addNewMessage(data) {
+    appendMessage(data);
+    
+    // Limit to the latest 25 messages
+    const messageElements = chatContainer.children;
+    if (messageElements.length > 25) {
+        // Remove the oldest messages
+        while (messageElements.length > 25) {
+            chatContainer.removeChild(messageElements[0]);
+        }
+    }
+}
+
+// Create the WebSocket connection
+const chatSocket = new WebSocket('wss://your-backend-server.com/ws/'); // Update with your actual URL
+
+chatSocket.onopen = function(e) {
+    console.log('WebSocket connection opened');
+    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+    chatSocket.send(JSON.stringify({ type: 'join', room: roomName }));
+};
+
+// Handle incoming messages
+chatSocket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    console.log('Received message:', data);
+    addNewMessage(data);
+};
+
+// Handle errors
+chatSocket.onerror = function(error) {
+    console.error('WebSocket error:', error);
+    alert('An error occurred while communicating with the chat server. Please refresh the page to try again.');
+};
+
+// Handle disconnections
+chatSocket.onclose = function(e) {
+    console.error('Chat socket closed unexpectedly:', e);
+    alert('Connection to the chat server has been lost. Please refresh the page to reconnect.');
+};
+
+// Send a message function
+function sendMessage(message) {
+    const username = "{{ user.username }}"; // Assuming you're using Django's template engine
+    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+    chatSocket.send(JSON.stringify({
+        'message': message,
+        'username': username,
+        'room': roomName
+    }));
+}
+
+// Event listeners for sending messages
+document.querySelector('#chat-message-submit').addEventListener('click', function(e) {
+    const messageInputDom = document.querySelector('#chat-message-input');
+    const message = messageInputDom.value.trim();
+    if (message.length === 0) {
+        console.log('Cannot send empty message');
+        return;
+    }
+    sendMessage(message);
+    messageInputDom.value = ''; // Clear input after sending
+});
+
+// Allow sending messages with Enter key
+document.querySelector('#chat-message-input').onkeyup = function(e) {
+    if (e.keyCode === 13) {  // Enter key
+        document.querySelector('#chat-message-submit').click();
+    }
+};
+
+// Automatically scroll to the bottom on load
+window.onload = function() {
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+};
+</script>
 </body>
 </html>
