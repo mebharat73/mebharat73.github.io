@@ -44,15 +44,15 @@ def get_latest_messages(request, room_name):
 
 
 
-
-
 @login_required
 def room(request, room_name):
-    # Fetch the latest 25 messages in descending order
-    messages = Message.objects.filter(room=room_name).select_related('user__profile').order_by('-timestamp')[:25]
-    # Reverse the list to display from oldest to newest
-    messages = list(messages)[::-1]  # This will reverse the list
+    # Fetch the latest 25 messages in ascending order
+    messages = Message.objects.filter(room=room_name).select_related('user__profile').order_by('timestamp')[:25]
+    
+    # Pass messages to the template
     return render(request, 'main/room.html', {'messages': messages, 'room_name': room_name, 'user': request.user})
+
+
 
 def index(request):
     return render(request, "main/index.html")

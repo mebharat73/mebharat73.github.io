@@ -178,34 +178,25 @@
 <body>
     <div class="chat-container">
         <div class="chat-header">
-            <h2>Chat Room</h2>
-            <div class="user-info">
-                
-            </div>
+            <h2>Chat Room: {{ room_name }}</h2>
         </div>
-        <hr>
-
         <div class="chat-messages" id="chat-log">
-    {% for message in messages %}
-        <div class="message {% if message.user == request.user %}right{% else %}left{% endif %}">
-            {% comment %} <img src="{{ message.user.profile.profile_pic.url|default:'/path/to/default/image.png' }}" alt="Profile Picture"> {% endcomment %}
-            <img src="{% if message.user.profile.profile_pic %}{{ message.user.profile.profile_pic.url }}{% else %}{% static 'main/image/default-profile-pic.jpg' %}{% endif %}" alt="Profile Picture" class="profile-pic">
-            <span class="username">{{ message.user.username }}:</span>
-            <span>{{ message.message }}</span>
-            <span class="time">{{ message.timestamp }}</span>
+            {% for message in messages %}
+                <div class="message {% if message.user == user %}right{% else %}left{% endif %}">
+                    <img src="{{ message.user.profile.profile_pic.url|default:'/path/to/default/image.png' }}" alt="Profile Picture" class="profile-pic">
+                    <span class="username">{{ message.user.username }}:</span>
+                    <span>{{ message.message }}</span>
+                    <span class="time">{{ message.timestamp }}</span>
+                </div>
+            {% endfor %}
         </div>
-    {% endfor %}
-</div>
-            
-    
-
         <div class="chat-input-container">
-            <div class="chat-input">
-                <input id="chat-message-input" type="text" size="100">
-                <input id="chat-message-submit" type="button" value="Send">
-            </div>
+            <input id="chat-message-input" type="text" size="100">
+            <input id="chat-message-submit" type="button" value="Send">
         </div>
+    </div>
 
+    
     {{ room_name|json_script:"room-name" }}
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
