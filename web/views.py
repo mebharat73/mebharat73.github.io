@@ -14,7 +14,7 @@ from rest_framework.decorators import api_view
 from .forms import CommentForm, CommentReplyForm
 from django.core.mail import send_mail
 from django.http import JsonResponse
-from .models import Message
+from .models import Message, Room
 
 from django.http import HttpResponse
 from .redis_client import get_redis_client
@@ -22,7 +22,8 @@ from .redis_client import get_redis_client
 
 
 def my_view(request):
-    client = get_redis_client()
+    client = get_redis_clie
+    nt()
     # Example operation
     if client.ping():
         return HttpResponse("Connected to Redis!")
@@ -44,14 +45,22 @@ def get_latest_messages(request, room_name):
 
 
 
+
+
 @login_required
 def room(request, room_name):
-    # Fetch the latest 25 messages in ascending order
-    messages = Message.objects.filter(room=room_name).select_related('user__profile').order_by('timestamp')[:25]
-    
-    # Pass messages to the template
-    return render(request, 'main/room.html', {'messages': messages, 'room_name': room_name, 'user': request.user})
+    # Fetch the room
+    room = Room.objects.get(name=room_name)
 
+    # Fetch the latest 25 messages in ascending order
+    messages = Message.objects.filter(room=room).select_related('user').order_by('timestamp')[:25]
+
+    # Pass messages to the template
+    return render(request, 'main/room.html', {
+        'messages': messages,
+        'room_name': room_name,
+        'user': request.user,
+    })
 
 
 def index(request):

@@ -200,14 +200,15 @@
     {{ room_name|json_script:"room-name" }}
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
-        const chatSocket = new WebSocket('wss://websockets-echo.onrender.com/');
-        const chatContainer = document.querySelector('.chat-messages');
+        {% comment %} const chatSocket = new WebSocket('wss://websockets-echo.onrender.com/'); {% endcomment %}
+        const chatSocket = new WebSocket(`wss://${window.location.host}/ws/chat/${roomName}/`);
         const messageInput = document.querySelector('#chat-message-input');
         const submitButton = document.querySelector('#chat-message-submit');
     
         // Setup WebSocket connection and event listeners
         chatSocket.onopen = function(e) {
             console.log('WebSocket connection opened');
+            console.log('Joining room:', roomName);  // Debugging line
             chatSocket.send(JSON.stringify({ type: 'join', room: roomName }));
             messageInput.focus();
         };

@@ -4,12 +4,18 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models
 
+class Room(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
 
 class Message(models.Model):
-    room = models.CharField(max_length=255)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user.username}: {self.message}'
 
 
 
