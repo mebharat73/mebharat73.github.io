@@ -185,15 +185,15 @@
         <hr>
 
         <div class="chat-messages" id="chat-log">
-    {% for message in messages %}
-        <div class="message {% if message.user == request.user %}right{% else %}left{% endif %}">
-            <img src="{{ message.user.profile.profile_pic.url }}" alt="Profile Picture">
-            <span class="username">{{ message.user.username }}:</span>
-            <span>{{ message.message }}</span>
-            <span class="time">{{ message.timestamp }}</span>
+            {% for message in messages %}
+                <div class="message {% if message.user == request.user %}right{% else %}left{% endif %}">
+                    <img src="{{ message.user.profile.profile_pic.url }}" alt="{{ message.user.username }}'s profile picture" width="30">
+                    <span class="username">{{ message.user.username }}:</span>
+                    <span>{{ message.message }}</span>
+                    <span class="time">{{ message.timestamp }}</span>
+                </div>
+            {% endfor %}
         </div>
-    {% endfor %}
-</div>
             
     
 

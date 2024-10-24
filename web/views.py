@@ -13,23 +13,37 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from .forms import CommentForm, CommentReplyForm
 from django.core.mail import send_mail
-from django.http import JsonResponse
 from .models import Message, Room
 
-from django.http import HttpResponse
-from .redis_client import get_redis_client
 
 
 
-def my_view(request):
-    client = get_redis_clie
-    nt()
-    # Example operation
-    if client.ping():
-        return HttpResponse("Connected to Redis!")
-    else:
-        return HttpResponse("Failed to connect to Redis.")
 
+
+def send_message(request, room_name):
+    if request.method == 'POST':
+        message_content = request.POST['message']
+        user = request.user  # Assuming the user is logged in
+        room = Room.objects.get(name=room_name)  # Get the room by name
+
+        # Create a new message
+        Message.objects.create(user=user, room=room, message=message_content)
+
+        return redirect('room', room_name=room_name)  # Redirect back to the room view
+
+
+
+def upload_profile_picture(request):
+    if request.method == 'POST' and request.FILES['profile_pic']:
+        profile_pic = request.FILES['profile_pic']
+        user = request.user  # Assuming the user is logged in
+
+        # Save the profile picture
+        profile, created = Profile.objects.get_or_create(user=user)
+        profile.profile_pic = profile_pic
+        profile.save()
+
+        return redirect('profile_view')  # Redirect to a profile view or some success page
 
 
 def get_latest_messages(request, room_name):
@@ -49,19 +63,10 @@ def get_latest_messages(request, room_name):
 
 @login_required
 def room(request, room_name):
-    # Fetch the room
     room = Room.objects.get(name=room_name)
+    messages = Message.objects.filter(room=room).order_by('timestamp')
 
-    # Fetch the latest 25 messages in ascending order
-    messages = Message.objects.filter(room=room).select_related('user').order_by('timestamp')[:25]
-
-    # Pass messages to the template
-    return render(request, 'main/room.html', {
-        'messages': messages,
-        'room_name': room_name,
-        'user': request.user,
-    })
-
+    return render(request, 'room.html', {'room': room, 'messages': messages})
 
 def index(request):
     return render(request, "main/index.html")
