@@ -67,9 +67,8 @@ def get_latest_messages(request, room_name):
 
 @login_required
 def room(request, room_name):
-    room = Room.objects.get(name=room_name)
+    room = get_object_or_404(Room, name=room_name)
     messages = Message.objects.filter(room=room).order_by('timestamp')
-
     return render(request, 'main/room.html', {'room': room, 'messages': messages})
 
 
