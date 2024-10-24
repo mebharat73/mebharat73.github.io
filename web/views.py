@@ -14,7 +14,7 @@ from rest_framework.decorators import api_view
 from .forms import CommentForm, CommentReplyForm
 from django.core.mail import send_mail
 from .models import Message, Room
-
+from django.shortcuts import get_object_or_404
 
 
 
@@ -22,9 +22,9 @@ from .models import Message, Room
 
 def send_message(request, room_name):
     if request.method == 'POST':
-        message_content = request.POST['message']
+        message_content = request.POST.get('message', '')
         user = request.user  # Assuming the user is logged in
-        room = Room.objects.get(name=room_name)  # Get the room by name
+        room = get_object_or_404(Room, name=room_name)  # Get the room safely
 
         # Create a new message
         Message.objects.create(user=user, room=room, message=message_content)
@@ -33,8 +33,9 @@ def send_message(request, room_name):
 
 
 
+@login_required
 def upload_profile_picture(request):
-    if request.method == 'POST' and request.FILES['profile_pic']:
+    if request.method == 'POST' and request.FILES.get('profile_pic'):
         profile_pic = request.FILES['profile_pic']
         user = request.user  # Assuming the user is logged in
 
@@ -47,14 +48,17 @@ def upload_profile_picture(request):
 
 
 def get_latest_messages(request, room_name):
-    latest_messages = Message.objects.filter(room=room_name).order_by('-timestamp')[:25]
+    room = get_object_or_404(Room, name=room_name)  # Ensure the room exists
+    latest_messages = Message.objects.filter(room=room).order_by('-timestamp')[:25]
     messages = []
+
     for message in latest_messages:
         messages.append({
             'message': message.message,
             'username': message.user.username,
-            'profile_pic_url': message.user.profile.profile_pic.url
+            'profile_pic_url': message.user.profile.profile_pic.url if message.user.profile.profile_pic else None
         })
+    
     return JsonResponse(messages, safe=False)
 
 
@@ -68,9 +72,10 @@ def room(request, room_name):
 
     return render(request, 'chat/room.html', {'room': room, 'messages': messages})
 
-def index(request):
-    return render(request, "main/index.html")
 
+def index(request):
+    rooms = Room.objects.all()  # Assuming you want to list all rooms
+    return render(request, 'main/index.html', {'rooms': rooms})
 
 
 def contact_us(request):

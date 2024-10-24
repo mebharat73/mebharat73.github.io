@@ -1,6 +1,6 @@
 from django.urls import path
 from .import views
-from .views import room
+
 
 
 
@@ -8,7 +8,6 @@ urlpatterns= [
     path('accounts/login/', views.login_view, name="login_page"),
     path('accounts/logout/', views.logout_view, name="logout_page"),
     path('accounts/signup/', views.signup_view, name="signup_page"),
-    #path('accounts/contact/', views.contact_view, name="contact_page"),
     path('accounts/post/', views.post_view, name="post_page"),
     path('blog/category/add/', views.add_category, name="add_category_page"),
     path('blog/create/', views.create_post, name="create_post_page"),
@@ -20,8 +19,10 @@ urlpatterns= [
     path('accounts/contact_us/', views.contact_us, name='contact_us'),
     path("chat/<str:room_name>/", views.room, name="room"),
     path("chat/", views.index, name="index"),
-    path('room/', room, name='room'),
-   
+    path("send_message/<str:room_name>/", views.send_message, name="send_message"),
+    path("upload_profile_picture/", views.upload_profile_picture, name="upload_profile_picture"),
+    path("get_latest_messages/<str:room_name>/", views.get_latest_messages, name="get_latest_messages"),
+      
    
 ]
 
