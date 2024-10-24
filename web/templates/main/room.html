@@ -199,12 +199,15 @@
     
     {{ room_name|json_script:"room-name" }}
     <script>
-        let chatContainer = document.getElementById('chat-container');
-        const roomName = JSON.parse(document.getElementById('room-name').textContent);
-        {% comment %} const chatSocket = new WebSocket('wss://websockets-echo.onrender.com/'); {% endcomment %}
-        chatSocket = new WebSocket('wss://websockets-echo.onrender.com/'); // Replace with your actual URL
-        const messageInput = document.querySelector('#chat-message-input');
-        const submitButton = document.querySelector('#chat-message-submit');
+        window.onload = function() {
+            let chatContainer = document.getElementById('chat-container');
+            const roomName = JSON.parse(document.getElementById('room-name').textContent);
+            chatSocket = new WebSocket('wss://websockets-echo.onrender.com/'); // Replace with your actual URL
+            const messageInput = document.querySelector('#chat-message-input');
+            const submitButton = document.querySelector('#chat-message-submit');
+        
+            // Rest of your code here
+        }
     
         // Setup WebSocket connection and event listeners
         chatSocket.onopen = function(e) {
