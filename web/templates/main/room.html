@@ -205,7 +205,7 @@
         window.onload = function() {
             let chatContainer = document.getElementById('chat-container');
             const roomName = JSON.parse(document.getElementById('room-name').textContent);
-            chatSocket = new WebSocket('wss://your-websocket-url/'); // Replace with your actual URL
+            chatSocket = new WebSocket('wss://websockets-echo.onrender.com/'); // Replace with your actual URL
             const messageInput = document.querySelector('#chat-message-input');
             const submitButton = document.querySelector('#chat-message-submit');
     
