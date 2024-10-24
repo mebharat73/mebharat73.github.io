@@ -143,9 +143,14 @@ load_dotenv()
 
 # Database configuration
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL')
-    )
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",  # Assuming you are using Django
+        "NAME": "my_project_q45u",                  # Database name
+        "USER": "my_project",                        # Username
+        "PASSWORD": "LY45kgR48mIcjj5YrFy9pRycwK9HMXM4",  # Password
+        "HOST": "dpg-csbjk3dds78s73b8pcsg-a.oregon-postgres.render.com",  # Host
+        "PORT": "5432",                             # Default PostgreSQL port
+    }
 }
 
 
