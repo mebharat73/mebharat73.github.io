@@ -66,7 +66,7 @@ def room(request, room_name):
     room = Room.objects.get(name=room_name)
     messages = Message.objects.filter(room=room).order_by('timestamp')
 
-    return render(request, 'room.html', {'room': room, 'messages': messages})
+    return render(request, 'chat/room.html', {'room': room, 'messages': messages})
 
 def index(request):
     return render(request, "main/index.html")
