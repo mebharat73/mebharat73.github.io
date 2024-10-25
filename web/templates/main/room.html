@@ -5,6 +5,8 @@
     <meta charset="utf-8"/>
     <title>Chat Room</title>
     <style>
+
+        /* Your CSS styles here */
         body {
             font-family: Arial, sans-serif;
             background-image: url('https://picsum.photos/2000/1000'); /* Add a background image */
@@ -177,9 +179,6 @@
     <div class="chat-container">
         <div class="chat-header">
             <h2>Chat Room</h2>
-            <div class="user-info">
-                
-            </div>
         </div>
         <hr>
 
@@ -193,8 +192,6 @@
                 </div>
             {% endfor %}
         </div>
-            
-    
 
         <div class="chat-input-container">
             <div class="chat-input">
@@ -203,13 +200,15 @@
             </div>
         </div>
 
-    {{ room_name|json_script:"room-name" }}
+        {{ room_name|json_script:"room-name" }}  <!-- Ensure this is present -->
+    </div>
+
     <script>
-
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
-        chatSocket = new WebSocket(`wss://websockets-echo.onrender.com/${roomName}/`); // Make sure to replace with your actual WebSocket URL
+        console.log('Room Name:', roomName); // Debugging line
+        chatSocket = new WebSocket(`wss://your-websocket-url/chat/${roomName}/`); // Ensure this is correct
 
-        
+        // Your WebSocket handling code here...
         // Listen for the 'open' event
         chatSocket.onopen = function(e) {
             console.log('WebSocket connection opened');
@@ -286,9 +285,7 @@
                 <span class="username">${username}:</span>
                 <span>${message}</span>
             `;
-            
-
-            
+    
         
             // Append the message to the bottom of the chat container
             chatContainer.appendChild(messageElement);
@@ -298,9 +295,6 @@
         };
 
         
-        
-    
-
         chatSocket.onerror = function(error) {
             console.error('WebSocket error:', error);
             alert('An error occurred while communicating with the chat server. Please refresh the page to try again.');
@@ -346,8 +340,6 @@
             messageInputDom.value = '';
             console.log('Input field value after submit:', messageInputDom.value);
         });
-        
     </script>
-    
 </body>
 </html>
