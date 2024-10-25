@@ -29,7 +29,7 @@ class Room(models.Model):
 
 
 class Message(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -42,7 +42,7 @@ class Message(models.Model):
 
 class Profile(models.Model):
     profile_pic = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     class Meta:
         verbose_name_plural = "Profiles"
 
@@ -70,7 +70,7 @@ class Post(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="posts")  
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")  
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="posts")
     #likes_count = models.IntegerField(default=0)
     @property
@@ -83,7 +83,7 @@ class Post(models.Model):
 class Comment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="comments")  
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")  
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
     #likes_count = models.IntegerField(default=0)
     @property
@@ -97,7 +97,7 @@ class Comment(models.Model):
 
 
 class Like(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
@@ -113,4 +113,4 @@ class CommentReply(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
