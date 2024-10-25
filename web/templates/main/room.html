@@ -206,7 +206,7 @@
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
         console.log('Room Name:', roomName); // Debugging line
-        chatSocket = new WebSocket(`wss://your-websocket-url/chat/${roomName}/`); // Ensure this is correct
+        chatSocket = new WebSocket(`wss://websockets-echo.onrender.com/chat/${roomName}/`); // Ensure this is correct
 
         // Your WebSocket handling code here...
         // Listen for the 'open' event
