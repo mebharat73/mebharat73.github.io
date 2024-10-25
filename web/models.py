@@ -2,22 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
-from django.conf import settings
-from django.contrib.auth.models import AbstractUser 
 
 
 
 
 
-
-
-class CustomUser(AbstractUser):
-    phone_number = models.CharField(max_length=20, blank=True, null=True)
-    birth_date = models.DateField(blank=True, null=True)
-    email = models.EmailField(unique=True)
-
-    USERNAME_FIELD = 'email'  # Assuming you're using email as the username
-    REQUIRED_FIELDS = ['username']  # Add any other required fields here
 
 
 

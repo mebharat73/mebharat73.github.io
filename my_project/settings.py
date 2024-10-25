@@ -109,8 +109,7 @@ CSRF_COOKIE_SECURE = True  # Use secure CSRF cookies
 
 
 
-AUTH_USER_MODEL = 'web.CustomUser '
-# Database
+
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 # Database configuration
 DATABASES = {
