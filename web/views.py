@@ -20,17 +20,26 @@ from django.shortcuts import get_object_or_404
 
 
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 def send_message(request, room_name):
     if request.method == 'POST':
         message_content = request.POST.get('message', '')
         user = request.user  # Assuming the user is logged in
         room = get_object_or_404(Room, name=room_name)  # Get the room safely
 
+        logger.info(f"User  {user.username} is sending a message to room {room_name}: {message_content}")
+
         # Create a new message
-        Message.objects.create(user=user, room=room, message=message_content)
+        try:
+            Message.objects.create(user=user, room=room, message=message_content)
+            logger.info(f"Message saved: {message_content}")
+        except Exception as e:
+            logger.error(f"Error saving message: {e}")
 
-        return redirect('room', room_name=room_name)  # Redirect back to the room view
-
+        return redirect('room', room_name=room_name)
 
 
 @login_required
