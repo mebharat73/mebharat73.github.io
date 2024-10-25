@@ -26,9 +26,13 @@ logger = logging.getLogger(__name__)
 
 def send_message(request, room_name):
     if request.method == 'POST':
-        message_content = request.POST.get('message', '')
+        message_content = request.POST.get('message', '').strip()  # Strip whitespace
         user = request.user  # Assuming the user is logged in
         room = get_object_or_404(Room, name=room_name)  # Get the room safely
+
+        if not message_content:
+            logger.warning(f"Empty message from user {user.username} to room {room_name}")
+            return redirect('room', room_name=room_name)
 
         logger.info(f"User  {user.username} is sending a message to room {room_name}: {message_content}")
 
@@ -38,9 +42,12 @@ def send_message(request, room_name):
             logger.info(f"Message saved: {message_content}")
         except Exception as e:
             logger.error(f"Error saving message: {e}")
+            # Optionally, you can add a message to inform the user
+            messages.error(request, "There was an error saving your message. Please try again.")
 
         return redirect('room', room_name=room_name)
-
+    
+    
 
 @login_required
 def upload_profile_picture(request):
