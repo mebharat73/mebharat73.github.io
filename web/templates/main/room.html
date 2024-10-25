@@ -207,14 +207,9 @@
     <script>
 
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
+        chatSocket = new WebSocket(`wss://websockets-echo.onrender.com/${roomName}/`); // Make sure to replace with your actual WebSocket URL
 
-                // ... (rest of the code remains the same)
-
-        let chatSocket;
-
-        // Create the WebSocket connection
-        chatSocket = new WebSocket('wss://websockets-echo.onrender.com/'); // Replace with your actual URL
-
+        
         // Listen for the 'open' event
         chatSocket.onopen = function(e) {
             console.log('WebSocket connection opened');
