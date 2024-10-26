@@ -42,22 +42,34 @@ INSTALLED_APPS = [
 
 ]
 
-ASGI_APPLICATION = "my_project.asgi.application"
+# Database configuration
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get('DB_NAME', 'my_project_q45u'),  # Use environment variable or default
+        "USER": os.environ.get('DB_USER', 'my_project'),        # Use environment variable or default
+        "PASSWORD": os.environ.get('DB_PASSWORD', 'LY45kgR48mIcjj5YrFy9pRycwK9HMXM4'),  # Use environment variable or default
+        "HOST": os.environ.get('DB_HOST', 'dpg-csbjk3dds78s73b8pcsg-a.oregon-postgres.render.com'),  # Use environment variable or default
+        "PORT": os.environ.get('DB_PORT', '5432'),              # Use environment variable or default
+    }
+}
+
+# Channels configuration
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
             "hosts": [
                 {
-                    "address": "redis://red-csbjk3dds78s73b8pcrg:6379",
+                    "address": os.environ.get('REDIS_URL', 'redis://red-csbjk3dds78s73b8pcrg:6379'),  # Use environment variable or default
                 }
             ],
         },
     },
 }
 
-
-
+# Additional settings
+ASGI_APPLICATION = 'my_project.asgi.application'  # Replace with your actual ASGI application path
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -101,18 +113,6 @@ CSRF_COOKIE_SECURE = True  # Use secure CSRF cookies
 
 
 
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-# Database configuration
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",  # Assuming you are using Django
-        "NAME": "my_project_q45u",                  # Database name
-        "USER": "my_project",                        # Username
-        "PASSWORD": "LY45kgR48mIcjj5YrFy9pRycwK9HMXM4",  # Password
-        "HOST": "dpg-csbjk3dds78s73b8pcsg-a.oregon-postgres.render.com",  # Host
-        "PORT": "5432",                             # Default PostgreSQL port
-    }
-}
 
 
 
