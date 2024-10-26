@@ -43,16 +43,19 @@ INSTALLED_APPS = [
 ]
 
 # Database configuration
+
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get('DB_NAME', 'my_project_q45u'),  # Use environment variable or default
-        "USER": os.environ.get('DB_USER', 'my_project'),        # Use environment variable or default
-        "PASSWORD": os.environ.get('DB_PASSWORD', 'LY45kgR48mIcjj5YrFy9pRycwK9HMXM4'),  # Use environment variable or default
-        "HOST": os.environ.get('DB_HOST', 'dpg-csbjk3dds78s73b8pcsg-a.oregon-postgres.render.com'),  # Use environment variable or default
-        "PORT": os.environ.get('DB_PORT', '5432'),              # Use environment variable or default
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'my_project_q45u',
+        'USER': 'my_project',
+        'PASSWORD': 'LY45kgR48mIcjj5YrFy9pRycwK9HMXM4',
+        'HOST': 'dpg-csbjk3dds78s73b8pcsg-a.oregon-postgres.render.com',  # Often 'localhost', '127.0.0.1', or the actual database URL
+        'PORT': '5432',  # Default PostgreSQL port
     }
 }
+
 
 # Channels configuration
 CHANNEL_LAYERS = {

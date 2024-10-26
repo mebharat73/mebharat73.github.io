@@ -30,21 +30,29 @@ class ChatConsumer(AsyncWebsocketConsumer):
         username = data['username']
 
         # Save the message to the database
-        room = Room.objects.get(name=self.room_name)
-        user = User.objects.get(username=username)  # Ensure you have the user object
+        try:
+            room = await Room.objects.get(name=self.room_name)
+            user = await User.objects.get(username=username)
 
-        Message.objects.create(user=user, room=room, message=message)
+            # Create a new message instance
+            message_instance = await Message.objects.create(user=user, room=room, message=message)
 
-        # Send message to room group
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message': message,
-                'username': username,
-                'profile_pic_url': user.profile.profile_pic.url if user.profile.profile_pic else None
-            }
-        )
+            # Send message to room group
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'message': message,
+                    'username': username,
+                    'profile_pic_url': user.profile.profile_pic.url if hasattr(user, 'profile') and user.profile.profile_pic else None
+                }
+            )
+        except Room.DoesNotExist:
+            print(f"Room '{self.room_name}' does not exist.")
+        except User.DoesNotExist:
+            print(f"User  '{username}' does not exist.")
+        except Exception as e:
+            print(f"Error saving message: {e}")
 
     async def chat_message(self, event):
         message = event['message']
