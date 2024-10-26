@@ -1,5 +1,8 @@
-from channels.generic.websocket import AsyncWebsocketConsumer
+# consumers.py
 import json
+from channels.generic.websocket import AsyncWebsocketConsumer
+from .models import Message, Room
+from django.contrib.auth.models import User
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -22,10 +25,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        username = text_data_json['username']
-        profile_pic_url = text_data_json['profile_pic_url']
+        data = json.loads(text_data)
+        message = data['message']
+        username = data['username']
+
+        # Save the message to the database
+        room = Room.objects.get(name=self.room_name)
+        user = User.objects.get(username=username)  # Ensure you have the user object
+
+        Message.objects.create(user=user, room=room, message=message)
 
         # Send message to room group
         await self.channel_layer.group_send(
@@ -34,7 +42,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'type': 'chat_message',
                 'message': message,
                 'username': username,
-                'profile_pic_url': profile_pic_url,
+                'profile_pic_url': user.profile.profile_pic.url if user.profile.profile_pic else None
             }
         )
 
@@ -47,5 +55,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'message': message,
             'username': username,
-            'profile_pic_url': profile_pic_url,
+            'profile_pic_url': profile_pic_url
         }))
