@@ -208,9 +208,12 @@
             const roomName = JSON.parse(document.getElementById('room-name').textContent);
             console.log('Room Name:', roomName); // Debugging line
         
+            // Declare chatSocket in a higher scope
+            let chatSocket;
+        
             // Function to establish WebSocket connection
             function connectWebSocket() {
-                const chatSocket = new WebSocket(`wss://websockets-echo.onrender.com/chat/${roomName}/`); // Ensure this is correct
+                chatSocket = new WebSocket(`wss://websockets-echo.onrender.com/chat/${roomName}/`); // Ensure this is correct
         
                 chatSocket.onopen = function(e) {
                     console.log('WebSocket connection opened');
@@ -251,17 +254,19 @@
                     console.error('Chat socket closed unexpectedly:', e);
                     alert('Connection to the chat server has been lost. Please refresh the page to reconnect.');
                 };
-        
-                return chatSocket; // Return the chatSocket for potential use outside this function
             }
         
             // Function to send a message via WebSocket
             function sendMessage(message) {
-                const username = "{{ user.username }}"; // Assuming you're using Django's template engine
-                chatSocket.send(JSON.stringify({
-                    'message': message,
-                    'username': username
-                }));
+                if (chatSocket && chatSocket.readyState === WebSocket.OPEN) {
+                    const username = "{{ user.username }}"; // Assuming you're using Django's template engine
+                    chatSocket.send(JSON.stringify({
+                        'message': message,
+                        'username': username
+                    }));
+                } else {
+                    console.error('WebSocket is not open. Cannot send message.');
+                }
             }
         
             // Function to append a message to the chat log
@@ -292,7 +297,7 @@
                     .catch(error => console.error('Error fetching messages:', error));
             }
         
-            // Call the function to load the image (if needed)
+            // Function to load the image (if needed)
             function loadImage() {
                 const imageId = getImageId(); // Ensure this function returns a valid ID
                 if (imageId) {
@@ -307,7 +312,7 @@
             // Call the function to load messages when the page loads
             window.onload = function() {
                 fetchMessages(); // Fetch messages from the server
-                const chatSocket = connectWebSocket(); // Establish WebSocket connection
+                connectWebSocket(); // Establish WebSocket connection
                 loadImage(); // Load the image if needed
             };
         </script>
