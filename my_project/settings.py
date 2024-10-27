@@ -10,16 +10,19 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-from pathlib import Path
 import os
+import dj_database_url
+from pathlib import Path
+from dotenv import load_dotenv
+
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ir)0&nac$$0nprx(&00yp3$9qr-s#d3mst&6))p@%_g0sr^7n%'
-
+#SECRET_KEY = 'django-insecure-ir)0&nac$$0nprx(&00yp3$9qr-s#d3mst&6))p@%_g0sr^7n%'
+SECRET_KEY = os.environ.get('SECRET_KEY', default='django-insecure-ir)0&nac$$0nprx(&00yp3$9qr-s#d3mst&6))p@%_g0sr^7n%')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -42,34 +45,59 @@ INSTALLED_APPS = [
 
 ]
 
-# Database configuration
 
+
+
+
+
+
+
+import os
+import dj_database_url
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'my_project_q45u',
-        'USER': 'my_project',
-        'PASSWORD': 'LY45kgR48mIcjj5YrFy9pRycwK9HMXM4',
-        'HOST': 'dpg-csbjk3dds78s73b8pcsg-a.oregon-postgres.render.com',  # Often 'localhost', '127.0.0.1', or the actual database URL
-        'PORT': '5432',  # Default PostgreSQL port
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),  # Correctly retrieve the DATABASE_URL
+        conn_max_age=600
+    )
 }
 
 
-# Channels configuration
+# database_url = os.environ.get('DATABASE_URL')
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'my_project_q45u',
+#         'USER': 'my_project',
+#         'PASSWORD': 'LY45kgR48mIcjj5YrFy9pRycwK9HMXM4',
+#         'HOST': 'dpg-csbjk3dds78s73b8pcsg-a.oregon-postgres.render.com',  # Often 'localhost', '127.0.0.1', or the actual database URL
+#         'PORT': '5432',  # Default PostgreSQL port
+#     }
+# }
+
+
 CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [
-                {
-                    "address": os.environ.get('REDIS_URL', 'redis://red-csbjk3dds78s73b8pcrg:6379'),  # Use environment variable or default
-                }
-            ],
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [(os.environ.get('REDIS_HOST', 'redis://red-csbjk3dds78s73b8pcrg'), int(os.environ.get('REDIS_PORT', 6379)))],
         },
     },
 }
+
+# Channels configuration
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [
+#                 {
+#                     "address": os.environ.get('REDIS_URL', 'redis://red-csbjk3dds78s73b8pcrg:6379'),  # Use environment variable or default
+#                 }
+#             ],
+#         },
+#     },
+# }
 
 # Additional settings
 ASGI_APPLICATION = 'my_project.asgi.application'  # Replace with your actual ASGI application path
@@ -157,12 +185,25 @@ USE_TZ = True
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = os.environ.get('STATIC_URL', '/static/')
-STATIC_ROOT = os.environ.get('STATIC_ROOT', os.path.join(BASE_DIR, 'staticfiles'))
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/5.0/howto/static-files/
+
+
+
+# This setting informs Django of the URI path from which your static files will be served to users
+# Here, they well be accessible at your-domain.onrender.com/static/... or yourcustomdomain.com/static/...
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+
+# Specify a directory for collected static files
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Ensure this directory is valid
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
 
 # Media files
 MEDIA_URL = os.environ.get('MEDIA_URL', '/media/')
-MEDIA_ROOT = os.environ.get('MEDIA_ROOT', os.path.join(BASE_DIR, 'mediafiles'))
+MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
