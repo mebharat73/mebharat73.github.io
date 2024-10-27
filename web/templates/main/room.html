@@ -204,40 +204,67 @@
         <div class="chat-messages" id="chat-log"></div> <!-- Ensure this container exists -->
         
         <script>
+            // Fetch the room name from the JSON script tag
             const roomName = JSON.parse(document.getElementById('room-name').textContent);
             console.log('Room Name:', roomName); // Debugging line
-            const chatSocket = new WebSocket(`wss://websockets-echo.onrender.com/chat/${roomName}/`); // Ensure this is correct
         
-            chatSocket.onopen = function(e) {
-                console.log('WebSocket connection opened');
-                document.querySelector('#chat-message-input').focus();
+            // Function to establish WebSocket connection
+            function connectWebSocket() {
+                const chatSocket = new WebSocket(`wss://websockets-echo.onrender.com/chat/${roomName}/`); // Ensure this is correct
         
-                document.querySelector('#chat-message-input').onkeyup = function(e) {
-                    if (e.keyCode === 13) {  // Enter key
-                        document.querySelector('#chat-message-submit').click();
-                    }
+                chatSocket.onopen = function(e) {
+                    console.log('WebSocket connection opened');
+                    document.querySelector('#chat-message-input').focus();
+        
+                    document.querySelector('#chat-message-input').onkeyup = function(e) {
+                        if (e.keyCode === 13) {  // Enter key
+                            document.querySelector('#chat-message-submit').click();
+                        }
+                    };
+        
+                    document.querySelector('#chat-message-submit').onclick = function(e) {
+                        const messageInput = document.querySelector('#chat-message-input');
+                        const message = messageInput.value.trim();
+                        if (message) {
+                            sendMessage(message);
+                            messageInput.value = '';
+                        }
+                    };
                 };
         
-                document.querySelector('#chat-message-submit').onclick = function(e) {
-                    const messageInput = document.querySelector('#chat-message-input');
-                    const message = messageInput.value.trim();
-                    if (message) {
-                        sendMessage(message);
-                        messageInput.value = '';
-                    }
+                chatSocket.onmessage = function(e) {
+                    const data = JSON.parse(e.data);
+                    console.log('Received data:', data); // Debugging line
+                    const message = data.message;
+                    const username = data.username || 'Anonymous';
+                    const profilePicUrl = data.profile_pic_url || 'default-pic-url.png'; // Fallback URL
+        
+                    appendMessage(username, message, profilePicUrl);
                 };
-            };
         
-            chatSocket.onmessage = function(e) {
-                const data = JSON.parse(e.data);
-                console.log('Received data:', data); // Debugging line
-                const message = data.message;
-                const username = data.username || 'Anonymous';
-                const profilePicUrl = data.profile_pic_url || 'default-pic-url.png'; // Fallback URL
+                chatSocket.onerror = function(error) {
+                    console.error('WebSocket error:', error);
+                    alert('An error occurred while communicating with the chat server. Please refresh the page to try again.');
+                };
         
-                appendMessage(username, message, profilePicUrl);
-            };
+                chatSocket.onclose = function(e) {
+                    console.error('Chat socket closed unexpectedly:', e);
+                    alert('Connection to the chat server has been lost. Please refresh the page to reconnect.');
+                };
         
+                return chatSocket; // Return the chatSocket for potential use outside this function
+            }
+        
+            // Function to send a message via WebSocket
+            function sendMessage(message) {
+                const username = "{{ user.username }}"; // Assuming you're using Django's template engine
+                chatSocket.send(JSON.stringify({
+                    'message': message,
+                    'username': username
+                }));
+            }
+        
+            // Function to append a message to the chat log
             function appendMessage(username, message, profilePicUrl) {
                 const chatContainer = document.getElementById('chat-log');
                 const messageElement = document.createElement('div');
@@ -253,25 +280,19 @@
                 chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to bottom
             }
         
-            chatSocket.onerror = function(error) {
-                console.error('WebSocket error:', error);
-                alert('An error occurred while communicating with the chat server. Please refresh the page to try again.');
-            };
-        
-            chatSocket.onclose = function(e) {
-                console.error('Chat socket closed unexpectedly:', e);
-                alert('Connection to the chat server has been lost. Please refresh the page to reconnect.');
-            };
-        
-            function sendMessage(message) {
-                const username = "{{ user.username }}"; // Assuming you're using Django's template engine
-                chatSocket.send(JSON.stringify({
-                    'message': message,
-                    'username': username
-                }));
+            // Function to fetch messages from the server
+            function fetchMessages() {
+                fetch(`/get_latest_messages/${roomName}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(message => {
+                            appendMessage(message.username, message.message, message.profile_pic_url);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching messages:', error));
             }
-
-            // Example code for constructing the image URL
+        
+            // Call the function to load the image (if needed)
             function loadImage() {
                 const imageId = getImageId(); // Ensure this function returns a valid ID
                 if (imageId) {
@@ -282,9 +303,13 @@
                     // Optionally set a default image or handle the error
                 }
             }
-
-            // Call the function to load the image
-            loadImage();
+        
+            // Call the function to load messages when the page loads
+            window.onload = function() {
+                fetchMessages(); // Fetch messages from the server
+                const chatSocket = connectWebSocket(); // Establish WebSocket connection
+                loadImage(); // Load the image if needed
+            };
         </script>
 </body>
 </html>

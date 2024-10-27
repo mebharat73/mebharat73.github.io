@@ -1,8 +1,11 @@
-# consumers.py
 import json
+import logging
 from channels.generic.websocket import AsyncWebsocketConsumer
 from .models import Message, Room
 from django.contrib.auth.models import User
+from asgiref.sync import sync_to_async
+
+logger = logging.getLogger(__name__)
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -17,7 +20,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
-    async def disconnect(self, close_code):
+    async def disconnect(self, _):
         # Leave room group
         await self.channel_layer.group_discard(
             self.room_group_name,
@@ -31,11 +34,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         # Save the message to the database
         try:
-            room = await Room.objects.get(name=self.room_name)
-            user = await User.objects.get(username=username)
+            room = await sync_to_async(Room.objects.get)(name=self.room_name)
+            user = await sync_to_async(User.objects.get)(username=username)
 
-            # Create a new message instance
-            message_instance = await Message.objects.create(user=user, room=room, message=message)
+            # Create a new message instance and save it to the database
+            await sync_to_async(Message.objects.create)(
+                user=user,
+                room=room,
+                message=message
+            )
 
             # Send message to room group
             await self.channel_layer.group_send(
@@ -44,15 +51,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     'type': 'chat_message',
                     'message': message,
                     'username': username,
-                    'profile_pic_url': user.profile.profile_pic.url if hasattr(user, 'profile') and user.profile.profile_pic else None
+                    'profile_pic_url': user.profile.profile_pic.url if hasattr(user, 'profile') and user.profile.profile_pic else 'default-pic-url.png'
                 }
             )
         except Room.DoesNotExist:
-            print(f"Room '{self.room_name}' does not exist.")
+            logger.error(f"Room '{self.room_name}' does not exist.")
+            await self.send(text_data=json.dumps({'error': 'Room does not exist.'}))
         except User.DoesNotExist:
-            print(f"User  '{username}' does not exist.")
+            logger.error(f"User   '{username}' does not exist.")
+            await self.send(text_data=json.dumps({'error': 'User  does not exist.'}))
         except Exception as e:
-            print(f"Error saving message: {e}")
+            logger.error(f"Error saving message: {e}")
+            await self.send(text_data=json.dumps({'error': 'An error occurred while saving the message.'}))
 
     async def chat_message(self, event):
         message = event['message']
