@@ -30,10 +30,8 @@ class Message(models.Model):
 
 
 class Profile(models.Model):
-    profile_pic = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
-    class Meta:
-        verbose_name_plural = "Profiles"
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to='profile_pictures/', default='default_profile_picture.jpg')
 
     def __str__(self):
         return f"{self.user.username}'s profile"

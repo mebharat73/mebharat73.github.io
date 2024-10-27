@@ -185,7 +185,11 @@
         <div class="chat-messages" id="chat-log">
             {% for message in messages %}
                 <div class="message {% if message.user == request.user %}right{% else %}left{% endif %}">
-                    <img src="{{ message.user.profile.profile_pic.url }}" alt="{{ message.user.username }}'s profile picture" width="30">
+                    {% if user.is_authenticated %}
+                        <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}'s profile picture" width="100">
+                    {% else %}
+                        <img src="{% static 'default_profile_picture.jpg' %}" alt="Default profile picture" width="100">
+                    {% endif %}
                     <span class="username">{{ message.user.username }}:</span>
                     <span>{{ message.message }}</span>
                     <span class="time">{{ message.timestamp }}</span>
