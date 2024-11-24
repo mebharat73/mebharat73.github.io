@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Room</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-size: cover; /* Cover the entire viewport */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh; /* Full height */
+            text-align: center;
+            color: #333; /* Dark text color */
+            transition: background-image 1s ease; /* Smooth transition for background change */
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5em; /* Increase font size */
+            color: #ffffff; /* White color for better contrast */
+        }
+        form {
+            background-color: rgba(255, 255, 255, 0.9); /* White background with slight transparency */
+            padding: 20px;
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+            width: 300px; /* Fixed width */
+        }
+        label {
+            display: block; /* Block display for label */
+            margin-bottom: 10px; /* Space below label */
+            font-weight: bold; /* Bold text */
+        }
+        input[type="text"] {
+            width: 90%; /* Full width */
+            padding: 10px; /* Padding inside input */
+            margin-bottom: 20px; /* Space below input */
+            border: 1px solid #ccc; /* Light border */
+            border-radius: 5px; /* Rounded corners */
+            font-size: 1em; /* Font size */
+        }
+        button {
+            background-color: #007bff; /* Primary button color */
+            color: white; /* White text */
+            border: none; /* No border */
+            border-radius: 5px; /* Rounded corners */
+            padding: 10px 15px; /* Padding inside button */
+            font-size: 1em; /* Font size */
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: background-color 0.3s; /* Smooth transition for hover */
+        }
+        button:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+        }
+        a {
+            margin-top: 20px; /* Space above link */
+            text-decoration: none; /* No underline */
+            color: #ffffff; /* White link color */
+            font-size: 1.2em; /* Increase font size */
+        }
+        a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+    </style>
+    <script>
+        // Define your background images using Django's static template tag
+        const images = [
+            "{% static 'main/image/nature1.jpeg' %}",
+            "{% static 'main/image/nature2.jpg' %}",
+            "{% static 'main/image/nature3.jpg' %}",
+            "{% static 'main/image/nature4.jpg' %}"
+        ];
+
+        let currentIndex = 0;
+
+        function changeBackground() {
+            document.body.style.backgroundImage = `url(${images[currentIndex]})`;
+            currentIndex = (currentIndex + 1) % images.length; // Loop back to the first image
+        }
+
+        window.onload = function() {
+            changeBackground(); // Set initial background
+            setInterval(changeBackground, 5000); // Change background every 5 seconds
+        };
+    </script>
+</head>
+<body>
+    <h1>Create a New Chat Room</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="room_name">Room Name:</label>
+        <input type="text" id="room_name" name="room_name" required>
+        <button type="submit">Create Room</button>
+    </form>
+    <br>
+    <a href="{% url 'index' %}">Back to Chat Rooms</a>
+</body>
+</html>

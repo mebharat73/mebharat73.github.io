@@ -1,98 +1,99 @@
-<!-- chat/templates/chat/index.html -->
 <!DOCTYPE html>
-<html>
+{% load static %}
+
+<html lang="en">
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Rooms</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-image: url('https://picsum.photos/2000/1000'); /* Add a background image */
-            background-size: cover;
-            background-position: center;
-            height: 100vh;
             margin: 0;
+            padding: 0;
+            background-size: cover; /* Cover the entire viewport */
+            color: white; /* Change text color for better contrast */
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            color: #fff;
+            justify-content: center;
+            height: 100vh; /* Full height */
+            text-align: center;
+            transition: background-image 1s ease; /* Smooth transition for background change */
         }
-        
-        .container {
-            background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background */
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5em; /* Increase font size */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Add shadow for better readability */
+        }
+        .room-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive grid */
+            gap: 20px; /* Space between cards */
+            margin: 20px 0; /* Margin around the grid */
+            padding: 0;
+            list-style-type: none; /* Remove bullet points */
+        }
+        .room-card {
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+            border-radius: 10px; /* Rounded corners */
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s; /* Smooth scale on hover */
         }
-        
-        #room-name-input {
-            padding: 10px;
-            font-size: 15px;
-            border: none;
-            border-radius: 5px;
-            width: 80%;
+        .room-card:hover {
+            transform: scale(1.05); /* Scale up on hover */
         }
-        
-        #room-name-submit {
-            padding: 10px 20px;
-            font-size: 15px;
-            border: none;
-            border-radius: 5px;
-            background-color: #4CAF50;
-            color: #fff;
-            cursor: pointer;
+        .room-card a {
+            text-decoration: none;
+            color: #00ffcc; /* Link color */
+            font-size: 1.5em; /* Increase link font size */
+            text-align: center; /* Center align text */
         }
-        
-        #room-name-submit:hover {
-            background-color: #3e8e41;
-        }
-        
-        .options {
+        .create-room {
             margin-top: 20px;
+            padding: 10px 20px;
+            background-color: rgba(255, 204, 0, 0.8); /* Button color */
+            border-radius: 5px; /* Rounded corners */
+            color: #000; /* Text color */
+            text-decoration: none; /* No underline */
+            font-size: 1.2em; /* Increase font size */
+            transition: background-color 0.3s; /* Smooth transition for hover effect */
         }
-        
-        .option {
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #4CAF50;
-            color: #fff;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-        
-        .option:hover {
-            background-color: #3e8e41;
+        .create-room:hover {
+            background-color: rgba(255, 204, 0, 1); /* Change background on hover */
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Chat Rooms</h1>
-        <p>What chat room would you like to enter?</p>
-        <input id="room-name-input" type="text" size="100" placeholder="Enter room name">
-        <input id="room-name-submit" type="button" value="Enter">
-        
-        <div class="options">
-            <h2>Or select from the following options:</h2>
-            <button class="option" onclick="window.location.pathname = '/chat/lobby/';">General</button>
-            <button class="option" onclick="window.location.pathname = '/chat/general/';">Technical</button>
-            <button class="option" onclick="window.location.pathname = '/chat/tech/';">Administration</button>
-        </div>
-    </div>
-    
     <script>
-        document.querySelector('#room-name-input').focus();
-        document.querySelector('#room-name-input').onkeyup = function(e) {
-            if (e.keyCode === 13) {  // enter, return
-                document.querySelector('#room-name-submit').click();
-            }
-        };
+        const images = [
+            "{% static 'main/image/bird.jpg' %}",
+            "{% static 'main/image/nature2.jpg' %}",
+            "{% static 'main/image/leaf (2).jpg' %}"
+        ];
 
-        document.querySelector('#room-name-submit').onclick = function(e) {
-            var roomName = document.querySelector('#room-name-input').value;
-            window.location.pathname = '/chat/' + roomName + '/';
+        let currentIndex = 0;
+
+        function changeBackground() {
+            document.body.style.backgroundImage = `url(${images[currentIndex]})`;
+            currentIndex = (currentIndex + 1) % images.length; // Loop back to the first image
+        }
+
+        window.onload = function() {
+            changeBackground(); // Set initial background
+            setInterval(changeBackground, 5000); // Change background every 5 seconds
         };
     </script>
+</head>
+<body>
+    <h1>Chat Rooms</h1>
+    <ul class="room-list">
+        {% for room in rooms %}
+            <li class="room-card">
+                <a href="{% url 'room_view' room.name %}">{{ room.name }}</a>
+            </li>
+        {% empty %}
+            <li>No chat rooms available.</li>
+        {% endfor %}
+    </ul>
+    <a class="create-room" href="{% url 'create_room' %}">Create a new room</a>  <!-- Optional link to create a new room -->
 </body>
 </html>

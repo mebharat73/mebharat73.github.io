@@ -9,28 +9,27 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
 import os
-import dj_database_url
 from pathlib import Path
-from dotenv import load_dotenv
-
-
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'django-insecure-ir)0&nac$$0nprx(&00yp3$9qr-s#d3mst&6))p@%_g0sr^7n%'
-SECRET_KEY = os.environ.get('SECRET_KEY', default='django-insecure-ir)0&nac$$0nprx(&00yp3$9qr-s#d3mst&6))p@%_g0sr^7n%')
+SECRET_KEY = 'django-insecure-ir)0&nac$$0nprx(&00yp3$9qr-s#d3mst&6))p@%_g0sr^7n%'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1:8000/', 'my-project-wa3s.onrender.com']
+ALLOWED_HOSTS = []
 
+
+# Application definition
 
 INSTALLED_APPS = [
-    'daphne',
+    'sslserver',
     'channels',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,72 +38,46 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'web',
-    'django_extensions',
     'debug_toolbar',
     'django_summernote',
+    
 
 ]
 
+ASGI_APPLICATION = "my_project.asgi.application"
 
 
+# If you're using Django Channels, you may also want to set up the channel layers
+# Note: Use a tuple with the host and port for the CHANNEL_LAYERS configuration
+# settings.py
 
 
-
-
-
-import os
-import dj_database_url
-
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),  # Correctly retrieve the DATABASE_URL
-        conn_max_age=600
-    )
-}
-
-
-# database_url = os.environ.get('DATABASE_URL')
-# DATABASES = {
+# CACHES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'my_project_q45u',
-#         'USER': 'my_project',
-#         'PASSWORD': 'LY45kgR48mIcjj5YrFy9pRycwK9HMXM4',
-#         'HOST': 'dpg-csbjk3dds78s73b8pcsg-a.oregon-postgres.render.com',  # Often 'localhost', '127.0.0.1', or the actual database URL
-#         'PORT': '5432',  # Default PostgreSQL port
+#         'BACKEND': 'django_redis.cache.RedisCache',
+#         'LOCATION': 'rediss://red-csbjk3dds78s73b8pcrg:hN9mjW2HVaa3RTQh9KHwXffkWi2eLVRa@oregon-redis.render.com:6379/0',
+#         'OPTIONS': {
+#             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+#             'SOCKET_CONNECT_TIMEOUT': 5,
+#             'SOCKET_TIMEOUT': 5,
+#             'CONNECTION_POOL_KWARGS': {
+#                 'max_connections': 20,  # Maximum number of connections in the pool
+                
+#             },
+#         }
 #     }
 # }
 
+# settings.py
 
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [(os.environ.get('REDIS_HOST', 'redis://red-csbjk3dds78s73b8pcrg'), int(os.environ.get('REDIS_PORT', 6379)))],
-        },
-    },
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    }
 }
-
-# Channels configuration
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels_redis.core.RedisChannelLayer",
-#         "CONFIG": {
-#             "hosts": [
-#                 {
-#                     "address": os.environ.get('REDIS_URL', 'redis://red-csbjk3dds78s73b8pcrg:6379'),  # Use environment variable or default
-#                 }
-#             ],
-#         },
-#     },
-# }
-
-# Additional settings
-ASGI_APPLICATION = 'my_project.asgi.application'  # Replace with your actual ASGI application path
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -112,11 +85,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-    
 ]
 
 ROOT_URLCONF = 'my_project.urls'
-BASE_DIR = Path(__file__).resolve().parent.parent
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -137,16 +109,23 @@ TEMPLATES = [
 #WSGI_APPLICATION = 'my_project.wsgi.application'
 
 
-SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
-SESSION_COOKIE_SECURE = True  # Use secure cookies
-CSRF_COOKIE_SECURE = True  # Use secure CSRF cookies
 
 
 
+# Database
+# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-
-
-
+database_url = os.environ.get('DATABASE_URL')
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'bharatkarki',
+        'USER': 'bharatkarki_user',
+        'PASSWORD': 'iKU6AASm7IBhwCMNDNYEBIAwAzdxmGCu',
+        'HOST': 'dpg-csuru35umphs739mkirg-a.oregon-postgres.render.com',  # Often 'localhost', '127.0.0.1', or the actual database URL
+        'PORT': '5432',  # Default PostgreSQL port
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -181,32 +160,34 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Static files (CSS, JavaScript, Images)
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-
-
-
-# This setting informs Django of the URI path from which your static files will be served to users
-# Here, they well be accessible at your-domain.onrender.com/static/... or yourcustomdomain.com/static/...
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 
-# Specify a directory for collected static files
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Ensure this directory is valid
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Directory where static files will be collected
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# Default primary key field type
+# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+#for SSL inorder to redirect http to https
+# Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = True
+
+# Optional: Set this to prevent browsers from caching your SSL certificate
+SECURE_HSTS_SECONDS = 3600  # 1 hour
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
 
 #for e-mail
 # settings.py
@@ -258,5 +239,5 @@ DEBUG_TOOLBAR_CONFIG = {
         'django.views.decorators',
         'django.views.generic',
     ),
-    'INTERNAL_IPS': ['localhost'],  # or your local IP address
+    'INTERNAL_IPS': ['127.0.0.1'],  # or your local IP address
 }

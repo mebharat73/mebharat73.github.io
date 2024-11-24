@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from .models import Profile, Post, Like, Comment
+from .forms import PostImageForm
 from .forms import CreateBlogForm, CategoryForm, CommentForm
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_POST
@@ -15,82 +16,96 @@ from .forms import CommentForm, CommentReplyForm
 from django.core.mail import send_mail
 from .models import Message, Room
 from django.shortcuts import get_object_or_404
+from .models import Message, Room  # Make sure to import your models
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from .models import Room, Message
+import datetime
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from web.models import BlogImage  # Ensure this is the correct import
+from .forms import PostForm, PostImageForm
 
 
-
-
-
-import logging
-
-logger = logging.getLogger(__name__)
-
-def send_message(request, room_name):
+@login_required
+def create_room(request):
     if request.method == 'POST':
-        message_content = request.POST.get('message', '').strip()  # Strip whitespace
-        user = request.user  # Assuming the user is logged in
-        room = get_object_or_404(Room, name=room_name)  # Get the room safely
-
-        if not message_content:
-            logger.warning(f"Empty message from user {user.username} to room {room_name}")
-            return redirect('room', room_name=room_name)
-
-        logger.info(f"User  {user.username} is sending a message to room {room_name}: {message_content}")
-
-        # Create a new message
-        try:
-            Message.objects.create(user=user, room=room, message=message_content)
-            logger.info(f"Message saved: {message_content}")
-        except Exception as e:
-            logger.error(f"Error saving message: {e}")
-            # Optionally, you can add a message to inform the user
-            messages.error(request, "There was an error saving your message. Please try again.")
-
-        return redirect('room', room_name=room_name)
-    
-    
-
-@login_required
-def upload_profile_picture(request):
-    if request.method == 'POST' and request.FILES.get('profile_pic'):
-        profile_pic = request.FILES['profile_pic']
-        user = request.user  # Assuming the user is logged in
-
-        # Save the profile picture
-        profile, created = Profile.objects.get_or_create(user=user)
-        profile.profile_pic = profile_pic
-        profile.save()
-
-        return redirect('profile_view')  # Redirect to a profile view or some success page
+        room_name = request.POST.get('room_name')
+        Room.objects.create(name=room_name)
+        return HttpResponseRedirect(reverse('index'))
+    return render(request, 'main/create_room.html')  # Create a template for this
 
 
-def get_latest_messages(request, room_name):
-    room = get_object_or_404(Room, name=room_name)  # Ensure the room exists
-    latest_messages = Message.objects.filter(room=room).order_by('-timestamp')[:25]
-    messages = []
-
-    for message in latest_messages:
-        messages.append({
-            'message': message.message,
-            'username': message.user.username,
-            'profile_pic_url': message.user.profile.profile_pic.url if message.user.profile.profile_pic else None
-        })
-    
-    return JsonResponse(messages, safe=False)
-
-
+def index(request):
+    rooms = Room.objects.all()  # Get all chat rooms
+    return render(request, 'main/index.html', {'rooms': rooms})
 
 
 
 @login_required
-def room(request, room_name):
+def room_view(request, room_name):
     room = get_object_or_404(Room, name=room_name)
     messages = Message.objects.filter(room=room).order_by('timestamp')
     return render(request, 'main/room.html', {'room': room, 'messages': messages})
 
+@login_required
+def send_message(request):
+    if request.method == 'POST':
+        print("Request received")  # Debugging line
+        message = request.POST.get('message')
+        room_name = request.POST.get('room_name')
+        print("Message:", message)  # Debugging line
+        room = get_object_or_404(Room, name=room_name)
 
-def index(request):
-    rooms = Room.objects.all()  # Assuming you want to list all rooms
-    return render(request, 'main/index.html', {'rooms': rooms})
+        # Check for duplicate message (optional)
+        if Message.objects.filter(user=request.user, room=room, message=message).exists():
+            return JsonResponse({'error': 'Duplicate message'}, status=400)
+
+        new_message = Message.objects.create(user=request.user, room=room, message=message)
+        return JsonResponse({
+            'user': new_message.user.username,
+            'message': new_message.message,
+            'timestamp': new_message.timestamp.isoformat(),
+            'profile_picture': new_message.user.profile.profile_picture.url
+        })
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+@login_required
+def get_messages(request, room_name, last_timestamp=None):
+    # Convert last_timestamp to a datetime object if provided
+    if last_timestamp:
+        last_timestamp = datetime.datetime.fromisoformat(last_timestamp)
+
+    # Fetch messages for the specified room, ordered by timestamp
+    messages = Message.objects.filter(room__name=room_name)
+
+    # Filter messages if last_timestamp is provided
+    if last_timestamp:
+        messages = messages.filter(timestamp__gt=last_timestamp)
+
+    # Limit the number of messages fetched (e.g., last 10 messages)
+    messages = messages.order_by('-timestamp')[:10]  # Adjust the number as needed
+
+    # Construct a list of dictionaries to return as JSON
+    messages_data = [
+        {
+            'user': msg.user.username,
+            'message': msg.message,
+            'timestamp': msg.timestamp.isoformat(),  # Return timestamp in ISO format
+            'profile_picture': msg.user.profile.profile_picture.url  # Include profile picture URL
+        } 
+        for msg in messages
+    ]
+
+    # Reverse the list to return the oldest messages first
+    messages_data.reverse()
+
+    return JsonResponse(messages_data, safe=False)
+
+
 
 
 def contact_us(request):
@@ -125,24 +140,32 @@ def contact_us(request):
         return render(request, 'main/contact.html')
 
 
-
-
 @require_POST
 @login_required
-def add_comment_reply(request, comment_id):
-    comment = get_object_or_404(Comment, id=comment_id)
-    form = CommentReplyForm(request.POST)
-    if form.is_valid():
-        reply = form.save(commit=False)
-        reply.comment = comment
-        reply.author = request.user
-        reply.save()
-        return JsonResponse({"reply": reply.content, "id": reply.id})
+def add_comment(request):
+    print("add_comment view called")
+    blog_id = request.POST.get('blog_id')
+    blog = get_object_or_404(Post, id=blog_id)
+    form_data = CommentForm(request.POST)
+    if form_data.is_valid():
+        comment = form_data.save(commit=False)  # Don't save yet
+        comment.author = request.user  # Set the author field
+        comment.post = blog  # Set the post field
+        comment.save()  # Now save the comment
+        return redirect("blog_detail", blog_id=blog_id)
     else:
-        return JsonResponse({"error": "Invalid form data"})
+        comments = blog.comments.all()
+        context = {
+            'blog': blog,
+            'content': blog.content,
+            'comment_form': form_data,
+            'comments': comments
+        }
+        return render(request, 'main/blog_detail.html', context)
 
 
-@login_required
+
+
 @api_view(['POST'])
 def like_unlike(request):
     print("like_unlike view called")
@@ -176,44 +199,56 @@ def like_unlike(request):
 
 
 
+from django.shortcuts import render, get_object_or_404
+from .models import Post, BlogImage
+from .forms import CommentForm, CommentReplyForm  # Ensure these forms are imported
+
 def blog_detail(request, blog_id):
     blog = get_object_or_404(Post, id=blog_id)
+    images = BlogImage.objects.filter(post=blog)  # Fetch images related to the blog post
+    first_image = images.first()  # Get the first image if available
 
-    
     context = {
         'blog': blog,
         'content': blog.content,
         'comment_form': CommentForm(),
         'comment_reply_form': CommentReplyForm(),
-        'comments': blog.comments.all()
+        'comments': blog.comments.all(),  # Access comments using related_name
+        'images': images,  # Include images in the context
+        'first_image': first_image  # Pass the first image to the context
     }
     return render(request, 'main/blog_detail.html', context)
 
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Comment, CommentReply
+from .forms import CommentReplyForm
 
 @require_POST
 @login_required
-def add_comment(request):
-    print("add_comment view called")
-    blog_id = request.POST.get('blog_id')
-    blog = get_object_or_404(Post, id=blog_id)
-    form_data = CommentForm(request.POST)
-    if form_data.is_valid():
-        comment = form_data.save(commit=False)  # Don't save yet
-        comment.author = request.user  # Set the author field
-        comment.post = blog  # Set the post field
-        comment.save()  # Now save the comment
-        return redirect("blog_detail", blog_id=blog_id)
-    else:
-        comments = blog.comments.all()
-        context = {
-            'blog': blog,
-            'content': blog.content,
-            'comment_form': form_data,
-            'comments': comments
+def add_comment_reply(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    form = CommentReplyForm(request.POST)
+    
+    if form.is_valid():
+        reply = form.save(commit=False)
+        reply.comment = comment
+        reply.author = request.user
+        reply.save()
+        
+        # Prepare the response data
+        response_data = {
+            "reply": reply.content,
+            "id": reply.id,
+            "author": str(reply.author),  # Get the author's name
+            "profile_pic": reply.author.profile.profile_picture.url if reply.author.profile.profile_picture else '',  # Get the profile picture URL
+            "created_at": reply.created_at.strftime('%Y-%m-%d %H:%M:%S'),  # Format the timestamp
         }
-        return render(request, 'main/blog_detail.html', context)
-
-
+        
+        return JsonResponse(response_data)
+    else:
+        return JsonResponse({"error": "Invalid form data"}, status=400)
 
 #.......................................................................................
 
@@ -232,22 +267,30 @@ def add_category(request):
 
 #.............................................................................................................
 
+
+
 @login_required
+
+
 def create_post(request):
     if request.method == 'POST':
-        form = CreateBlogForm(request.POST)
-        if form.is_valid():
-            form.save(author=request.user)
-            #form.save()
-            return redirect("home_page")
-        
-        else:
-            return render(request, "main/login.html", {'form':form})
-        
+        post_form = PostForm(request.POST)
+        if post_form.is_valid():
+            post = post_form.save(commit=False)
+            post.author = request.user  # Set the author to the current user
+            post.save()
+
+            # Handle image uploads
+            images = request.FILES.getlist('images')  # Use the name of the image input field
+            for image in images:
+                BlogImage.objects.create(post=post, image=image)
+
+            return redirect('home_page')  # Redirect to a success page
     else:
-        form = CreateBlogForm()
-        return render(request, "main/create_blog.html", {'form':form})
-#.................................................................................
+        post_form = PostForm()
+
+    return render(request, 'main/create_blog.html', {'post_form': post_form})
+
 
 
 def home(request):
@@ -299,33 +342,46 @@ def login_view(request):
 
 #*********************************************************************************
 
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django.contrib import messages
+from .models import Profile  # Ensure you import your Profile model
+
 def signup_view(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
         password_confirm = request.POST.get('password_confirm')
-        try:
-            user=User.objects.get(username=username)
-            return render (request, 'main/signup.html', {'error':"username must be unique"})
-        except User.DoesNotExist:
-            if len(username) <6 and '@' not in username:
-                return render(request, 'main/signup.html', {'error':"username mst be atleast 6 character and contain @"})
-            elif password != password_confirm:
-                return render(request, 'main/signup.html', {'error':"Password and Confirm password must be same"})
-            elif len(password)<6 and len(password_confirm)<6:
-                return render(request, 'main/signup.html', {'error':"password must be 6 character long"})
-            else:
-                first_name = request.POST.get('first_name', 'default_name')
-                last_name = request.POST.get('last_name', 'default_name')
-                profile_pic = request.FILES.get('profile_picture')
-                user = User.objects.create_user(username, password=password, first_name=first_name, last_name=last_name)
+        first_name = request.POST.get('first_name', 'default_name')
+        last_name = request.POST.get('last_name', 'default_name')
+        profile_pic = request.FILES.get('profile_picture')
 
-                if profile_pic:
-                    Profile.objects.create(profile_pic=profile_pic, user=user)
-                return redirect("login_page")
-    else:
-        return render(request, 'main/signup.html')
+        # Check if username already exists
+        if User.objects.filter(username=username).exists():
+            return render(request, 'main/signup.html', {'error': "Username must be unique"})
 
+        # Validate username
+        if len(username) < 3:
+            return render(request, 'main/signup.html', {'error': "Username must be at least 6 characters and contain '@'"})
+
+        # Validate password
+        if password != password_confirm:
+            return render(request, 'main/signup.html', {'error': "Password and Confirm password must be the same"})
+        
+        if len(password) < 3:
+            return render(request, 'main/signup.html', {'error': "Password must be at least 6 characters long"})
+
+        # Create the user
+        user = User.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name)
+
+        # Create the profile if a profile picture is provided
+        if profile_pic:
+            Profile.objects.create(profile_picture=profile_pic, user=user)
+
+        messages.success(request, 'Account created successfully! You can now log in.')
+        return redirect("login_page")  # Redirect to the login page or another page
+
+    return render(request, 'main/signup.html')
 
 
 #...................................................................................................................................

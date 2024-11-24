@@ -3,6 +3,9 @@ from django import forms
 from .models import Category
 from django_summernote.widgets import SummernoteWidget
 from .models import CommentReply
+from web.models import BlogImage  # Ensure this import is correct
+
+
 
 
 
@@ -13,8 +16,10 @@ class CategoryForm(forms.ModelForm):
         model = Category
         fields = "__all__"
 
+
+
 class CreateBlogForm(forms.ModelForm):
-    content = forms.CharField(widget=SummernoteWidget(attrs={'height':300, 'width':500}))
+    content = forms.CharField(widget=SummernoteWidget(attrs={'height':400, 'width':700}))
     class Meta:
         model = Post
         fields = ['title', 'content', 'category']
@@ -26,7 +31,23 @@ class CreateBlogForm(forms.ModelForm):
         if commit:
             blog.save()
         return blog
-                   
+    
+
+
+from django import forms
+from .models import Post, BlogImage
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'category']  # Include other fields as necessary
+
+class PostImageForm(forms.ModelForm):
+    class Meta:
+        model = BlogImage
+        fields = ['image']  # Only the image field
+
+        
 
 class CommentForm(forms.ModelForm):
     

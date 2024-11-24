@@ -1,324 +1,217 @@
-<!DOCTYPE html>
 {% load static %}
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <title>Chat Room</title>
+    <meta charset="UTF-8">
+    <title>Chat Room: {{ room_name }}</title>
+    <scrip src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-
-        /* Your CSS styles here */
         body {
             font-family: Arial, sans-serif;
-            background-image: url('https://picsum.photos/2000/1000'); /* Add a background image */
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 10px;
+            background-image: url("{% static 'main/image/nature3.jpg' %}");
             background-size: cover;
             background-position: center;
-            height: 100vh;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #fff;
+            background-repeat: no-repeat;
         }
         
-        .username {
-            background-color: #56d41d; /* a light gray background */
-            padding: 2px 4px; /* add some padding to make it look nicer */
-            border-radius: 4px; /* add a subtle border radius */
-            margin-right: 10px; /* add some space between the username and the message */
-            
-            position: relative; /* add this to position the username relative to the picture */
-            top: -3.2px; /* move the username up by 2 pixels */
-            margin-left: -20px; /* reduce the space between the picture and the username */
-        }
-
-        
-        
-        
-        .chat-input-container {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 92%;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-top: 1px solid #ccc;
-        }
-
-        
-        
-        .chat-input-container input[type="text"] {
-            width: 90%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-        }
-
-
-        .chat-container {
-            width: 430px;
-            height: 650px;
-            position: relative;
-            padding: 10px;
-            border: 2px solid #ccc;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            background-color: #f9f9f9;
-            margin: 30px auto; /* add this line */
-            max-height: 650px; /* adjust the height to your liking */
-            overflow-y: auto;
-        }
-        
-        
-
-        
-        .chat-header {
-            background-color: #fb6fef;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); 
-            color: springgreen;
+        h1 {
             text-align: center;
-            text-decoration: fuchsia;
-            display: block;
-            font-size: 19px;
-            margin-top: -10px;
-            margin-left: 5px;
+            color: #333;
+            margin-bottom: 10px; /* Add some space below the title */
+        }
+        
+        #messages {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 5px; /* Reduced padding */
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            overflow-y: auto;
+            height: 600px; /* Height for the chat container */
+        }
+        
+        .user-message {
+            justify-content: flex-end;
+        }
+        
+        .other-message {
+            justify-content: flex-start;
         }
         
         .message {
-            margin-bottom: 3px;
-            padding: 5px;
-            border-radius: 10px;
-            width: 80%;
-            line-height: 1.2; /* add this line */
-            word-wrap: break-word;  /* Allow long words to wrap */
-            word-break: break-all;  /* Break words if necessary */
-            
+            display: flex;
+            margin: 3px 0; /* Reduced margin */
+            align-items: center;
         }
         
-        .left {
-            float: left;
-            background-color: #999999;
-            transform: translateX(-1px); /* add this line */
+        .message-content {
+            background-color: rgba(0, 0, 0, 0.2); /* Background color */
+            border-radius: 8px; /* Rounded corners */
+            padding: 5px; /* Add some vertical padding */
+            margin-left: 5px; /* Space between image and message */
+            flex: 1; /* Allow it to take available space */
+            max-width: 70%; /* Set a maximum width for the message box */
+            min-height: 20px; /* Set a minimum height for single-line messages */
+            max-height: 150px; /* Set a maximum height for longer messages */
+            overflow: auto; /* Allow scrolling if content exceeds max-height */
+            word-wrap: break-word; /* Allow words to break */
+            font-size: 14px; /* Keep the font size the same */
+            line-height: 1.0; /* Adjust line-height for better spacing */
         }
         
-        .right {
-            float: right;
-            background-color: #C0C0C0;
-            transform: translateX(1px); /* add this line */
-        }
-        
-        .message img {
-            width: 22px;
-            height: 22px;
+        .user-image {
+            width: 30px; /* Smaller image */
+            height: 30px; /* Smaller image */
             border-radius: 50%;
-            margin-right: 20px;
+            border: 2px solid #9ef86a;
         }
         
-        .time {
-            font-size: 12px;
-            color: #666;
+        #message-form {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
         }
         
-        
-        .chat-messages {
-            overflow-y: auto;
-            height: calc(100% - 80px); /* adjust the height to make room for the chat input */
+        #message-input {
+            width: 450px; /* Width for the input */
+            height: 25px; /* Height for the input */
+            padding: 5px; /* Reduced padding */
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-right: 10px; /* Space between input and button */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            font-size: 14px; /* Smaller font size */
         }
         
-        .profile-pic {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #fff;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-        }
-
-        
-        #chat-message-input {
-            width: 77%;
-            height: 16px;
-            padding: 5px;
-            font-size: 14px;
-            border: 2px solid #ccc;
-            border-radius: 8px;
-        }
-        
-        #chat-message-submit {
-            width: 18%;
-            height: 25px;
-            padding: 5px;
-            font-size: 14px;
-            background-color: #4CAF50;
-            color: #fff;
+        button {
+            padding: 5px 10px; /* Reduced padding */
+            background-color: #007bff;
+            color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
         
-        #chat-message-submit:hover {
-            background-color: #3e8e41;
-        }
-        
-        .no-messages {
-            margin-top: 5px;
-        }
-        
-        
-        
-        .chat-input {
-            position: absolute;
-            bottom: 0;
-            left: 9;
-            width: 100%;
-            padding: 0px;
+        button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-header">
-            <h2>Chat Room</h2>
-        </div>
-        <hr>
+    <h1>Chat Room: {{ room.name }}</h1>
 
-        <div class="chat-messages" id="chat-log">
-            {% for message in messages %}
-                <div class="message {% if message.user == request.user %}right{% else %}left{% endif %}">
-                    {% if user.is_authenticated %}
-                        <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}'s profile picture" width="100">
-                    {% else %}
-                        <img src="{% static 'default_profile_picture.jpg' %}" alt="Default profile picture" width="100">
-                    {% endif %}
-                    <span class="username">{{ message.user.username }}:</span>
-                    <span>{{ message.message }}</span>
-                    <span class="time">{{ message.timestamp }}</span>
+    <div id="messages">
+        {% for message in messages %}
+            <div class="message {% if message.user == request.user %}user-message{% else %}other-message{% endif %}">
+                <img src="{{ message.user.profile.profile_picture.url }}" alt="{{ message.user.username }}'s picture" class="user-image">
+                <div class="message-content">
+                    <p><strong>{{ message.user.username }}:</strong> {{ message.message }}</p>
                 </div>
-            {% endfor %}
-        </div>
-
-        <div class="chat-input-container">
-            <div class="chat-input">
-                <input id="chat-message-input" type="text" size="100" placeholder="Type your message here...">
-                <input id="chat-message-submit" type="button" value="Send">
             </div>
-        </div>
-        
-        {{ room_name|json_script:"room-name" }}  <!-- Ensure this is present -->
-        <div class="chat-messages" id="chat-log"></div> <!-- Ensure this container exists -->
-        
-        <script>
-            // Fetch the room name from the JSON script tag
-            const roomName = JSON.parse(document.getElementById('room-name').textContent);
-            console.log('Room Name:', roomName); // Debugging line
-        
-            // Declare chatSocket in a higher scope
-            let chatSocket;
-        
-            // Function to establish WebSocket connection
-            function connectWebSocket() {
-                chatSocket = new WebSocket(`wss://websockets-echo.onrender.com/chat/${roomName}/`); // Ensure this is correct
-        
-                chatSocket.onopen = function(e) {
-                    console.log('WebSocket connection opened');
-                    document.querySelector('#chat-message-input').focus();
-        
-                    document.querySelector('#chat-message-input').onkeyup = function(e) {
-                        if (e.keyCode === 13) {  // Enter key
-                            document.querySelector('#chat-message-submit').click();
-                        }
-                    };
-        
-                    document.querySelector('#chat-message-submit').onclick = function(e) {
-                        const messageInput = document.querySelector('#chat-message-input');
-                        const message = messageInput.value.trim();
-                        if (message) {
-                            sendMessage(message);
-                            messageInput.value = '';
-                        }
-                    };
-                };
-        
-                chatSocket.onmessage = function(e) {
-                    const data = JSON.parse(e.data);
-                    console.log('Received data:', data); // Debugging line
-                    const message = data.message;
-                    const username = data.username || 'Anonymous';
-                    const profilePicUrl = data.profile_pic_url || 'default-pic-url.png'; // Fallback URL
-        
-                    appendMessage(username, message, profilePicUrl);
-                };
-        
-                chatSocket.onerror = function(error) {
-                    console.error('WebSocket error:', error);
-                    alert('An error occurred while communicating with the chat server. Please refresh the page to try again.');
-                };
-        
-                chatSocket.onclose = function(e) {
-                    console.error('Chat socket closed unexpectedly:', e);
-                    alert('Connection to the chat server has been lost. Please refresh the page to reconnect.');
-                };
-            }
-        
-            // Function to send a message via WebSocket
-            function sendMessage(message) {
-                if (chatSocket && chatSocket.readyState === WebSocket.OPEN) {
-                    const username = "{{ user.username }}"; // Assuming you're using Django's template engine
-                    chatSocket.send(JSON.stringify({
-                        'message': message,
-                        'username': username
-                    }));
-                } else {
-                    console.error('WebSocket is not open. Cannot send message.');
-                }
-            }
-        
-            // Function to append a message to the chat log
-            function appendMessage(username, message, profilePicUrl) {
-                const chatContainer = document.getElementById('chat-log');
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('message');
-        
-                // Add user profile picture and message
-                messageElement.innerHTML = `
-                    <img src="${profilePicUrl}" alt="${username}'s Avatar" class="avatar">
-                    <span class="username">${username}:</span>
-                    <span>${message}</span>
-                `;
-                chatContainer.appendChild(messageElement);
-                chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to bottom
-            }
-        
-            // Function to fetch messages from the server
-            function fetchMessages() {
-                fetch(`/get_latest_messages/${roomName}/`)
-                    .then(response => response.json())
-                    .then(data => {
-                        data.forEach(message => {
-                            appendMessage(message.username, message.message, message.profile_pic_url);
+        {% endfor %}
+    </div>
+    <div id="message-form">
+        <textarea id="message-input" placeholder="Type your message..."></textarea>
+        <button id="send-button">Send</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  <!-- Ensure jQuery is included -->
+    <script type="text/javascript">
+        const roomName = "{{ room.name }}"; // Get room name from Django template
+        let lastTimestamp = null; // Variable to store the last message timestamp
+    
+        // Function to fetch messages from the server
+        function fetchMessages() {
+            $.ajax({
+                url: `/get_messages/${roomName}/`,
+                method: 'GET',
+                data: {
+                    last_timestamp: lastTimestamp
+                },
+                success: function(data) {
+                    if (data.length > 0) {
+                        data.reverse().forEach(msg => {
+                            appendMessage(msg);
                         });
-                    })
-                    .catch(error => console.error('Error fetching messages:', error));
-            }
-        
-            // Function to load the image (if needed)
-            function loadImage() {
-                const imageId = getImageId(); // Ensure this function returns a valid ID
-                if (imageId) {
-                    const imageUrl = `https://my-project-wa3s.onrender.com/chat/lobby/${imageId}`;
-                    document.getElementById('imageElement').src = imageUrl; // Set the image source
-                } else {
-                    console.error('Image ID is undefined. Cannot construct URL.');
-                    // Optionally set a default image or handle the error
+                        lastTimestamp = data[data.length - 1].timestamp;
+                    }
+                    // Poll again after a short delay
+                    setTimeout(fetchMessages, 500); // Adjust this for a faster response
+                },
+                error: function(xhr) {
+                    console.error('Error fetching messages:', xhr.responseText);
+                    // Retry after a longer delay on error
+                    setTimeout(fetchMessages, 500); // Increase the delay on error
                 }
-            }
+            });
+        }
         
-            // Call the function to load messages when the page loads
-            window.onload = function() {
-                fetchMessages(); // Fetch messages from the server
-                connectWebSocket(); // Establish WebSocket connection
-                loadImage(); // Load the image if needed
-            };
-        </script>
+        // Start the first fetch
+        fetchMessages();
+    
+        // Function to append a message to the chat
+        function appendMessage(message) {
+            // Check if the message is already displayed
+            const existingMessages = $('#messages').children('div');
+            const isDuplicate = Array.from(existingMessages).some(existingMsg => {
+                return $(existingMsg).text().includes(message.message);
+            });
+        
+            // Append the message only if it's not a duplicate
+            if (!isDuplicate) {
+                const messageClass = message.user === '{{ request.user.username }}' ? 'user-message' : 'other-message';
+                const messageHtml = `
+                    <div class="message ${messageClass}">
+                        <img src="${message.profile_picture}" alt="${message.user}'s picture" class="user-image">
+                        <div class="message-content">
+                            <p><strong>${message.user}:</strong> ${message.message}</p>
+                        </div>
+                    </div>
+                `;
+                $('#messages').append(messageHtml);
+                $('#messages').scrollTop($('#messages')[0].scrollHeight); // Scroll to the bottom
+            }
+        }
+    
+        // Sending a message
+        $('#send-button').click(function() {
+            const message = $('#message-input').val();
+            if (message) {
+                // Disable the send button to prevent multiple submissions
+                $('#send-button').prop('disabled', true);
+    
+                $.ajax({
+                    url: '/send_message/',
+                    method: 'POST',
+                    data: {
+                        message: message,
+                        room_name: roomName,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'  // Include CSRF token
+                    },
+                    success: function(data) {
+                        appendMessage(data); // Append the sent message
+                        $('#message-input').val(''); // Clear the input field
+                        lastTimestamp = data.timestamp; // Update lastTimestamp to the sent message's timestamp
+                    },
+                    error: function(xhr) {
+                        console.error('Error sending message:', xhr.responseText);
+                    },
+                    complete: function() {
+                        // Re-enable the send button after the request completes
+                        $('#send-button').prop('disabled', false);
+                    }
+                });
+            }
+        });
+    
+        
+    </script>    
+    </script>
+    
 </body>
 </html>

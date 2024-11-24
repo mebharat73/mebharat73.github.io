@@ -1,7 +1,6 @@
 from django.urls import path
 from .import views
-from .views import get_latest_messages, room
-
+from web.views import create_post  # Adjust the import based on your project structure
 
 
 
@@ -13,17 +12,17 @@ urlpatterns= [
     path('blog/category/add/', views.add_category, name="add_category_page"),
     path('blog/create/', views.create_post, name="create_post_page"),
     path('blog/<int:blog_id>/', views.blog_detail, name='blog_detail'),
-    path('comment', views.add_comment, name="add_comment"),
+    path('comment/', views.add_comment, name="add_comment"),
     path('like_unlike/', views.like_unlike, name='like_unlike'),
-    path('add_comment_reply/<int:comment_id>', views.add_comment_reply, name='add_comment_reply'),
+    path('add_comment_reply/<int:comment_id>/', views.add_comment_reply, name='add_comment_reply'),
     path('', views.home, name="home_page"),
     path('accounts/contact_us/', views.contact_us, name='contact_us'),
-    #path('chat/room/<str:room_name>/', views.room, name='room'),
-    path("chat/<str:room_name>/", views.room, name="room"),
-    path("chat/", views.index, name="index"),
-    path("send_message/<str:room_name>/", views.send_message, name="send_message"),
-    path("upload_profile_picture/", views.upload_profile_picture, name="upload_profile_picture"),
-    path("get_latest_messages/<str:room_name>/", views.get_latest_messages, name="get_latest_messages"),
+    path('chat/', views.index, name='index'),
+    path('chat/create/', views.create_room, name='create_room'),  # URL for creating a room
+    path('chat/<str:room_name>/', views.room_view, name='room_view'),
+    path('send_message/', views.send_message, name='send_message'),
+    path('get_messages/<str:room_name>/', views.get_messages, name='get_messages'),
+    
     
    
 ]

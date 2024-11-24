@@ -10,6 +10,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 
 
 
+
 class Room(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
@@ -31,10 +32,10 @@ class Message(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(upload_to='profile_pictures/', default='default_profile_picture.jpg')
+    profile_picture = models.ImageField(upload_to='profile_pictures/', default='default.jpg')
 
     def __str__(self):
-        return f"{self.user.username}'s profile"
+        return self.user.username
 
 #.......................................................................................................................................
 
@@ -52,36 +53,42 @@ class Category(models.Model):
 
  #.......................................................................................................................................   
 
+
 class Post(models.Model):
     title = models.CharField(max_length=256)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")  
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="posts")
-    #likes_count = models.IntegerField(default=0)
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name="posts")
+
     @property
     def likes_count(self):
         return Like.objects.filter(content_type=ContentType.objects.get_for_model(self), object_id=self.id).count()
-    
-#........................................................................................................................................    
 
+    def __str__(self):
+        return self.title
+
+class BlogImage(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='images/')
 
 class Comment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")  
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
-    #likes_count = models.IntegerField(default=0)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)  
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')  # Ensure related_name is set
+
     @property
     def likes_count(self):
         return Like.objects.filter(content_type=ContentType.objects.get_for_model(self), object_id=self.id).count()
-    
-    
-#.........................................................................................................................................    
 
-
-
+class CommentReply(models.Model):
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -95,9 +102,3 @@ class Like(models.Model):
         return self.content_type
 #...........................................................................................................................................
 
-class CommentReply(models.Model):
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)

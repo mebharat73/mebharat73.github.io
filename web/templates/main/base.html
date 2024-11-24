@@ -21,6 +21,7 @@
     <link href="{% static 'main/css/clean-blog.min.css' %}" rel="stylesheet">
     <!-- Custom Fonts -->
     {% comment "" %}<link href="{% static 'main/css/fontawesome.min.css' %}" rel="stylesheet">{% endcomment %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
@@ -88,6 +89,44 @@
             font-size: 50px; /* or any other size of footer icon you prefer */
           }
         
+          footer {
+            background-color: transparent; /* Set footer background to transparent */
+            color: #aafbff; /* White text */
+            padding: 40px 0; /* Padding for top and bottom */
+            position: relative; /* Ensure proper positioning */
+            bottom: 0; /* Stick to the bottom */
+            width: 100%; /* Full width */
+            text-align: center; /* Center align text */
+        }
+    
+        .list-inline {
+            padding: 0;
+            list-style: none; /* Remove default list styling */
+        }
+    
+        .list-inline li {
+            display: inline; /* Display items inline */
+            margin: 0 15px; /* Space between items */
+        }
+    
+        .list-inline a {
+            color: #fff; /* White color for icons */
+            font-size: 24px; /* Larger icons */
+            transition: color 0.3s, transform 0.3s; /* Smooth transition for hover effect */
+            text-decoration: none; /* Remove underline */
+            filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.7)); /* Add shadow for better visibility */
+        }
+    
+        .list-inline a:hover {
+            color: #007bff; /* Change color on hover */
+            transform: scale(1.2); /* Slightly enlarge the icon on hover */
+        }
+    
+        .copyright {
+            margin-top: 20px; /* Space above copyright text */
+            font-size: 14px; /* Smaller font size */
+        }
+        
     </style>
     
     <script>
@@ -120,30 +159,30 @@
        
     </script>  
     <footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <ul class="list-inline text-center">
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-twitter"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-facebook"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-github"></i>
-                        </a>
-                    </li>
-                </ul>
-                <p class="copyright text-muted">Copyright &copy; bharat.karki.com.np</p>
-            </div>
-        </div>
-    </div>
+      <div class="container">
+          <div class="row">
+              <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                  <ul class="list-inline">
+                      <li>
+                          <a href="#">
+                              <i class="fa fa-twitter"></i>
+                          </a>
+                      </li>
+                      <li>
+                          <a href="#">
+                              <i class="fa fa-facebook"></i>
+                          </a>
+                      </li>
+                      <li>
+                          <a href="#">
+                              <i class="fa fa-github"></i>
+                          </a>
+                      </li>
+                  </ul>
+                  <p class="copyright text-muted">Copyright &copy; bharat.karki.com.np</p>
+              </div>
+          </div>
+      </div>
     </footer>
 
    
