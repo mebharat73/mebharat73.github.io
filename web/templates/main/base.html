@@ -53,7 +53,7 @@
                   {% if request.user.is_authenticated %}
                       <li class="dropdown">
                           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                              <img src="{{ request.user.profile.profile_picture.url }}" alt="Profile Picture" class="profile-pic new-profile-pic">
+                            <img src="{{ request.user.profile.profile_picture.url }}" alt="Profile Picture" class="navbar-profile-pic">
                               {{ request.user.username }} <span class="caret"></span>
                           </a>
                           <ul class="dropdown-menu">
@@ -91,7 +91,7 @@
 
 .navbar-custom .navbar-brand {
   color: #0018ff; /* Brand text color */
-  font-size: 15px; /* Brand font size */
+  font-size: 18px; /* Brand font size */
   font-weight: bold; /* Make brand text bold */
 }
 
@@ -121,15 +121,16 @@
   color: #ffffff; /* Dropdown link text color on hover */
 }
 
-/* Profile Picture */
-.new-profile-pic {
-  width: 30px; /* Adjust size as needed */
-  height: 30px; /* Adjust size as needed */
-  border-radius: 50%; /* Makes the image circular */
-  margin-right: 5px; /* Space between image and text */
-  margin-top: -6px;
-}
 
+
+
+  .navbar-profile-pic {
+    width: 30px; /* Adjust size as needed */
+    height: 30px; /* Adjust size as needed */
+    border-radius: 50%; /* Makes the image circular */
+    margin-right: 5px; /* Space between image and text */
+    margin-top: -6px;
+  }
   
 
       /* Footer Styles */

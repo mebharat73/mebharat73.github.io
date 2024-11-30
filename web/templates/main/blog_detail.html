@@ -462,11 +462,11 @@
         background-color: #e9ecef; /* Slightly darker gray for replies */
         margin-left: 300px;
         margin-top: 3px;
-        padding: -8px; /* Reduced padding for a more compact appearance */
+        padding: 1px; /* Reduced padding for a more compact appearance */
         border: 1px solid #ced4da; /* Border for reply box */
         border-radius: 12px; /* Slightly rounded corners */
         display: flex; /* Flexbox for alignment */
-        line-height: 0.5; /* Adjust line height for better readability */
+        line-height: 0.9; /* Adjust line height for better readability */
         max-width: 800px; /* Set a maximum width for reply boxes */
     }
     
@@ -748,13 +748,13 @@
     }
 
     // Change main image every 6 seconds
-    setInterval(changeMainImage, 6000);
+    setInterval(changeMainImage, 9000);
 
     // Change each sidebar image at different intervals
     sidebarImages.forEach((_, index) => {
         setInterval(() => {
             changeSidebarImage(index);
-        }, 9000 + index * 1000); // Stagger the intervals (e.g., 9s, 10s, 11s, etc.)
+        }, 10000 + index * 1000); // Stagger the intervals (e.g., 9s, 10s, 11s, etc.)
     });
 
   // JavaScript code
