@@ -553,156 +553,238 @@
     }
 
 
-    @media (max-width: 1200px) {
-        .main-image {
-            width: 100%; /* Full width on smaller screens */
-            height: auto; /* Maintain aspect ratio */
-        }
-    
-        .blog-content {
-            width: 100%; /* Full width on smaller screens */
-            margin: 0 10px; /* Add some margin */
-        }
-    
-        .sidebar {
-            width: 100%; /* Sidebar takes full width */
-            float: none; /* Remove float */
-            margin-left: 0; /* Reset margin */
-        }
-    
-        .comment-box {
-            width: 100%; /* Full width for comment boxes */
-            margin: 10px 0; /* Space between comments */
-            padding: 5px; /* Reduce padding */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add shadow */
-        }
-    
-        .reply-box {
-            width: 100%; /* Full width for replies */
-            margin-left: 0; /* Reset left margin for replies */
-            margin-top: 5px; /* Space above the reply */
-            padding: 5px; /* Reduce padding */
-        }
-    
-        .comment-header,
-        .reply-header {
-            flex-direction: column; /* Stack header elements vertically */
-            align-items: flex-start; /* Align items to the start */
-        }
-    
-        .created-at {
-            font-size: 9px; /* Smaller font for timestamp */
-        }
-    
-        .comment-content {
-            font-size: 12px; /* Adjust font size for reply content */
-        }
-    
-        .reply-btn,
-        .more-replies {
-            width: 100%; /* Full width for reply button and more replies */
-            margin-top: 5px; /* Space above button */
-        }
+/* Responsive Styles for 768px */
+@media (max-width: 768px) {
+    .main-image {
+        width: 70%; /* Full width for smaller screens */
+        height: auto; /* Maintain aspect ratio */
     }
-    
-    @media (max-width: 768px) {
-        .section-heading {
-            font-size: 2rem; /* Smaller font size for headings */
-        }
-    
-        .blog-content {
-            font-size: 1.4rem; /* Adjust font size for readability */
-        }
-    
-        .like-btn,
-        .comment-toggle-btn {
-            width: 100%; /* Full width buttons */
-            height: auto; /* Adjust height */
-            margin: 5px 0; /* Add margin between buttons */
-        }
-    
-        .related-image {
-            width: 100%; /* Full width for related images */
-            height: auto; /* Maintain aspect ratio */
-        }
-    
-        .comment-box {
-            padding: 10px; /* Adjust padding to your preference */
-            margin-left: 0; /* Reset left margin */
-            margin-top: 10px; /* Space above comment box */
-            width: calc(100% - 20px); /* Full width minus padding */
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Optional: Add shadow for better visibility */
-        }
-    
-        .reply-box {
-            margin-left: 0; /* Reset left margin for replies */
-            margin-top: 5px; /* Space above the reply */
-        }
-    
-        .comment-header,
-        .reply-header {
-            flex-direction: column; /* Stack header elements vertically */
-            align-items: flex-start; /* Align items to the start */
-        }
-    
-        .created-at {
-            font-size: 9px; /* Smaller font for timestamp */
-        }
-    
-        .comment-content {
-            font-size: 10px; /* Adjust font size for reply content */
-        }
-    
-        .reply-btn {
-            width: 100%; /* Width for reply button */
-            margin-top: 5px; /* Space above button */
-        }
-    
-        .more-replies {
-            width: 100%; /* Width for more replies button */
-            margin-top: 5px; /* Space above button */
-        }
+
+    .section-heading {
+        font-size: 2.5rem; /* Smaller heading size */
     }
-    
-    @media (max-width: 480px) {
-        .section-heading {
-            font-size: 1.5rem; /* Further reduce font size */
-        }
-    
-        .blog-content {
-            font-size: 1.2rem; /* Further reduce font size */
-        }
-    
-        .comment-form input[type="text"],
-        .comment-form textarea {
-            height: 40px; /* Adjust height for smaller screens */
-            width: 100%; /* Full width for input and textarea */
-        }
-        .comment-form button {
-            width: 100%; /* Full width for buttons */
-        }
-    
-        .comment-box {
-            padding: 2px; /* Reduce padding to 2px */
-            font-size: 10px; /* Reduce font size to 10px */
-        }
-    
-        .reply-box {
-            padding: 3px; /* Further reduce padding for replies */
-            width: 100%; /* Ensure reply boxes are full width */
-        }
-    
-        .comment-content {
-            font-size: 11px; /* Further adjust font size */
-        }
-    
-        .reply-btn,
-        .more-replies {
-            font-size: 10px; /* Smaller font size for buttons */
-            width: 100%; /* Full width for reply button and more replies */
-        }
+
+    .blog-content {
+        font-size: 1.4rem; /* Slightly smaller font size */
+        line-height: 1.2;
+        color: #000000;
+        text-align: justify;
+        margin: 0 1.5rem;
+        word-spacing: 0.1rem;
+        padding: 0;
+        margin-left: 5px;
+        width: 470px;
+        
     }
+
+
     
+
+    .post-meta {
+        font-size: 1rem; /* Smaller font size */
+    }
+
+    .sidebar {
+        width: 40%; /* Full width for sidebar */
+        float: none; /* Remove float for stacking */
+        margin-left: 500px; /* Reset margin */
+        margin-top: -560px;
+    }
+
+    .related-image {
+        width: 60%; /* Full width for related images */
+        height: auto; /* Maintain aspect ratio */
+    }
+
+    .like-btn, .comment-toggle-btn {
+        width: 15%; /* Full width buttons */
+        font-size: 1rem; /* Smaller font size */
+    }
+
+
+    .comment-toggle-btn {
+        width: 15%; /* Full width on smaller screens */
+        margin-right: 0; /* Reset margin for alignment */
+        margin-top: 5px; /* Adjust margin for better spacing */
+    }
+
+    .comment-form-container {
+        margin-left: 0; /* Reset margin for alignment */
+        padding: 10px; /* Increase padding for touch devices */
+    }
+
+    .comment-form {
+        width: 100%; /* Full width on smaller screens */
+    }
+
+    .comment-form input[type="text"],
+    .comment-form textarea {
+        height: 40px; /* Adjust height for smaller screens */
+        font-size: 12px; /* Decrease font size */
+    }
+
+    .comment-form button {
+        width: 15%; /* Full width for button */
+        height: 30px; /* Adjust height for button */
+        font-size: 12px; /* Decrease font size */
+    }
+
+
+    .reply-form-container {
+        max-width: 100%; /* Make the reply form full width on smaller screens */
+        padding-left: 5px; /* Adjust padding for better spacing */
+        margin-top: 10px;
+    }
+
+    .reply-form-container input[type="text"],
+    .reply-form-container textarea {
+        height: 35px; /* Increase height for better usability on touch devices */
+        font-size: 12px; /* Decrease font size for smaller screens */
+    }
+
+    .reply-btn {
+        width: 15%; /* Full width on smaller screens */
+        height: 20px; /* Adjust height for button */
+        font-size: 10px; /* Adjust font size for smaller screens */
+    }
+
+    
+
+    
+
+    
+
+    .reply-btn, .btn-reply, .more-replies {
+        width: 15%; /* Full width buttons */
+        font-size: 10px; /* Smaller font size */
+    }
+
+    .comment-box {
+        width: 100%; /* Full width on smaller screens */
+        margin-left: 0; /* Reset margin for alignment */
+        padding: 15px; /* Increased padding for better spacing */
+        box-shadow: none; /* Remove shadow for simplicity */
+    }
+
+    .reply-box {
+        margin-left: 20px; /* Adjust margin for replies on smaller screens */
+        width: calc(100% - 20px); /* Full width minus margin */
+        padding: 5px; /* Adjust padding for smaller screens */
+    }
+}
+
+/* Responsive Styles for 520px */
+/* Responsive Styles for 520px */
+@media (max-width: 520px) {
+    .main-image {
+        width: 75%; /* Full width for smaller screens */
+        height: auto; /* Maintain aspect ratio */
+    }
+
+    .section-heading {
+        font-size: 2rem; /* Smaller heading size */
+    }
+
+    .blog-content {
+        font-size: 1.2rem; /* Further decrease font size */
+        line-height: 1.4; /* Slightly increase line height for readability */
+        color: #000000;
+        text-align: justify;
+        margin: 0 1rem; /* Adjust margins for smaller screens */
+        word-spacing: 0.1rem;
+        padding: 0;
+        width: 330px;
+    }
+
+    .post-meta {
+        font-size: 0.9rem; /* Smaller font size */
+    }
+
+    .sidebar {
+        width: 60%; /* Full width for sidebar */
+        float: none; /* Remove float for stacking */
+        margin-left: 350px; /* Reset margin */
+        margin-top: -510px; /* Reset margin */
+    }
+
+    .related-image {
+        width: 40%; /* Full width for related images */
+        height: auto; /* Maintain aspect ratio */
+    }
+
+    .like-btn, .comment-toggle-btn {
+        width: 20%; /* Full width buttons */
+        font-size: 0.9rem; /* Smaller font size */
+    }
+
+    .comment-toggle-btn {
+        width: 20%; /* Full width on smaller screens */
+        margin-right: 0; /* Reset margin for alignment */
+        margin-top: 5px; /* Adjust margin for better spacing */
+    }
+
+    .comment-form-container {
+        margin-left: 0; /* Reset margin for alignment */
+        margin-top: 30px;
+        padding: 5px; /* Decrease padding for compactness */
+    }
+
+    .comment-form {
+        width: 100%; /* Full width on smaller screens */
+    }
+
+    .comment-form input[type="text"],
+    .comment-form textarea {
+        height: 35px; /* Adjust height for smaller screens */
+        font-size: 11px; /* Decrease font size */
+    }
+
+    .comment-form button {
+        width: 20%; /* Full width for button */
+        height: 20px; /* Adjust height for button */
+        font-size: 8px; /* Decrease font size */
+    }
+
+    .reply-form-container {
+        max-width: 100%; /* Make the reply form full width on smaller screens */
+        padding-left: 5px; /* Adjust padding for better spacing */
+        margin-top: 10px;
+    }
+
+    .reply-form-container input[type="text"],
+    .reply-form-container textarea {
+        height: 30px; /* Adjust height for better usability on touch devices */
+        font-size: 11px; /* Decrease font size for smaller screens */
+    }
+
+    .reply-btn {
+        width: 20%; /* Full width on smaller screens */
+        height: 25px; /* Adjust height for button */
+        font-size: 10px; /* Adjust font size for smaller screens */
+    }
+
+    .reply-btn, .btn-reply, .more-replies {
+        width: 20%; /* Full width buttons */
+        font-size: 10px; /* Smaller font size */
+    }
+
+    .comment-box {
+        width: 100%; /* Full width on smaller screens */
+        margin-left: 0; /* Reset margin for alignment */
+        margin-bottom: 90px;
+        padding: 10px; /* Decreased padding for compactness */
+        box-shadow: none; /* Remove shadow for simplicity */
+    }
+
+    .reply-box {
+        margin-left: 0; /* Remove left margin for replies */
+        width: 100%; /* Full width */
+        padding: 5px; /* Adjust padding for smaller screens */
+    }
+}
+
+/* Responsive Styles for 480px */
+
 
 </style>
 

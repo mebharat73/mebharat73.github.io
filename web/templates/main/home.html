@@ -57,26 +57,27 @@
     .container {
         max-width: 2000px; /* Set a maximum width for the container */
         width: 100%; /* Full width for smaller screens */
-        height: 40%; /* Set height as needed */
+        height: auto; /* Allow height to adjust based on content */
         padding: 20px; /* Padding inside the container */
         margin-left: 1px;
         margin-top: -90px; /* Adjust this as needed */
     }
     
     .post-preview {
-        margin-bottom: -10px; /* Space between each post */
-        padding: 5px; /* Padding around each post */
+        margin-bottom: 10px; /* Space between each post */
+        padding: -15px; /* Padding around each post */
         border: 1px solid #34495e; /* Light border around each post */
         border-radius: 8px; /* Rounded corners */
         background-color: #f9f9f9; /* Light background for the post */
         transition: box-shadow 0.3s; /* Smooth transition for hover effect */
-        max-height: 75%; /* Limit height if needed */
-        height: 135px; /* Fixed height */
+        max-height: none; /* Remove height limit */
+        height: 143px; /* Allow height to adjust based on content */
         display: flex; /* Use flexbox for centering */
         flex-direction: column; /* Stack children vertically */
         justify-content: center; /* Center vertically */
         align-items: center; /* Center horizontally */
         text-align: center; /* Center text */
+        font-weight: bold;
     }
     
     .post-title:hover {
@@ -95,12 +96,12 @@
     }
     
     .post-title {
-        font-size: 10px; /* Font size for the post title */
+        font-size: 13px; /* Font size for the post title */
         color: #333; /* Dark color for the title */
     }
     
     .post-subtitle {
-        font-size: 18px; /* Font size for the post subtitle */
+        font-size: 17px; /* Font size for the post subtitle */
         font-weight: bold;
         color: #032cfc; /* Lighter color for the subtitle */
     }
@@ -108,13 +109,14 @@
     .post-meta {
         font-size: 10px; /* Font size for the post meta information */
         color: #f003fc; /* Light gray color for the meta */
-        margin-top: 5px; /* Space above the meta */
+        margin-top: 10px; /* Space above the meta */
     }
+    
 
 
     .pager {
         list-style: none; /* Remove default list styling */
-        padding: 0; /* Remove padding */
+        padding: 10px; /* Remove padding */
         display: flex; /* Use flexbox for alignment */
         justify-content: center; /* Center the pagination */
         margin: 20px 0; /* Space above and below the pagination */
@@ -128,6 +130,8 @@
         display: inline-flex; /* Use inline-flex to center text vertically */
         align-items: center; /* Center text vertically */
         justify-content: center; /* Center text horizontally */
+        text-align: center; /* Center text in buttons */
+        flex: 1; /* Allow buttons to grow and fill space */
         padding: 1px 5px; /* Padding for spacing around text */
         border-radius: 10px; /* Rounded corners */
         background-color: #f8f9fa; /* Light background color */
@@ -177,127 +181,77 @@
 
 
 /* Responsive styles */
+* Media Queries for Responsiveness */
 @media (max-width: 768px) {
-    .intro-header {
-        height: 70vh; /* Adjust height for smaller screens */
-    }
-
     .slider-container {
         width: 90%; /* Adjust width for smaller screens */
         height: 70%; /* Adjust height for smaller screens */
     }
 
     .site-heading {
-        margin-top: 50px; /* Reduce margin for smaller screens */
+        margin-top: 30px; /* Adjust heading margin */
     }
 
     .post-preview {
-        height: auto; /* Allow height to adjust based on content */
-        margin-bottom: 10px; /* Space between posts */
+        padding: 70px; /* Increase padding for better touch targets */
     }
 
     .post-title {
-        font-size: 12px; /* Slightly larger font size */
+        font-size: 10px; /* Adjust title font size */
     }
 
     .post-subtitle {
-        font-size: 16px; /* Slightly smaller subtitle font size */
+        font-size: 10px; /* Adjust subtitle size */
     }
 
     .post-meta {
-        font-size: 9px; /* Smaller font size for meta information */
+        font-size: 12px; /* Adjust meta font size */
+    }
+
+    .pager {
+        flex-direction: column; /* Stack buttons vertically */
     }
 
     .pager a {
-        min-width: 100px; /* Adjust minimum width for buttons */
-        height: auto; /* Allow height to adjust */
-        line-height: normal; /* Reset line height */
+        width: 100%; /* Full width for buttons */
+        margin: 5px 0; /* Vertical margin for spacing */
     }
+
+    
 }
+
 
 @media (max-width: 576px) {
-    .intro-header {
-        height: 60vh; /* Further adjust height for mobile */
-    }
-
     .slider-container {
-        width: 95%; /* Full width for mobile */
-        height: 60%; /* Adjust height for mobile */
+        width: 95%; /* Further adjust width for mobile screens */
+        height: 60%; /* Further adjust height for mobile screens */
     }
 
     .site-heading {
-        margin-top: 30px; /* Reduce margin for mobile */
-        font-size: 20px; /* Adjust heading size */
+        margin-top: 30px; /* Further adjust heading margin */
     }
 
     .post-preview {
-        height: auto; /* Allow height to adjust based on content */
-        padding: 10px; /* Increase padding for touch targets */
+        padding: 10px; /* Adjust padding for smaller screens */
     }
 
     .post-title {
-        font-size: 10px; /* Adjust title font size for mobile */
+        font-size: 10px; /* Further adjust title font size */
     }
 
     .post-subtitle {
-        font-size: 14px; /* Adjust subtitle font size for mobile */
+        font-size: 12px; /* Further adjust subtitle size */
     }
 
     .post-meta {
-        font-size: 8px; /* Smaller font size for meta information */
+        font-size: 8px; /* Further adjust meta font size */
     }
 
     .pager a {
-        min-width: 125px; /* Adjust minimum width for buttons */
-        height: auto; /* Allow height to adjust */
-        line-height: 1.0; /* Reset line height */
+        font-size: 12px; /* Adjust font size for readability */
+        padding: -60px; /* Increase padding for touch targets */
     }
 }
-
-@media (max-width: 480px) {
-    .intro-header {
-        height: 50vh; /* Further adjust height for very small screens */
-    }
-
-    .slider-container {
-        width: 100%; /* Full width for very small screens */
-        height: 50%; /* Adjust height for very small screens */
-    }
-
-    .site-heading {
-        margin-top: 20px; /* Reduce margin for very small screens */
-        font-size: 18px; /* Adjust heading size */
-    }
-
-    .post-preview {
-        height: auto; /* Allow height to adjust based on content */
-        padding: 5px; /* Padding for touch targets */
-    }
-
-    .post-title {
-        font-size: 9px; /* Adjust title font size for very small screens */
-    }
-
-    .post-subtitle {
-        font-size: 12px; /* Adjust subtitle font size for very small screens */
-    }
-
-    .post-meta {
-        font-size: 7px; /* Smaller font size for meta information */
-    }
-
-    .pager a {
-        min-width: 300px; /* Adjust minimum width for buttons */
-        height: auto; /* Allow height to adjust */
-        line-height: normal; /* Reset line height */
-        padding: 2px 4px; /* Adjust padding for smaller buttons */
-    }
-}
-
-
-
-
-
 
 
 </style>
@@ -331,7 +285,7 @@
             {% for blog in page_obj.object_list %}
                 <div class="post-preview">
                     <a href="{% url 'blog_detail' blog.id %}">
-                        <h2 class="post-title">{{ blog.title|striptags|truncatechars:45 }}</h2>
+                        <h2 class="post-title">{{ blog.title|striptags|truncatechars:42 }}</h2>
                         <h3 class="post-subtitle">{{ blog.content|striptags|truncatechars:200 }}</h3>
                     </a>
                     <p class="post-meta">Posted by <a href="#">{{ blog.author }}</a> on {{ blog.created_at}}</p>
