@@ -35,93 +35,146 @@
 <body> 
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
-        <div class="container-fluid">
+      <div class="container-fluid">
           <div class="navbar-header page-scroll">
-            <a class="navbar-brand" href="{% url 'home_page' %}">Let's start..</a>
+              <a class="navbar-brand" href="{% url 'home_page' %}">Let's Start..</a>
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+              </button>
           </div>
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-              <li>
-                <a href="{% url 'home_page' %}">Home</a>
-              </li>
-              <li>
-                <a href="{% url 'create_post_page' %}">Create Blog</a>
-              </li>
-              <li>
-                {% if request.user.is_authenticated %}
-                  <a href="{% url 'logout_page' %}">logout</a>
-                {% else %}
-                  <a href="{% url 'login_page' %}">login</a>
-                {% endif %}
-              </li>
-              <li>
-                <a href="{% url 'signup_page' %}">signup</a>
-              </li>
-              <li>
-                <a href="{% url 'contact_us' %}">Contact us</a>
-              </li>
-            </ul>
+              <ul class="nav navbar-nav navbar-right">
+                  <li><a href="{% url 'home_page' %}">Home</a></li>
+                  <li><a href="{% url 'create_post_page' %}">Create Blog</a></li>
+                  
+                  <!-- Profile Section -->
+                  {% if request.user.is_authenticated %}
+                      <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                              <img src="{{ request.user.profile.profile_picture.url }}" alt="Profile Picture" class="profile-pic new-profile-pic">
+                              {{ request.user.username }} <span class="caret"></span>
+                          </a>
+                          <ul class="dropdown-menu">
+                              <li><a href="{% url 'index' %}">Chat</a></li>
+                              <li><a href="{% url 'home_page' %}">Blog</a></li>
+                              <li role="separator" class="divider"></li>
+                              <li><a href="{% url 'logout_page' %}">Logout</a></li>
+                          </ul>
+                      </li>
+                  {% else %}
+                      <li><a href="{% url 'login_page' %}">Login</a></li>
+                      <li><a href="{% url 'signup_page' %}">Signup</a></li>
+                  {% endif %}
+                  
+                  <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+              </ul>
           </div>
-        </div>
-      </nav>
+      </div>
+  </nav>
     <!-- Page Header -->
     {% block main_content %}
    
     {% endblock main_content %}
+
+
     <style>
-        .navbar {
-            height: 40px;
-            background-color: #34C759;
-            z-index: 1000;
-          }
-          
-          .navbar-nav > li > a {
-            font-size: 13px;
-            padding: 5px 10px;
-          }
-          
-          .navbar-brand {
-            font-size: 15px;
-            padding: 10px 15px;
-          }
-        
-          .fa {
-            font-size: 50px; /* or any other size of footer icon you prefer */
-          }
-        
-          footer {
-            background-color: transparent; /* Set footer background to transparent */
-            color: #aafbff; /* White text */
-            padding: 40px 0; /* Padding for top and bottom */
-            position: relative; /* Ensure proper positioning */
-            bottom: 0; /* Stick to the bottom */
-            width: 100%; /* Full width */
-            text-align: center; /* Center align text */
+
+
+/* Navbar Customization */
+.navbar-custom {
+  background-color: #de00ff; /* Dark background color */
+  border-color: #1eff00; /* Border color */
+  height: 40px; /* Set the height of the navbar */
+}
+
+.navbar-custom .navbar-brand {
+  color: #0018ff; /* Brand text color */
+  font-size: 15px; /* Brand font size */
+  font-weight: bold; /* Make brand text bold */
+}
+
+.navbar-custom .navbar-nav > li > a {
+  color: #ffffff; /* Link text color */
+  padding: 15px 22px; /* Padding for links */
+  font-size: 13px; /* Font size for links */
+}
+
+.navbar-custom .navbar-nav > li > a:hover {
+  background-color: #aeaeae; /* Background color on hover */
+  color: #ffffff; /* Text color on hover */
+}
+
+.navbar-custom .dropdown-menu {
+  background-color: #e7ebe8; /* Dropdown background color */
+  border: none; /* Remove border */
+}
+
+.navbar-custom .dropdown-menu > li > a {
+  color: #ffffff; /* Dropdown link color */
+  padding: 10px 20px; /* Padding for dropdown links */
+}
+
+.navbar-custom .dropdown-menu > li > a:hover {
+  background-color: #495057; /* Dropdown link hover color */
+  color: #ffffff; /* Dropdown link text color on hover */
+}
+
+/* Profile Picture */
+.new-profile-pic {
+  width: 30px; /* Adjust size as needed */
+  height: 30px; /* Adjust size as needed */
+  border-radius: 50%; /* Makes the image circular */
+  margin-right: 5px; /* Space between image and text */
+  margin-top: -6px;
+}
+
+  
+
+      /* Footer Styles */
+      footer {
+        background-color: transparent; /* Dark background for footer */
+        padding: 20px 0; /* Add some padding */
+        color: #d60dfb; /* White text color */
+      }
+
+      .social-links {
+        margin-bottom: 20px; /* Add some space between social links and copyright */
+      }
+
+      .social-links li {
+        display: inline-block; /* Display social links inline */
+        margin: 0 10px; /* Add some space between social links */
+      }
+
+      .social-links a {
+        color: #d60dfb; /* White color for social links */
+        transition: color 0.3s; /* Smooth transition for hover */
+      }
+
+      .social-links a:hover {
+        color: #ccc; /* Light gray color on hover */
+      }
+
+      .copyright {
+        font-size: 12px; /* Smaller font size for copyright */
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 768px) {
+        .social-links li {
+            margin: 0 5px; /* Reduce space between social links on small screens */
         }
-    
-        .list-inline {
-            padding: 0;
-            list-style: none; /* Remove default list styling */
+      }
+
+      @media (max-width: 480px) {
+        .social-links li {
+            margin: 0 2px; /* Further reduce space between social links on very small screens */
         }
-    
-        .list-inline li {
-            display: inline; /* Display items inline */
-            margin: 0 15px; /* Space between items */
-        }
-    
-        .list-inline a {
-            color: #fff; /* White color for icons */
-            font-size: 24px; /* Larger icons */
-            transition: color 0.3s, transform 0.3s; /* Smooth transition for hover effect */
-            text-decoration: none; /* Remove underline */
-            filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.7)); /* Add shadow for better visibility */
-        }
-    
-        .list-inline a:hover {
-            color: #007bff; /* Change color on hover */
-            transform: scale(1.2); /* Slightly enlarge the icon on hover */
-        }
-    
+      }
+              
+  
         .copyright {
             margin-top: 20px; /* Space above copyright text */
             font-size: 14px; /* Smaller font size */
@@ -158,32 +211,34 @@
 
        
     </script>  
+  
+
     <footer>
       <div class="container">
           <div class="row">
               <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
-                  <ul class="list-inline">
+                  <ul class="list-inline social-links">
                       <li>
-                          <a href="#">
-                              <i class="fa fa-twitter"></i>
+                          <a href="#" target="_blank">
+                              <i class="fa fa-twitter fa-2x" aria-hidden="true"></i>
                           </a>
                       </li>
                       <li>
-                          <a href="#">
-                              <i class="fa fa-facebook"></i>
+                          <a href="#" target="_blank">
+                              <i class="fa fa-facebook fa-2x" aria-hidden="true"></i>
                           </a>
                       </li>
                       <li>
-                          <a href="#">
-                              <i class="fa fa-github"></i>
+                          <a href="#" target="_blank">
+                              <i class="fa fa-github fa-2x" aria-hidden="true"></i>
                           </a>
                       </li>
                   </ul>
-                  <p class="copyright text-muted">Copyright &copy; bharat.karki.com.np</p>
+                  <p class="copyright text-muted">Copyright &copy; 2023 bharat.karki.com.np. All rights reserved.</p>
               </div>
           </div>
       </div>
-    </footer>
+  </footer>
 
    
     <!-- jQuery -->

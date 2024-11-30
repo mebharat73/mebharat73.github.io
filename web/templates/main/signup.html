@@ -8,77 +8,113 @@
 {% block main_content %}
 
 <style>
-  
 
-  
+  /* Base styles */
+.container {
+  padding: 40px;
+  max-width: 1000px; /* Set a max width for larger screens */
+  width: 100%;
+  margin: 0 auto; /* Center the container */
+}
 
-  /* Add some whitespace between form groups */
-  .form-group {
-    margin-bottom: 20px;
-  }
+footer {
+  text-align: center; /* Center the footer text */
+  padding: 20px 0; /* Add some padding */
+  background-color: #f8f9fa; /* Optional: background color for footer */
+  margin-top: 20px; /* Add some space above the footer */
+}
 
-  /* Style the input fields */
-  .form-control {
-    height: 36px;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    width: 60%; /* Add this line to set the width */
-  }
+/* Form styles */
+.form-group {
+  margin-bottom: 20px;
+}
 
-  /* Style the labels */
-  form .col-form-label {
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: greenyellow;
-    font-size: 18px; /* Add this line to set the font size */
-  }
+.form-control {
+  height: 36px; /* Adjust height for better usability */
+  padding: 10px; /* Adjust padding for better usability */
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%; /* Set to 100% for better responsiveness */
+  box-sizing: border-box; /* Include padding and border in width */
+}
 
-  /* Style the placeholder text */
-  .form-control::placeholder {
-    color: #C0C0C0;
-  }
+form .col-form-label {
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: gold;
+  font-size: 18px;
+}
 
-  /* Style the submit button */
-  .resize-btn {
-    width: 20%;
-    height: 30px;
-    padding: 0px;
-    font-size: 13px;
-    border-radius: 10px;
-    background-color: #dc3545;
-    color: #fff;
-    border: none;
-  }
+.form-control::placeholder {
+  color: #C0C0C0;
+}
 
-  .resize-btn:hover {
-    background-color: #c82333;
-  }
+.resize-btn {
+  width: 15%; /* Default to 100% for better responsiveness */
+  height: 30px; /* Match input height */
+  padding: 0px;
+  font-size: 12px; /* Adjust font size for better readability */
+  border-radius: 10px;
+  background-color: #ec16fe;
+  color: #fff;
+  border: none;
+}
 
-  /* Add some padding to the container */
+.resize-btn:hover {
+  background-color: #c82333;
+}
+
+.form-group.row {
+  margin-bottom: 10px;
+}
+
+.form-group:first-child {
+  margin-top: 20px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
   .container {
-    padding: 40px;
+    padding: 20px; /* Reduce padding on smaller screens */
   }
 
-  /* Make the form more compact */
-  .form-group.row {
-    margin-bottom: 10px;
+  .form-control {
+    height: 36px; /* Maintain height */
+    padding: 10px; /* Maintain padding */
   }
 
-  /* Add some margin to the top of the form */
-  .form-group:first-child {
-    margin-top: 20px;
+  .resize-btn {
+    width: 100%; /* Full width on smaller screens */
+    font-size: 14px; /* Slightly larger font for better readability */
   }
+}
+
+@media (max-width: 576px) {
+  .form-control {
+    height: 40px; /* Slightly taller input fields */
+    padding: 10px; /* Maintain padding */
+  }
+
+  .resize-btn {
+    height: 40px; /* Match button height */
+    font-size: 12px; /* Adjust font size for smaller screens */
+  }
+
+  footer {
+    padding: 15px 0; /* Adjust footer padding for smaller screens */
+  }
+}
+
   
 </style>
  
 
 
 
-<body style="background-image: url('{% static 'main/image/nature1.jpeg' %}'); background-size: cover; background-position: center;">
+  <body style="background-image: url('{% static 'main/image/33.jpg' %}'); background-size: cover; background-position: center;">
 
 
-<div class="container">
+  <div class="container">
 
   
     <br><br>
@@ -137,5 +173,5 @@
           </div>
         </div>
       </form>
-
+  </div>
 {% endblock main_content %}

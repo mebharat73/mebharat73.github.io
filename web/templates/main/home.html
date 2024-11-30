@@ -5,21 +5,325 @@
 {% endblock %}
 
 {% block main_content %}
-<!-- Set your background image for this header on the line below. -->
-<header class="intro-header" style="background-image:  url('{% static 'main/image/nature4.jpg' %}'); background-size: cover; background-position:center; height: 65vh;">
+
+<style>
+
+    .intro-header {
+        position: relative;
+        height: 83vh; /* Adjust height as needed */
+        overflow: hidden; /* Hide overflow to prevent showing extra images */
+    }
+    
+    .slider-container {
+        position: absolute;
+        top: 50%; /* Center vertically */
+        left: 50%; /* Center horizontally */
+        transform: translate(-50%, -50%); /* Adjust for centering */
+        width: 80%; /* Adjust width as needed */
+        height: 80%; /* Adjust height as needed */
+        border: 2px solid #bc06fb; /* Border width, style, and color */
+        border-radius: 8px; /* Rounded corners */
+        box-shadow: 2px 4px 15px rgba(0, 0, 0.4, 0.6); /* Optional shadow for depth */
+
+    }
+    
+    .slides {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    
+    .slides img {
+        position: absolute;
+        width: 100%; /* Full width of the slides container */
+        height: 100%; /* Full height of the slides container */
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+    }
+    
+    .slides img.active {
+        opacity: 1; /* Only the active image is fully visible */
+    }
+
+    .site-heading {
+        color: white; /* Change text color for better visibility */
+        text-align: center; /* Center text */
+        margin-top: 100px;
+    }
+
+    /*********** Now css part below image container********** */
+
+    .container {
+        max-width: 2000px; /* Set a maximum width for the container */
+        width: 100%; /* Full width for smaller screens */
+        height: 40%; /* Set height as needed */
+        padding: 20px; /* Padding inside the container */
+        margin-left: 1px;
+        margin-top: -90px; /* Adjust this as needed */
+    }
+    
+    .post-preview {
+        margin-bottom: -10px; /* Space between each post */
+        padding: 5px; /* Padding around each post */
+        border: 1px solid #34495e; /* Light border around each post */
+        border-radius: 8px; /* Rounded corners */
+        background-color: #f9f9f9; /* Light background for the post */
+        transition: box-shadow 0.3s; /* Smooth transition for hover effect */
+        max-height: 75%; /* Limit height if needed */
+        height: 135px; /* Fixed height */
+        display: flex; /* Use flexbox for centering */
+        flex-direction: column; /* Stack children vertically */
+        justify-content: center; /* Center vertically */
+        align-items: center; /* Center horizontally */
+        text-align: center; /* Center text */
+    }
+    
+    .post-title:hover {
+        color: #00698f; /* Change text color on hover */
+        transition: color 0.3s; /* Smooth transition for color change */
+    }
+    
+    .post-content:hover {
+        color: #8bc34a; /* Change text color on hover */
+        transition: color 0.3s; /* Smooth transition for color change */
+    }
+    
+    .post-preview:hover {
+        background-color: #efefef; /* Change background color on hover */
+        transition: background-color 0.3s; /* Smooth transition for background color change */
+    }
+    
+    .post-title {
+        font-size: 10px; /* Font size for the post title */
+        color: #333; /* Dark color for the title */
+    }
+    
+    .post-subtitle {
+        font-size: 18px; /* Font size for the post subtitle */
+        font-weight: bold;
+        color: #032cfc; /* Lighter color for the subtitle */
+    }
+    
+    .post-meta {
+        font-size: 10px; /* Font size for the post meta information */
+        color: #f003fc; /* Light gray color for the meta */
+        margin-top: 5px; /* Space above the meta */
+    }
+
+
+    .pager {
+        list-style: none; /* Remove default list styling */
+        padding: 0; /* Remove padding */
+        display: flex; /* Use flexbox for alignment */
+        justify-content: center; /* Center the pagination */
+        margin: 20px 0; /* Space above and below the pagination */
+    }
+    
+    .pager li {
+        margin: 0 10px; /* Space between pagination items */
+    }
+    
+    .pager a {
+        display: inline-flex; /* Use inline-flex to center text vertically */
+        align-items: center; /* Center text vertically */
+        justify-content: center; /* Center text horizontally */
+        padding: 1px 5px; /* Padding for spacing around text */
+        border-radius: 10px; /* Rounded corners */
+        background-color: #f8f9fa; /* Light background color */
+        color: #333; /* Text color */
+        text-decoration: none; /* Remove underline */
+        border: 1px solid #ccc; /* Border styling */
+        transition: background-color 0.3s, border-color 0.3s; /* Smooth transitions */
+        font-weight: bold; /* Make text bold for better visibility */
+        min-width: 130px; /* Set a minimum width for the button */
+        height: 15px; /* Set a fixed height for the button */
+        line-height: 2px; /* Center the text vertically, adjust as needed */
+        margin-left: 5px; /* Add left margin to the button */
+        margin-top: -10px; /* Add top margin to the button */
+    }
+    
+    /* Optional: For specific text alignment */
+    .pager .next a {
+        text-align: left; /* Align text to the left */
+    }
+    
+    .pager .previous a {
+        text-align: right; /* Align text to the right */
+    }
+    
+    .pager a:hover {
+        background-color: #dc3545; /* Change background on hover */
+        color: #fff; /* Change text color on hover */
+        border-color: #dc3545; /* Match border color with background */
+    }
+    
+    .pager .next a {
+        background-color: #28a745; /* Green background for 'Older Posts' */
+    }
+    
+    .pager .next a:hover {
+        background-color: #218838; /* Darker green on hover */
+    }
+    
+    .pager .previous a {
+        background-color: #007bff; /* Blue background for 'Newest Posts' */
+    }
+    
+    .pager .previous a:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+    }
+
+
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .intro-header {
+        height: 70vh; /* Adjust height for smaller screens */
+    }
+
+    .slider-container {
+        width: 90%; /* Adjust width for smaller screens */
+        height: 70%; /* Adjust height for smaller screens */
+    }
+
+    .site-heading {
+        margin-top: 50px; /* Reduce margin for smaller screens */
+    }
+
+    .post-preview {
+        height: auto; /* Allow height to adjust based on content */
+        margin-bottom: 10px; /* Space between posts */
+    }
+
+    .post-title {
+        font-size: 12px; /* Slightly larger font size */
+    }
+
+    .post-subtitle {
+        font-size: 16px; /* Slightly smaller subtitle font size */
+    }
+
+    .post-meta {
+        font-size: 9px; /* Smaller font size for meta information */
+    }
+
+    .pager a {
+        min-width: 100px; /* Adjust minimum width for buttons */
+        height: auto; /* Allow height to adjust */
+        line-height: normal; /* Reset line height */
+    }
+}
+
+@media (max-width: 576px) {
+    .intro-header {
+        height: 60vh; /* Further adjust height for mobile */
+    }
+
+    .slider-container {
+        width: 95%; /* Full width for mobile */
+        height: 60%; /* Adjust height for mobile */
+    }
+
+    .site-heading {
+        margin-top: 30px; /* Reduce margin for mobile */
+        font-size: 20px; /* Adjust heading size */
+    }
+
+    .post-preview {
+        height: auto; /* Allow height to adjust based on content */
+        padding: 10px; /* Increase padding for touch targets */
+    }
+
+    .post-title {
+        font-size: 10px; /* Adjust title font size for mobile */
+    }
+
+    .post-subtitle {
+        font-size: 14px; /* Adjust subtitle font size for mobile */
+    }
+
+    .post-meta {
+        font-size: 8px; /* Smaller font size for meta information */
+    }
+
+    .pager a {
+        min-width: 125px; /* Adjust minimum width for buttons */
+        height: auto; /* Allow height to adjust */
+        line-height: 1.0; /* Reset line height */
+    }
+}
+
+@media (max-width: 480px) {
+    .intro-header {
+        height: 50vh; /* Further adjust height for very small screens */
+    }
+
+    .slider-container {
+        width: 100%; /* Full width for very small screens */
+        height: 50%; /* Adjust height for very small screens */
+    }
+
+    .site-heading {
+        margin-top: 20px; /* Reduce margin for very small screens */
+        font-size: 18px; /* Adjust heading size */
+    }
+
+    .post-preview {
+        height: auto; /* Allow height to adjust based on content */
+        padding: 5px; /* Padding for touch targets */
+    }
+
+    .post-title {
+        font-size: 9px; /* Adjust title font size for very small screens */
+    }
+
+    .post-subtitle {
+        font-size: 12px; /* Adjust subtitle font size for very small screens */
+    }
+
+    .post-meta {
+        font-size: 7px; /* Smaller font size for meta information */
+    }
+
+    .pager a {
+        min-width: 300px; /* Adjust minimum width for buttons */
+        height: auto; /* Allow height to adjust */
+        line-height: normal; /* Reset line height */
+        padding: 2px 4px; /* Adjust padding for smaller buttons */
+    }
+}
+
+
+
+
+
+
+
+</style>
+
+<header class="intro-header">
+    <div class="slider-container">
+        <div class="slides">
+            <img src="{% static 'main/image/1.jpg' %}" alt="Image 1">
+            <img src="{% static 'main/image/nature3.jpg' %}" alt="Image 2">
+            <img src="{% static 'main/image/leaf (2).jpg' %}" alt="Image 3">
+            <img src="{% static 'main/image/nature3.jpg' %}" alt="Image 4">
+        </div>
+    </div>
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <div class="site-heading">
                     <h1>Home page</h1>
                     <hr class="small">
-                    <span class="subheading">Blog website presented by Bharat karki</span>
+                    <span class="subheading">Blog website presented by Bharat Karki</span>
                 </div>
             </div>
         </div>
     </div>
-</header>          
-    
+</header>
+
 <!-- Main Content -->
 <div class="container">
     <div class="row">
@@ -27,33 +331,43 @@
             {% for blog in page_obj.object_list %}
                 <div class="post-preview">
                     <a href="{% url 'blog_detail' blog.id %}">
-                        <h2 class="post-title">{{ blog.title }}</h2>
-                        <h3 class="post-subtitle">{{ blog.content|striptags|truncatechars:100 }}</h3>
+                        <h2 class="post-title">{{ blog.title|striptags|truncatechars:45 }}</h2>
+                        <h3 class="post-subtitle">{{ blog.content|striptags|truncatechars:200 }}</h3>
                     </a>
                     <p class="post-meta">Posted by <a href="#">{{ blog.author }}</a> on {{ blog.created_at}}</p>
                 </div>
                 <hr>
             {% endfor %}
 
-
-
             <!-- Pager -->
             <ul class="pager">
                 {% if page_obj.has_next %}
                 <li class="next">
-                    <a href="?page={{page_obj.next_page_number}}" class="btn btn-default btn-xs btn-block border border-secondary border-resize">Older Posts &rarr;</a>
+                    <a href="?page={{page_obj.next_page_number}}" class="btn btn-default btn-xs btn-block border border-secondary border-resize">Older Posts</a>
                 </li>
                 {% endif %}
                 {% if page_obj.has_previous %}
                 <li class="previous">
-                    <a href="?page={{page_obj.previous_page_number}}" class="btn btn-default btn-xs btn-block border border-secondary border-resize">Newest Posts &larr;</a>
+                    <a href="?page={{page_obj.previous_page_number}}" class="btn btn-default btn-xs btn-block border border-secondary border-resize">Newest Posts</a>
                 </li>
                 {% endif %}
             </ul>
-            
+        </div>
     </div>
 </div>
 
-<hr>
- 
+
+<script>
+    let currentIndex = 0;
+    const slides = document.querySelectorAll('.slides img');
+
+    function showNextSlide() {
+        slides[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % slides.length;
+        slides[currentIndex].classList.add('active');
+    }
+
+    setInterval(showNextSlide, 5000); // Change slide every 3 seconds
+</script>
+
 {% endblock main_content %}

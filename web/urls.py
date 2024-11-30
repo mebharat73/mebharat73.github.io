@@ -1,11 +1,13 @@
 from django.urls import path
 from .import views
 from web.views import create_post  # Adjust the import based on your project structure
-
+from .views import profile_view, settings_view 
 
 
 urlpatterns= [
     path('accounts/login/', views.login_view, name="login_page"),
+    path('profile/', profile_view, name='profile_page'),  # Ensure this line exists
+    path('settings/', settings_view, name='settings_page'),  # Ensure this line exists
     path('accounts/logout/', views.logout_view, name="logout_page"),
     path('accounts/signup/', views.signup_view, name="signup_page"),
     path('accounts/post/', views.post_view, name="post_page"),

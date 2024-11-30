@@ -140,6 +140,7 @@ def contact_us(request):
         return render(request, 'main/contact.html')
 
 
+
 @require_POST
 @login_required
 def add_comment(request):
@@ -147,6 +148,7 @@ def add_comment(request):
     blog_id = request.POST.get('blog_id')
     blog = get_object_or_404(Post, id=blog_id)
     form_data = CommentForm(request.POST)
+
     if form_data.is_valid():
         comment = form_data.save(commit=False)  # Don't save yet
         comment.author = request.user  # Set the author field
@@ -154,7 +156,8 @@ def add_comment(request):
         comment.save()  # Now save the comment
         return redirect("blog_detail", blog_id=blog_id)
     else:
-        comments = blog.comments.all()
+        # If the form is invalid, render the same page with errors
+        comments = blog.comments.all().order_by('-created_at')  # Ensure comments are ordered
         context = {
             'blog': blog,
             'content': blog.content,
@@ -162,9 +165,8 @@ def add_comment(request):
             'comments': comments
         }
         return render(request, 'main/blog_detail.html', context)
-
-
-
+    
+    
 
 @api_view(['POST'])
 def like_unlike(request):
@@ -199,31 +201,25 @@ def like_unlike(request):
 
 
 
-from django.shortcuts import render, get_object_or_404
-from .models import Post, BlogImage
-from .forms import CommentForm, CommentReplyForm  # Ensure these forms are imported
-
 def blog_detail(request, blog_id):
     blog = get_object_or_404(Post, id=blog_id)
     images = BlogImage.objects.filter(post=blog)  # Fetch images related to the blog post
-    first_image = images.first()  # Get the first image if available
+    comments = blog.comments.all().order_by('-created_at')  # Ensure comments are ordered
+
+    # Ensure replies are ordered when rendering
+    for comment in comments:
+        comment.replies = comment.commentreply_set.all().order_by('-created_at')  # Order replies by created_at
 
     context = {
         'blog': blog,
         'content': blog.content,
         'comment_form': CommentForm(),
         'comment_reply_form': CommentReplyForm(),
-        'comments': blog.comments.all(),  # Access comments using related_name
+        'comments': comments,  # Access comments using related_name
         'images': images,  # Include images in the context
-        'first_image': first_image  # Pass the first image to the context
     }
     return render(request, 'main/blog_detail.html', context)
 
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import Comment, CommentReply
-from .forms import CommentReplyForm
 
 @require_POST
 @login_required
@@ -316,30 +312,43 @@ def post_view(request):
 
 #............................................................................................................................
 
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
 def login_view(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
-        remember_me = request.POST.get('remember_me')
+        remember_me = request.POST.get('remember_me')  # This will be 'on' if checked
 
-        try:
-            user = authenticate(request, username=username, password=password)
-        except User.DoesNotExist:
-            return render(request, 'main/login.html', {'error':'Invalid credential'})
+        # Authenticate the user
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            # Set session expiry if "remember me" is checked
+            if remember_me:
+                request.session.set_expiry(7 * 24 * 60 * 60)  # 7 days
+            return redirect("home_page")  # Redirect to the home page
         else:
-            if user is None:
-                return render(request, 'main/login.html', {'error':'Invalid parameter'})
-            else:
-                login(request, user)
-                if remember_me:
-                    request.session.set_expiry(7*24*60*60)
-                return redirect("home_page")
+            messages.error(request, 'Invalid username or password.')  # Use messages framework for better UX
+            return render(request, 'main/login.html')  # Render the login page again with an error message
     else:
-        return render(request, 'main/login.html')
+        return render(request, 'main/login.html')  # Render the login page for GET requests
 
 
+# views.py
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
+@login_required
+def profile_view(request):
+    return render(request, 'main/profile.html')  # Ensure this template exists
 
+@login_required
+def settings_view(request):
+    return render(request, 'main/settings.html')  # Ensure this template exists
 #*********************************************************************************
 
 from django.shortcuts import render, redirect

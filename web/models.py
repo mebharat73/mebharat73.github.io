@@ -73,22 +73,33 @@ class BlogImage(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='images/')
 
+    
+
 class Comment(models.Model):
-    content = models.TextField()
+    content = models.TextField(blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)  
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')  # Ensure related_name is set
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
 
     @property
     def likes_count(self):
         return Like.objects.filter(content_type=ContentType.objects.get_for_model(self), object_id=self.id).count()
 
+    def __str__(self):
+        return f"{self.author.username}: {self.content[:20]}..."
+    
+
+
 class CommentReply(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
-    content = models.TextField()
+    content = models.TextField(blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.author.username}: {self.content[:20]}..."
+    
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

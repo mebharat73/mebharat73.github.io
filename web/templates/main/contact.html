@@ -11,69 +11,73 @@
 
     <!-- Page Header -->
     <!-- Set your background image for this header on the line below. -->
-    <header class="intro-header" style="background-image: url('{% static 'main/image/leaf (1).jpg' %}')">
+    <header class="intro-header">
+        <div class="slider-container">
+            <div class="slides">
+                <img src="{% static 'main/image/6.jpg' %}" alt="Image 1">
+                <img src="{% static 'main/image/11.jpg' %}" alt="Image 2">
+                <img src="{% static 'main/image/33.jpg' %}" alt="Image 3">
+                <img src="{% static 'main/image/7.jpg' %}" alt="Image 4">
+            </div>
+        </div>
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <div class="page-heading">
-                        <h1>Contact us</h1>
+                    <div class="site-heading">
+                        <h1>Contact us ..</h1>
                         <hr class="small">
-                        <span class="subheading">Have questions? I have answers...</span>
+                        <span class="subheading">You can email or chat with us ..</span>
                     </div>
                 </div>
             </div>
         </div>
     </header>
-
     <!-- Main Content -->
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 move-up-section">
                 <p>Want to get in touch with us? Fill out the form below to send us a message and we will try to get back to you within 24 hours!</p>
                 <!-- Contact Form - Enter your email address on line 19 of the mail/contact_me.php file to make this form work. -->
                 <!-- WARNING: Some web hosts do not allow emails to be sent through forms to common mail hosts like Gmail or Yahoo. It's recommended that you use a private domain email address! -->
                 <!-- NOTE: To use the contact form, your site must be on a live web host with PHP! The form will not work locally! -->
                 <div class="row">
                     <div class="col-lg-9">
-                        <form action="{% url 'contact_us' %}" method="post">
+                        <form action="{% url 'contact_us' %}" method="post" class="move-up">
                             {% csrf_token %}
                             <div class="row control-group">
                                 <div class="form-group col-xs-12 floating-label-form-group controls">
                                     <label>Name</label>
                                     <input type="text" class="form-control" placeholder="Name" id="name" name="name" required data-validation-required-message="Please enter your name.">
-                                    
                                 </div>
                             </div>
                             <div class="row control-group">
                                 <div class="form-group col-xs-12 floating-label-form-group controls">
                                     <label>Email Address</label>
                                     <input type="email" class="form-control" placeholder="Email Address" id="email" name="email" required data-validation-required-message="Please enter your email address.">
-                                    
                                 </div>
                             </div>
                             <div class="row control-group">
                                 <div class="form-group col-xs-12 floating-label-form-group controls">
                                     <label>Phone Number</label>
                                     <input type="tel" class="form-control" placeholder="Phone Number" id="phone" name="phone" required data-validation-required-message="Please enter your phone number.">
-                                    
                                 </div>
                             </div>
                             <div class="row control-group">
                                 <div class="form-group col-xs-12 floating-label-form-group controls">
                                     <label>Message</label>
                                     <textarea rows="5" class="form-control" placeholder="Message" id="message" name="message" required data-validation-required-message="Please enter a message."></textarea>
-                                    
                                 </div>
                             </div>
                             <br>
                             <div id="success"></div>
                             <div class="row">
                                 <div class="form-group col-xs-12">
-                                  <button type="submit" class="btn btn-success btn-sm custom-button custom-border">Send</button>
+                                    <button type="submit" class="btn btn-success btn-sm custom-button custom-border">Send</button>
                                 </div>
                             </div>
                         </form>
                     </div>
+            
                     <!-- ... (rest of the code remains the same) -->
 
                     <!-- Contact Form - Enter your email address on line 19 of the mail/contact_me.php file to make this form work. -->
@@ -107,11 +111,11 @@
         .custom-button {
             background-color: #4CAF50; /* Green */
             color: #ffffff; /* White text */
-            border-radius: 5px; /* Rounded corners */
+            border-radius: 12px; /* Rounded corners */
             cursor: pointer; /* Pointer cursor on hover */
-            padding: 1px 12px; /* Minimal padding */
-            border-width: 5px; /* Thinner border */
-            font-size: 15px; /* Same font size */
+            padding: 2px 10px; /* Minimal padding */
+            border-width: 2px; /* Thinner border */
+            font-size: 14px; /* Same font size */
           }
           
           .custom-button:hover {
@@ -122,22 +126,101 @@
 
         .chat-icon {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 80px;
+            right: 25px;
             background-color: #FF00FF;
-            color: #00FF00;
-            border-radius: 50%;
-            padding: 10px;
-            font-size: 24px;
+            color: #45ff14;
+            border-radius: 20%;
+            padding: 7px;
+            font-size: 35px;
             cursor: pointer;
         }
     
         .chat-icon:hover {
-            background-color: #FF0000;
+            background-color: #e714ff;
         }
+
+
+
+        .intro-header {
+            position: relative;
+            height: 83vh; /* Adjust height as needed */
+            overflow: hidden; /* Hide overflow to prevent showing extra images */
+        }
+        
+        .slider-container {
+            position: absolute;
+            top: 50%; /* Center vertically */
+            left: 50%; /* Center horizontally */
+            transform: translate(-50%, -50%); /* Adjust for centering */
+            width: 80%; /* Adjust width as needed */
+            height: 80%; /* Adjust height as needed */
+            border: 1px solid #e714ff; /* Border width, style, and color */
+            border-radius: 6px; /* Rounded corners */
+            box-shadow: 0 4px 15px rgba(0, 0, 0.2, 0.4); /* Optional shadow for depth */
+    
+        }
+        
+        .slides {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .slides img {
+            position: absolute;
+            width: 100%; /* Full width of the slides container */
+            height: 100%; /* Full height of the slides container */
+            opacity: 0; /* Initially hide all images */
+            transition: opacity 1s ease-in-out; /* Smooth transition */
+        }
+        
+        .slides img.active {
+            opacity: 1; /* Only the active image is fully visible */
+        }
+    
+        .site-heading {
+            color: white; /* Change text color for better visibility */
+            text-align: center; /* Center text */
+            margin-top: 100px;
+        }
+
+        .move-up {
+            margin-top: -20px; /* Adjust this value to move the form upwards */
+        }
+
+        .move-up-section {
+            margin-top: -100px; /* Adjust this value to move the section upwards */
+        }
+    
 
         
     </style>
+
+    <script>
+        let currentIndex = 0;
+        const slides = document.querySelectorAll('.slides img');
+    
+        // Define an array of time intervals for each slide in milliseconds
+        const slideIntervals = [6000, 7000, 8000, 9000]; // Adjust these values as needed
+    
+        function showNextSlide() {
+            slides[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % slides.length;
+            slides[currentIndex].classList.add('active');
+    
+            // Set the timeout for the next slide based on the current slide's interval
+            setTimeout(showNextSlide, slideIntervals[currentIndex]);
+        }
+    
+        // Start the slideshow with the first interval
+        setTimeout(showNextSlide, slideIntervals[currentIndex]);
+    </script>
+
+
+
+
 </body>    
 {% endblock main_content %}
 

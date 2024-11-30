@@ -9,119 +9,195 @@
 <br>
 
 <style>
-    /* Background Image */
-    body {
-        background-image: url('{% static 'main/image/leaf (2).jpg' %}');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-    }
 
-    /* Existing styles */
-    .flexbox-container {
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-        justify-content: center;
+    /* Background Image */
+body {
+    background-image: url('{% static 'main/image/6.jpg' %}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Existing styles */
+.flexbox-container {
+    display: flex;
+    flex-direction: column;
+    height: 120vh;
+    width: 100%;
+    justify-content: center;
+}
+
+/* Form Container */
+.form-container {
+    width: 90%; /* Use percentage for responsiveness */
+    max-width: 900px; /* Maximum width */
+    padding: 20px;
+    background-color: transparent;
+    border: 3px solid #6dfc69;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    margin: auto;
+    min-height: 500px;
+    height: auto;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form Title */
+.form-title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #3a00ee; /* Change the color as needed */
+}
+
+/* Form Group */
+.form-group {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    margin-bottom: 10px;
+    color: #00FF00;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px; /* Space below the label */
+}
+
+/* Input, Select, Textarea Styles */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%; /* Full width */
+    height: 35px; /* Default height */
+    padding: 8px; /* Adjust padding here */
+    font-size: 16px;
+    border: 2px solid #000080;
+    border-radius: 12px;
+}
+
+/* Textarea Specific Styles */
+.form-group textarea {
+    height: 300px; /* Default height for textarea */
+    resize: vertical; /* Allow vertical resizing */
+}
+
+/* Focus Styles */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #aaa;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Submit Button */
+.form-group button[type="submit"] {
+    width: 10%; /* Full width */
+    height: 27px; /* Adjust height */
+    font-size: 15px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.form-group button[type="submit"]:hover {
+    background-color: #3e8e41;
+}
+
+/* Link Styles */
+.form-group a {
+    display: inline-block;
+    max-width: 50px;
+    width: 100%;
+    margin-top: 10px; /* Space above the link */
+    margin-left: 800px;
+    padding: 2px 6px; /* Increased padding */
+    font-size: 12px;
+    background-color: blueviolet;
+    color: #FFFF00;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center; /* Center text */
+}
+
+.form-group a:hover {
+    background-color: #7a288a;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .form-group {
+        flex-direction: column; /* Stack vertically on smaller screens */
     }
 
     .form-container {
-        max-width: 1010px;
-        padding: 40px;
-        background-color: rgba(249, 222, 255, 0.9);
-        border: 3px solid #6dfc69;
-        border-radius: 12px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-        margin: auto;
-        min-height: 500px;
-        height: auto;
-        animation: fadeIn 0.5s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        padding: 20px; /* Reduce padding on smaller screens */
     }
 
     .form-title {
-        text-align: center;
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 20px;
-        color: #8a53fa; /* Change the color as needed */
+        font-size: 24px; /* Smaller title */
     }
 
-    .form-group {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-    }
-
-    .form-group label {
-        font-weight: bold;
-        margin-right: 5px;
-        width: 40%;
-    }
-
-    .form-group input, .form-group select, .form-group textarea {
-        width: 80%; /* Adjust width here */
-        height: 40px; /* Adjust height here */
-        padding: 8px; /* Adjust padding here */
-        font-size: 16px;
-        border: 2px solid #56fe70;
-        border-radius: 10px;
-    }
-
+    .form-group input,
+    .form-group select,
     .form-group textarea {
-        height: 300px; /* Increased height */
-        width: 200%; /* Full width */
-        padding: 10px; /* Increased padding */
-        resize: vertical; /* Allow vertical resizing */
-    }
-
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-        border-color: #aaa;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        font-size: 14px; /* Smaller font size for inputs on small screens */
     }
 
     .form-group button[type="submit"] {
-        width: 18%;
-        height: 30px; /* Adjust height here */
-        font-size: 17px;
-        background-color: #4CAF50;
-        color: #fff;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .form-group button[type="submit"]:hover {
-        background-color: #3e8e41;
+        font-size: 12px; /* Smaller button text */
     }
 
     .form-group a {
-        display: inline-block;
-        margin-left: 10px;
-        padding: 5px 10px;
-        font-size: 14px;
-        background-color: blueviolet;
-        color: #77efff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
+        max-width: 100%; /* Allow full width on smaller screens */
+        margin-left: 0; /* Remove left margin for smaller screens */
+        padding: 5px 10px; /* Increase padding for better touch targets */
+        font-size: 14px; /* Slightly larger font size for readability */
+    }
+}
+
+@media (max-width: 480px) {
+    .form-title {
+        font-size: 20px; /* Further reduce title size on very small screens */
     }
 
-    .form-group a:hover {
-        background-color: #7a288a;
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 12px; /* Smaller font size for inputs on very small screens */
+        padding: 6px; /* Adjust padding for smaller inputs */
     }
+
+    .form-group button[type="submit"] {
+        height: 35px; /* Adjust button height for smaller screens */
+        font-size: 14px; /* Smaller button text */
+    }
+
+    .form-group a {
+        font-size: 12px; /* Maintain smaller font size for very small screens */
+        padding: 4px 8px; /* Adjust padding for very small screens */
+        margin-top: 5px; /* Reduce space above the link */
+    }
+}
+   
+
+
 </style>
 
 <div class="flexbox-container">
