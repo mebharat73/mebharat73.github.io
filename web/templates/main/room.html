@@ -3,104 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Chat Room: {{ room_name }}</title>
-    <scrip src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 10px;
-            background-image: url("{% static 'main/image/nature3.jpg' %}");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-        
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 10px; /* Add some space below the title */
-        }
-        
-        #messages {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 5px; /* Reduced padding */
-            background-color: rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-            overflow-y: auto;
-            height: 600px; /* Height for the chat container */
-        }
-        
-        .user-message {
-            justify-content: flex-end;
-        }
-        
-        .other-message {
-            justify-content: flex-start;
-        }
-        
-        .message {
-            display: flex;
-            margin: 3px 0; /* Reduced margin */
-            align-items: center;
-        }
-        
-        .message-content {
-            background-color: rgba(0, 0, 0, 0.2); /* Background color */
-            border-radius: 8px; /* Rounded corners */
-            padding: 5px; /* Add some vertical padding */
-            margin-left: 5px; /* Space between image and message */
-            flex: 1; /* Allow it to take available space */
-            max-width: 70%; /* Set a maximum width for the message box */
-            min-height: 20px; /* Set a minimum height for single-line messages */
-            max-height: 150px; /* Set a maximum height for longer messages */
-            overflow: auto; /* Allow scrolling if content exceeds max-height */
-            word-wrap: break-word; /* Allow words to break */
-            font-size: 14px; /* Keep the font size the same */
-            line-height: 1.0; /* Adjust line-height for better spacing */
-        }
-        
-        .user-image {
-            width: 30px; /* Smaller image */
-            height: 30px; /* Smaller image */
-            border-radius: 50%;
-            border: 2px solid #9ef86a;
-        }
-        
-        #message-form {
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-        }
-        
-        #message-input {
-            width: 450px; /* Width for the input */
-            height: 25px; /* Height for the input */
-            padding: 5px; /* Reduced padding */
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            margin-right: 10px; /* Space between input and button */
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            font-size: 14px; /* Smaller font size */
-        }
-        
-        button {
-            padding: 5px 10px; /* Reduced padding */
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <title>Chat Room: {{ room_name }}</title> 
 </head>
 <body>
     <h1>Chat Room: {{ room.name }}</h1>
@@ -210,8 +113,112 @@
         });
     
         
-    </script>    
     </script>
+    
+    <style>
+
+        html, body {
+            height: 100%; /* Make sure html and body take full height */
+            margin: 0; /* Remove default margin */
+        }
+
+
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 0; /* Remove padding */
+            background-image: url("{% static 'main/image/nature3.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px 0; /* Add some space below the title */
+        }
+        
+        #messages {
+            max-width: 500px;
+            margin: 20px auto; /* Center the messages container */
+            padding: 5px; /* Reduced padding */
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            overflow-y: auto;
+            height: calc(100% - 150px); /* Adjust height based on available space */
+        }
+        
+        .user-message {
+            justify-content: flex-end;
+        }
+        
+        .other-message {
+            justify-content: flex-start;
+        }
+        
+        .message {
+            display: flex;
+            margin: 3px 0; /* Reduced margin */
+            align-items: center;
+        }
+        
+        .message-content {
+            background-color: rgba(0, 0, 0, 0.2); /* Background color */
+            border-radius: 8px; /* Rounded corners */
+            padding: 5px; /* Add some vertical padding */
+            margin-left: 5px; /* Space between image and message */
+            flex: 1; /* Allow it to take available space */
+            max-width: 70%; /* Set a maximum width for the message box */
+            min-height: 20px; /* Set a minimum height for single-line messages */
+            max-height: 150px; /* Set a maximum height for longer messages */
+            overflow: auto; /* Allow scrolling if content exceeds max-height */
+            word-wrap: break-word; /* Allow words to break */
+            font-size: 14px; /* Keep the font size the same */
+            line-height: 1.0; /* Adjust line-height for better spacing */
+        }
+        
+        
+        .user-image {
+            width: 30px; /* Smaller image */
+            height: 30px; /* Smaller image */
+            border-radius: 50%;
+            border: 2px solid #9ef86a;
+        }
+        
+        #message-form {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        
+        #message-input {
+            width: 450px; /* Width for the input */
+            height: 25px; /* Height for the input */
+            padding: 5px; /* Reduced padding */
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-right: 10px; /* Space between input and button */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            font-size: 14px; /* Smaller font size */
+        }
+        
+        button {
+            padding: 5px 10px; /* Reduced padding */
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
     
 </body>
 </html>

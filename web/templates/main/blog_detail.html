@@ -556,17 +556,34 @@
 /* Responsive Styles for 768px */
 @media (max-width: 768px) {
     .main-image {
-        width: 70%; /* Full width for smaller screens */
-        height: auto; /* Maintain aspect ratio */
+        width: 520px;
+        height: 330px;
+        overflow: hidden;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0.2, 0.4); 
+        margin-top: 60px;
+        position: relative;
+        aspect-ratio: 16 / 9; /* Adjust based on your image aspect ratio */
+        border: 2px solid #24fc08; /* Add border with color */
     }
 
+    .main-image img {
+        width: 520px;
+        height: 330px;
+        object-fit: fill; /* Changed to cover for better image fitting */
+        border-radius: 8px;
+    }
+
+    /* Section Heading */
     .section-heading {
-        font-size: 2.5rem; /* Smaller heading size */
-        width: 500px;
+        font-size: 3rem;
+        margin-top: 10px;
+        color: #4249f3;
     }
 
+    /* Blog Content */
     .blog-content {
-        font-size: 1.4rem; /* Slightly smaller font size */
+        font-size: 1.6rem;
         line-height: 1.2;
         color: #000000;
         text-align: justify;
@@ -574,28 +591,64 @@
         word-spacing: 0.1rem;
         padding: 0;
         margin-left: 5px;
-        width: 470px;
-        
+        width: 510px;
     }
 
-
-    
-
+    /* Post Meta Information */
     .post-meta {
-        font-size: 1rem; /* Smaller font size */
+        font-size: 1.1rem;
+        color: #ff07e8;
+        margin-top: 10px;
+        margin-left: 3px;
     }
 
-    .sidebar {
-        width: 48%; /* Full width for sidebar */
-        float: none; /* Remove float for stacking */
-        margin-left: 520px; /* Reset margin */
-        margin-top: -870px;
+    /* Sidebar Image Styles */
+    .side-images {
+        display: flex;
+        flex-direction: column;
+        margin-top: -477px;
+        margin-left: -60px;
     }
 
     .related-image {
-        width: 62%; /* Full width for related images */
-        height: 180px; /* Maintain aspect ratio */
+        width: 100%;
+        height: 180px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        border-radius: 12px;
+        border: 2px solid #bd01fc; /* Add border with color */
+        box-shadow: 0 2px 10px rgba(0, 0, 0.2, 0.4); 
     }
+
+    .related-image img {
+        width: 125%;
+        height: 105%;
+        object-fit: fill;
+        border-radius: 4px;
+    }
+
+    /* Sidebar and Content Layout */
+    .sidebar {
+        width: 20%;
+        float: right;
+        margin-left: 50px;
+    }
+
+    /* CSS for image transition */
+    #main-image, #sidebar-images img {
+        transition: opacity 0.5s ease-in-out; /* Adjust duration and easing as needed */
+        opacity: 1; /* Start fully visible */
+    }
+
+
+    .main-image:hover {
+        border-color: #ff07e8; /* Change border color on hover */
+    }
+    
+    .related-image:hover {
+        border-color: #46fc01; /* Change border color on hover */
+    }
+
 
     .like-btn, .comment-toggle-btn {
         width: 15%; /* Full width buttons */
@@ -606,12 +659,12 @@
     .comment-toggle-btn {
         width: 15%; /* Full width on smaller screens */
         margin-right: -1px; /* Reset margin for alignment */
-        margin-top: 40px; /* Adjust margin for better spacing */
+        margin-top: 10px; /* Adjust margin for better spacing */
     }
 
     .comment-form-container {
         margin-left: 0; /* Reset margin for alignment */
-        margin-top: 40px;
+        margin-top: 10px;
         padding: 20px; /* Increase padding for touch devices */
     }
 
@@ -621,14 +674,14 @@
 
     .comment-form input[type="text"],
     .comment-form textarea {
-        height: 40px; /* Adjust height for smaller screens */
-        font-size: 12px; /* Decrease font size */
+        height: 28px; /* Adjust height for smaller screens */
+        font-size: 10px; /* Decrease font size */
     }
 
     .comment-form button {
-        width: 15%; /* Full width for button */
-        height: 30px; /* Adjust height for button */
-        font-size: 12px; /* Decrease font size */
+        width: 13%; /* Full width for button */
+        height: 20px; /* Adjust height for button */
+        font-size: 10px; /* Decrease font size */
     }
 
 
@@ -679,63 +732,116 @@
 /* Responsive Styles for 520px */
 @media (max-width: 520px) {
     .main-image {
-        width: 75%; /* Full width for smaller screens */
-        height: auto; /* Maintain aspect ratio */
+        width: 330px;
+        height: 220px;
+        overflow: hidden;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0.2, 0.4); 
+        margin-top: 60px;
+        position: relative;
+        aspect-ratio: 16 / 9; /* Adjust based on your image aspect ratio */
+        border: 2px solid #24fc08; /* Add border with color */
     }
 
+    .main-image img {
+        width: 330px;
+        height: 220px;
+        object-fit: fill; /* Changed to cover for better image fitting */
+        border-radius: 8px;
+    }
+
+    /* Section Heading */
     .section-heading {
-        font-size: 0.9rem; /* Smaller heading size */
-        width: 360px;
+        font-size: 3rem;
+        margin-top: 10px;
+        color: #4249f3;
     }
 
+    /* Blog Content */
     .blog-content {
-        font-size: 1.2rem; /* Further decrease font size */
-        line-height: 1.4; /* Slightly increase line height for readability */
+        font-size: 1.6rem;
+        line-height: 1.2;
         color: #000000;
         text-align: justify;
-        margin: 0 1rem; /* Adjust margins for smaller screens */
+        margin: 0 1.5rem;
         word-spacing: 0.1rem;
         padding: 0;
-        width: 330px;
+        margin-left: 5px;
+        width: 320px;
     }
 
+    /* Post Meta Information */
     .post-meta {
-        font-size: 0.9rem; /* Smaller font size */
+        font-size: 1.1rem;
+        color: #ff07e8;
+        margin-top: 10px;
+        margin-left: 3px;
     }
 
-    .sidebar {
-        width: 60%; /* Full width for sidebar */
-        float: none; /* Remove float for stacking */
-        margin-left: 350px; /* Reset margin */
-        margin-top: -740px; /* Reset margin */
-    }
-
+    /* Sidebar Image Styles */
     .side-images {
         display: flex;
         flex-direction: column;
-        margin-top: -90px;
+        margin-top: -383px;
+        margin-left: -45px;
     }
 
     .related-image {
-        width: 45%; /* Full width for related images */
-        height: 130px; /* Maintain aspect ratio */
+        width: 100%;
+        height: 145px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        border-radius: 12px;
+        border: 2px solid #bd01fc; /* Add border with color */
+        box-shadow: 0 2px 10px rgba(0, 0, 0.2, 0.4); 
     }
+
+    .related-image img {
+        width: 100%%;
+        height: 145px;
+        object-fit: fill;
+        border-radius: 4px;
+    }
+
+    /* Sidebar and Content Layout */
+    .sidebar {
+        width: 20%;
+        float: right;
+        margin-left: 50px;
+    }
+
+    /* CSS for image transition */
+    #main-image, #sidebar-images img {
+        transition: opacity 0.5s ease-in-out; /* Adjust duration and easing as needed */
+        opacity: 1; /* Start fully visible */
+    }
+
+
+    .main-image:hover {
+        border-color: #ff07e8; /* Change border color on hover */
+    }
+    
+    .related-image:hover {
+        border-color: #46fc01; /* Change border color on hover */
+    }
+
 
     .like-btn, .comment-toggle-btn {
-        width: 20%; /* Full width buttons */
-        font-size: 0.9rem; /* Smaller font size */
+        width: 15%; /* Full width buttons */
+        font-size: 1rem; /* Smaller font size */
     }
 
+
     .comment-toggle-btn {
-        width: 20%; /* Full width on smaller screens */
-        margin-right: -10px; /* Reset margin for alignment */
-        margin-top: 190px; /* Adjust margin for better spacing */
+        width: 15%; /* Full width on smaller screens */
+        margin-right: -1px; /* Reset margin for alignment */
+        margin-top: -2px; /* Adjust margin for better spacing */
     }
 
     .comment-form-container {
         margin-left: 0; /* Reset margin for alignment */
-        margin-top: 190px;
-        padding: 5px; /* Decrease padding for compactness */
+        margin-top: 10px;
+        padding: 10px; /* Increase padding for touch devices */
     }
 
     .comment-form {
@@ -744,15 +850,16 @@
 
     .comment-form input[type="text"],
     .comment-form textarea {
-        height: 35px; /* Adjust height for smaller screens */
-        font-size: 11px; /* Decrease font size */
+        height: 28px; /* Adjust height for smaller screens */
+        font-size: 10px; /* Decrease font size */
     }
 
     .comment-form button {
-        width: 20%; /* Full width for button */
-        height: 20px; /* Adjust height for button */
+        width: 17%; /* Full width for button */
+        height: 16px; /* Adjust height for button */
         font-size: 8px; /* Decrease font size */
     }
+
 
     .reply-form-container {
         max-width: 100%; /* Make the reply form full width on smaller screens */
@@ -762,20 +869,28 @@
 
     .reply-form-container input[type="text"],
     .reply-form-container textarea {
-        height: 30px; /* Adjust height for better usability on touch devices */
-        font-size: 11px; /* Decrease font size for smaller screens */
+        height: 30px; /* Increase height for better usability on touch devices */
+        font-size: 10px; /* Decrease font size for smaller screens */
     }
 
     .reply-btn {
-        width: 20%; /* Full width on smaller screens */
-        height: 25px; /* Adjust height for button */
-        font-size: 10px; /* Adjust font size for smaller screens */
+        width: 25%; /* Full width on smaller screens */
+        height: 18px; /* Adjust height for button */
+        font-size: 7px; /* Adjust font size for smaller screens */
     }
 
-    .reply-btn, .btn-reply, .more-replies {
+    
+
+    
+    .like-btn, .comment-toggle-btn {
         width: 20%; /* Full width buttons */
-        font-size: 10px; /* Smaller font size */
+        font-size: 0.9rem; /* Smaller font size */
     }
+
+
+    
+
+    
 
     .comment-box {
         width: 100%; /* Full width on smaller screens */

@@ -24,7 +24,10 @@
         border: 2px solid #bc06fb; /* Border width, style, and color */
         border-radius: 8px; /* Rounded corners */
         box-shadow: 2px 4px 15px rgba(0, 0, 0.4, 0.6); /* Optional shadow for depth */
-
+        display: flex; /* Enable flexbox */
+        flex-direction: column; /* Stack children vertically */
+        justify-content: center; /* Center children vertically */
+        align-items: center; /* Center children horizontally */
     }
     
     .slides {
@@ -45,11 +48,12 @@
     .slides img.active {
         opacity: 1; /* Only the active image is fully visible */
     }
-
+    
     .site-heading {
         color: white; /* Change text color for better visibility */
         text-align: center; /* Center text */
-        margin-top: 100px;
+        font-size: 24px; /* Default font size */
+        margin: 80px 0 0; /* Add top margin to push it down */
     }
 
     /*********** Now css part below image container********** */
@@ -230,20 +234,14 @@
     
 }
 
-
 @media (max-width: 480px) {
-    .intro-header {
-        height: 60vh; /* Further adjust height for very small screens */
-    }
-
     .slider-container {
-        width: 95%; /* Full width for very small screens */
-        height: 60%; /* Adjust height */
+        height: 70%; /* Adjust height for small screens */
     }
 
     .site-heading {
-        margin-top: 30px; /* Further adjust margin for very small screens */
-        font-size: 24px; /* Adjust heading size for smaller screens */
+        font-size: 16px; /* Adjust font size for smaller screens */
+        padding: 10px; /* Add some padding if needed */
     }
 
     .post-preview {
@@ -262,6 +260,7 @@
         font-size: 8px; /* Adjust font size for meta information */
     }
 }
+
 
 </style>
 
