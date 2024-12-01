@@ -13,7 +13,7 @@
                 <div class="col-md-8 content col-sm-12">
                     <div class="main-image">
                         {% if images %}
-                            <img id="main-image" src="{{ images.0.image.url }}" alt="{{ blog.title }}">
+                            <img id="main-image" src="{{ images.0.image.url }}">
                         {% endif %}
                     </div>
 
@@ -37,7 +37,7 @@
                     <div class="side-images" id="sidebar-images">
                         {% for image in images|slice:":4" %}
                             <div class="related-image" style="display: block;">
-                                <img src="{{ image.image.url }}" alt="Image for {{ blog.title }}" class="img-fluid">
+                                <img src="{{ image.image.url }}" class="img-fluid">
                             </div>
                         {% empty %}
                             <p>No images available for this post.</p>
