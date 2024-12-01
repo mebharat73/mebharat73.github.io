@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'web',
-    'debug_toolbar',
     'django_summernote',
     'storages',
     
@@ -86,7 +85,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'my_project.urls'
@@ -206,26 +204,3 @@ EMAIL_USE_SSL = False
 
 
 
-DEBUG_TOOLBAR_CONFIG = {
-    'INTERCEPT_REDIRECTS': False,
-    'SHOW_TOOLBAR_CALLBACK': lambda request: True if request.user.is_authenticated else False,
-    'HIDE_IN_STACKTRACES': (
-        'socket',
-        'django.core.handlers',
-        'django.core.management',
-        'django.utils',
-        'django.utils.decorators',
-        'django.utils.deprecation',
-        'django.utils.encoding',
-        'django.utils.functional',
-        'django.utils.http',
-        'django.utils.module_loading',
-        'django.utils.safestring',
-        'django.utils.text',
-        'django.utils.translation',
-        'django.utils.tree',
-        'django.views.decorators',
-        'django.views.generic',
-    ),
-    'INTERNAL_IPS': ['127.0.0.1'],
-}
