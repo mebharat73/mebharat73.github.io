@@ -151,7 +151,7 @@
     .main-image img {
         width: 925px;
         height: 490px;
-        object-fit: cover; /* Changed to cover for better image fitting */
+        object-fit: fill; /* Changed to cover for better image fitting */
         border-radius: 8px;
     }
 
@@ -203,7 +203,7 @@
     .related-image img {
         width: 125%;
         height: 105%;
-        object-fit: cover;
+        object-fit: fill;
         border-radius: 4px;
     }
 
@@ -562,6 +562,7 @@
 
     .section-heading {
         font-size: 2.5rem; /* Smaller heading size */
+        width: 500px;
     }
 
     .blog-content {
@@ -585,15 +586,15 @@
     }
 
     .sidebar {
-        width: 40%; /* Full width for sidebar */
+        width: 48%; /* Full width for sidebar */
         float: none; /* Remove float for stacking */
-        margin-left: 500px; /* Reset margin */
-        margin-top: -560px;
+        margin-left: 520px; /* Reset margin */
+        margin-top: -870px;
     }
 
     .related-image {
-        width: 60%; /* Full width for related images */
-        height: auto; /* Maintain aspect ratio */
+        width: 62%; /* Full width for related images */
+        height: 180px; /* Maintain aspect ratio */
     }
 
     .like-btn, .comment-toggle-btn {
@@ -604,13 +605,14 @@
 
     .comment-toggle-btn {
         width: 15%; /* Full width on smaller screens */
-        margin-right: 0; /* Reset margin for alignment */
-        margin-top: 5px; /* Adjust margin for better spacing */
+        margin-right: -1px; /* Reset margin for alignment */
+        margin-top: 40px; /* Adjust margin for better spacing */
     }
 
     .comment-form-container {
         margin-left: 0; /* Reset margin for alignment */
-        padding: 10px; /* Increase padding for touch devices */
+        margin-top: 40px;
+        padding: 20px; /* Increase padding for touch devices */
     }
 
     .comment-form {
@@ -682,7 +684,8 @@
     }
 
     .section-heading {
-        font-size: 2rem; /* Smaller heading size */
+        font-size: 0.9rem; /* Smaller heading size */
+        width: 360px;
     }
 
     .blog-content {
@@ -704,12 +707,18 @@
         width: 60%; /* Full width for sidebar */
         float: none; /* Remove float for stacking */
         margin-left: 350px; /* Reset margin */
-        margin-top: -510px; /* Reset margin */
+        margin-top: -740px; /* Reset margin */
+    }
+
+    .side-images {
+        display: flex;
+        flex-direction: column;
+        margin-top: -90px;
     }
 
     .related-image {
-        width: 40%; /* Full width for related images */
-        height: auto; /* Maintain aspect ratio */
+        width: 45%; /* Full width for related images */
+        height: 130px; /* Maintain aspect ratio */
     }
 
     .like-btn, .comment-toggle-btn {
@@ -719,13 +728,13 @@
 
     .comment-toggle-btn {
         width: 20%; /* Full width on smaller screens */
-        margin-right: 0; /* Reset margin for alignment */
-        margin-top: 5px; /* Adjust margin for better spacing */
+        margin-right: -10px; /* Reset margin for alignment */
+        margin-top: 190px; /* Adjust margin for better spacing */
     }
 
     .comment-form-container {
         margin-left: 0; /* Reset margin for alignment */
-        margin-top: 30px;
+        margin-top: 190px;
         padding: 5px; /* Decrease padding for compactness */
     }
 
