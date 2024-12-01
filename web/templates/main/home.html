@@ -65,13 +65,13 @@
     
     .post-preview {
         margin-bottom: 10px; /* Space between each post */
-        padding: -15px; /* Padding around each post */
+        padding: 15px; /* Padding around each post */
         border: 1px solid #34495e; /* Light border around each post */
         border-radius: 8px; /* Rounded corners */
         background-color: #f9f9f9; /* Light background for the post */
         transition: box-shadow 0.3s; /* Smooth transition for hover effect */
         max-height: none; /* Remove height limit */
-        height: 143px; /* Allow height to adjust based on content */
+        height: auto; /* Allow height to adjust based on content */
         display: flex; /* Use flexbox for centering */
         flex-direction: column; /* Stack children vertically */
         justify-content: center; /* Center vertically */
@@ -180,33 +180,43 @@
 
 
 
-/* Responsive styles */
-* Media Queries for Responsiveness */
+
+    /* Responsive Styles */
 @media (max-width: 768px) {
+    .intro-header {
+        height: 70vh; /* Adjust height for smaller screens */
+    }
+
     .slider-container {
-        width: 90%; /* Adjust width for smaller screens */
-        height: 70%; /* Adjust height for smaller screens */
+        width: 90%; /* Increase width for smaller screens */
+        height: 70%; /* Adjust height */
     }
 
     .site-heading {
-        margin-top: 30px; /* Adjust heading margin */
+        margin-top: 50px; /* Adjust margin for smaller screens */
     }
 
     .post-preview {
-        padding: 70px; /* Increase padding for better touch targets */
+        height: auto; /* Allow height to adjust based on content */
+        padding: 10px; /* Adjust padding */
     }
 
     .post-title {
-        font-size: 10px; /* Adjust title font size */
+        font-size: 12px; /* Slightly smaller font size for titles */
     }
 
     .post-subtitle {
-        font-size: 10px; /* Adjust subtitle size */
+        font-size: 15px; /* Slightly smaller font size for subtitles */
     }
 
     .post-meta {
-        font-size: 12px; /* Adjust meta font size */
+        font-size: 9px; /* Adjust font size for meta information */
     }
+
+
+
+
+
 
     .pager {
         flex-direction: column; /* Stack buttons vertically */
@@ -221,38 +231,37 @@
 }
 
 
-@media (max-width: 576px) {
+@media (max-width: 480px) {
+    .intro-header {
+        height: 60vh; /* Further adjust height for very small screens */
+    }
+
     .slider-container {
-        width: 95%; /* Further adjust width for mobile screens */
-        height: 60%; /* Further adjust height for mobile screens */
+        width: 95%; /* Full width for very small screens */
+        height: 60%; /* Adjust height */
     }
 
     .site-heading {
-        margin-top: 30px; /* Further adjust heading margin */
+        margin-top: 30px; /* Further adjust margin for very small screens */
+        font-size: 24px; /* Adjust heading size for smaller screens */
     }
 
     .post-preview {
-        padding: 10px; /* Adjust padding for smaller screens */
+        padding: 5px; /* Reduce padding for smaller screens */
     }
 
     .post-title {
-        font-size: 10px; /* Further adjust title font size */
+        font-size: 11px; /* Further reduce font size for titles */
     }
 
     .post-subtitle {
-        font-size: 12px; /* Further adjust subtitle size */
+        font-size: 14px; /* Further reduce font size for subtitles */
     }
 
     .post-meta {
-        font-size: 8px; /* Further adjust meta font size */
-    }
-
-    .pager a {
-        font-size: 12px; /* Adjust font size for readability */
-        padding: -60px; /* Increase padding for touch targets */
+        font-size: 8px; /* Adjust font size for meta information */
     }
 }
-
 
 </style>
 
