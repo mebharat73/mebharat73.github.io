@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'web',
     'debug_toolbar',
     'django_summernote',
+    'storages',
     
 
 ]
@@ -173,7 +174,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = '/var/data/media'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -207,23 +208,7 @@ EMAIL_USE_SSL = False
 
 DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
-    'SHOW_TOOLBAR_CALLBACK': lambda request: True,
-    'CONFIG_PANELS': [
-        'debug_toolbar.panels.versions.VersionsPanel',
-        'debug_toolbar.panels.timer.TimerPanel',
-        'debug_toolbar.panels.settings.SettingsPanel',
-        'debug_toolbar.panels.headers.HeadersPanel',
-        'debug_toolbar.panels.request.RequestPanel',
-        'debug_toolbar.panels.sql.SQLPanel',
-        'debug_toolbar.panels.staticfiles.StaticFilesPanel',
-        'debug_toolbar.panels.templates.TemplatesPanel',
-        'debug_toolbar.panels.cache.CachePanel',
-        'debug_toolbar.panels.signals.SignalsPanel',
-        'debug_toolbar.panels.logging.LoggingPanel',
-        'debug_toolbar.panels.redirects.RedirectsPanel',
-    ],
-    'SHOW_TEMPLATE_CONTEXT': True,
-    'ENABLE_STACKTRACES': True,
+    'SHOW_TOOLBAR_CALLBACK': lambda request: True if request.user.is_authenticated else False,
     'HIDE_IN_STACKTRACES': (
         'socket',
         'django.core.handlers',
@@ -242,5 +227,5 @@ DEBUG_TOOLBAR_CONFIG = {
         'django.views.decorators',
         'django.views.generic',
     ),
-    'INTERNAL_IPS': ['127.0.0.1'],  # or your local IP address
+    'INTERNAL_IPS': ['127.0.0.1'],
 }
