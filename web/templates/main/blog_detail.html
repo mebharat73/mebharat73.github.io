@@ -13,17 +13,17 @@
                 <div class="col-md-8 content col-sm-12">
                     <div class="main-image">
                         {% if images %}
-                            <img id="main-image" src="{{ images.0.image.url }}">
+                            <img id="main-image" src="{{ images.0.image.url }}" alt="{{ blog.title }}">
                         {% endif %}
                     </div>
-
+    
                     <h2 class="section-heading">{{ blog.title }}</h2>
                     <p class="blog-content">{{ blog.content|striptags }}</p>
-
+    
                     <div class="post-meta">
                         Posted by <a href="#">{{ blog.author }}</a> on {{ blog.created_at }}
                     </div>
-
+    
                     <!-- Like button -->
                     <div class="like-container">
                         <button class="like-btn" data-obj-type="post" data-obj-id="{{ blog.id }}">
@@ -32,12 +32,12 @@
                         </button>
                     </div>
                 </div>
-
+    
                 <div class="col-md-4 sidebar col-sm-12">
                     <div class="side-images" id="sidebar-images">
                         {% for image in images|slice:":4" %}
-                            <div class="related-image" style="display: block;">
-                                <img src="{{ image.image.url }}" class="img-fluid">
+                            <div class="related-image">
+                                <img src="{{ image.image.url }}" class="img-fluid" alt="Related Image">
                             </div>
                         {% empty %}
                             <p>No images available for this post.</p>
@@ -45,7 +45,7 @@
                     </div>
                 </div>
             </div>
-
+    
             <section class="comment-section">
                 <!-- Comment icon -->
                 <button class="comment-toggle-btn" id="comment-toggle-btn">
@@ -135,952 +135,575 @@
 
 <style>
 
-    /* Main Image Styles */
-    .main-image {
-        width: 925px;
-        height: 490px;
-        overflow: hidden;
-        border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0.2, 0.4); 
-        margin-top: 60px;
-        position: relative;
-        aspect-ratio: 16 / 9; /* Adjust based on your image aspect ratio */
-        border: 2px solid #24fc08; /* Add border with color */
-    }
+    /* General reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-    .main-image img {
-        width: 925px;
-        height: 490px;
-        object-fit: fill; /* Changed to cover for better image fitting */
-        border-radius: 8px;
-    }
+/* Body and container styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
 
-    /* Section Heading */
-    .section-heading {
-        font-size: 3rem;
-        margin-top: 10px;
-        color: #4249f3;
-    }
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
 
-    /* Blog Content */
-    .blog-content {
-        font-size: 1.6rem;
-        line-height: 1.2;
-        color: #000000;
-        text-align: justify;
-        margin: 0 1.5rem;
-        word-spacing: 0.1rem;
-        padding: 0;
-        margin-left: 5px;
-        width: 919px;
-    }
+/* Header styles */
+.intro-header {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0.1, 0.4);
+}
 
-    /* Post Meta Information */
-    .post-meta {
-        font-size: 1.1rem;
-        color: #ff07e8;
-        margin-top: 10px;
-        margin-left: 3px;
-    }
+/* Blog content styles */
+.content {
+    flex: 1;
+    padding: 10px;
+    font-size: 1.8rem;
+    line-height: 1.6;
 
-    /* Sidebar Image Styles */
-    .side-images {
-        display: flex;
-        flex-direction: column;
-        margin-top: 60px;
-    }
+}
 
-    .related-image {
-        width: 125%;
-        height: 230px;
-        overflow: hidden;
-        margin-bottom: 10px;
-        border-radius: 12px;
-        border: 2px solid #bd01fc; /* Add border with color */
-        box-shadow: 0 2px 10px rgba(0, 0, 0.2, 0.4); 
-    }
+.main-image img {
+    max-width: 100%;
+    border-radius: 8px;
+}
 
-    .related-image img {
-        width: 125%;
-        height: 105%;
-        object-fit: fill;
-        border-radius: 4px;
-    }
+.section-heading {
+    font-size: 2em;
+    margin: 20px 0;
+}
 
-    /* Sidebar and Content Layout */
-    .sidebar {
-        width: 20%;
-        float: right;
-        margin-left: 5px;
-    }
+.blog-content {
+    line-height: 1.6;
+    margin-bottom: 20px;
+    text-align: justify;
+}
 
-    /* CSS for image transition */
-    #main-image, #sidebar-images img {
-        transition: opacity 0.5s ease-in-out; /* Adjust duration and easing as needed */
-        opacity: 1; /* Start fully visible */
-    }
+.post-meta {
+    font-size: 0.9em;
+    color: #4a9aff;
+}
 
+/* Like button styles */
+.like-container {
+    margin: 20px 0;
+}
 
-    .main-image:hover {
-        border-color: #ff07e8; /* Change border color on hover */
-    }
-    
-    .related-image:hover {
-        border-color: #46fc01; /* Change border color on hover */
-    }
+.like-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 1px 6px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    height: 23x;
+    width: 62px;
+}
 
-    /* Like Button Container */
-    .like-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-top: 5px;
-    }
+.like-btn:hover {
+    background-color: #0056b3;
+}
 
-    /* Like Button Styles */
-    .like-btn {
-        background-color: #6c52fd;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        font-size: 1.2rem;
-        cursor: pointer;
-        border-radius: 12px;
-        transition: transform 0.2s ease;
-        display: flex;
-        align-items: center;
-        height: 25px;
-        width: 60px;
-    }
+/* Sidebar styles */
+.sidebar {
+    position: sticky;
+    top: 20px; /* Adjust as needed */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
 
-    .like-btn:active {
-        transform: scale(0.95);
-    }
+.side-images {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
-    .like-count {
-        margin-left: 5px;
-        font-weight: bold;
-        font-size: 1rem;
-    }
+.related-image img {
+    border-radius: 10px;
+    max-width: 100%;
+}
+
+/* Comment section styles */
+.comment-section {
+    margin-top: 13px;
+}
+
+.comment-toggle-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 3px 13px;
+    font-size: 1.2rem;
+    border-radius: 12px;
+    cursor: pointer;
+    float: right;
+}
 
 
-    /* Comment Toggle Button Styles */
-    .comment-toggle-btn {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        height: 23px;
-        width: 78px;
-        cursor: pointer;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 13px;
-        font-weight: bold;
-        margin-right: -50px; /* Adjusted for better alignment */
-        margin-top: -5px;
-        float: right;
+
+ /* Comment Form Styles */
+ .comment-form-container {
+    display: flex; /* Use flexbox for layout */
+    padding: 5px; /* Add padding for spacing */
+    margin-left: -30px; /* Adjust left margin as needed */
+    margin-top: 5px; /* Adjust top margin as needed */
+}
+
+.comment-form {
+    width: 98%; /* Set to 90% for responsiveness */
+    display: flex; /* Use flexbox for inner layout */
+    flex-direction: column; /* Stack elements vertically */
+}
+
+.comment-form input[type="text"],
+.comment-form textarea {
+    height: 50px; /* Set height for input field */
+    padding: 5px; /* Add padding */
+    font-size: 14px; /* Set font size */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 12px; /* Rounded corners */
+    width: 100%; /* Full width */
+    box-sizing: border-box; /* Include padding and border in total width */
+    margin-bottom: -10px; /* Space below input field */
+}
+
+.comment-form textarea {
+    height: 35px; /* Adjust height for textarea */
+    resize: none; /* Disable resizing */
+}
+
+.comment-form button {
+    padding: 5px;
+    background-color: #fa1de7; /* Button background color */
+    height: 22px;
+    width: 70px;
+    color: white; /* Button text color */
+    border: none; /* No border */
+    border-radius: 10px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s ease; /* Transition for hover effect */
+}
+
+.comment-form button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+
+.btn-comment {
+    background-color: #fb28ea;
+    color: white;
+    padding: 1px 3px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 10px; /* Font size */
+    transition: background-color 0.3s; /* Smooth transition for background color */
+}
+
+.btn-comment:hover {
+    background-color: #fb2845; /* Darker shade on hover */
+}
+
+
+.comment-box {
+    width: 100%; /* Fixed width for larger screens */
+    background-color: #f8f9fa; /* Light gray background */
+    border: 1.0px solid #001fff; /* Border color */
+    border-radius: 10px; /* Rounded corners */
+    display: flex;
+    box-shadow: 0 4px 8px rgba(0, 0, 0.2, 0.4); /* Add shadow */
+    margin-left: -12px;
+
+    padding: 10px; /* Increased padding for better spacing */
+    margin-bottom: -13px; /* Space between comments */
+    line-height: 1.2; /* Adjust line height for better readability */
+}
+
+/* Comment Header */
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold; /* Make the author's name bold */
+    color: #3e72fa; /* Change color to match theme */
+    font-size: 1rem; /* Set font size */
+    margin-top: -1px;
+}
+
+.media-body {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    justify-content: flex-start; /* Align items at the start */
+}
+
+
+/* Comment Content */
+.comment-content {
+    font-weight: bold; /* Make the author's name bold */
+    font-size: 13px; /* Slightly larger font size */
+    color: #69696a; /* Change color to match theme */
+    line-height: 1.1;
+    margin-top: -6px;
+}
+
+/* Reply Button */
+/* Reply form button  */
+.reply-btn {
+    background-color: #7e00c6; /* Make background transparent */
+    color: #08f302; /* Text color */
+    text-decoration: none; /* Remove underline */
+    font-size: 12px; /* Adjust font size to be smaller */
+    font-weight: bold; /* Make the author's name bold */
+    padding: 0; /* Remove padding to use height for centering */
+    width: 55px; /* Set desired width */
+    height: 22px; /* Set desired height */
+    border: 1px solid #000500; /* Add a border */
+    border-radius: 12px; /* Slightly rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effects */
+    margin-left: auto; /* Push the button to the right */
+    /* Centering text */
+    display: flex; /* Use flexbox */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+}
+
+.reply-btn:hover {
+    background-color: #007bff; /* Change background on hover */
+    color: white; /* Change text color on hover */
+}
+
+/* Reply container styles */
+
+
+.reply-form-container input[type="text"],
+.reply-form-container textarea {
+    height: 25px; /* Set a specific height for the input field */
+    padding: 5px; /* Add some padding for better text visibility */
+    font-size: 13px; /* Set the font size */
+    border: 1px solid #ccc; /* Light border for the input field */
+    border-radius: 12px; /* Slightly rounded corners */
+    width: 93%; /* Make the input field take full width */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    margin-bottom: -5px; /* Space below the input field */
+}
+
+.reply-form-container textarea {
+    height: 33px; /* Adjust height for textarea if needed */
+    resize: none; /* Disable resizing if you want to keep it a fixed size */
+}
+
+
+
+.reply-container {
+    margin-top: 8px; /* Space above the reply container */
+    margin-left: 130px;
+}
+
+
+
+
+
+
+.hidden-reply {
+    display: none; /* Initially hide the replies */
+}
+
+.reply-box {
+    background-color: #e9ecef; /* Slightly darker gray for replies */
+    margin-left: 200px;
+    margin-top: 3px;
+    padding: 3px; /* Reduced padding for a more compact appearance */
+    border: 1px solid #ced4da; /* Border for reply box */
+    border-radius: 12px; /* Slightly rounded corners */
+    display: flex; /* Flexbox for alignment */
+    line-height: 0.9; /* Adjust line height for better readability */
+    max-width: 700px; /* Set a maximum width for reply boxes */
+}
+
+
+
+
+.reply-content {
+    font-weight: bold; /* Normal weight for reply content */
+    font-size: 12px; /* Adjust font size as needed */
+    line-height: 1.2; /* Adjust line height for better readability */
+    color: #585867; /* Color for reply content */
+    white-space: normal; /* Allow text to wrap */
+    overflow-wrap: break-word; /* Break long words to prevent overflow */
+}
+
+
+
+.profile-pic {
+    width: 30px; /* Fixed size for profile picture */
+    height: 30px; /* Fixed size for profile picture */
+    border-radius: 50%; /* Make it circular */
+    border: 1.6px solid #2b33fa;
+    margin-right: 15px; /* Space between image and text */
+    margin-bottom: -50px;
+}
+
+
+
+.reply-header {
+    display: flex; /* Use flexbox for header alignment */
+    justify-content: space-between; /* Space between author and timestamp */
+    align-items: center; /* Center align items vertically */
+    margin-bottom: -10px; /* Space below the header */
+}
+
+
+.created-at {
+    font-size: 10px; /* Smaller font for timestamp */
+    color: #0d09f5; /* Color for timestamp */
+}
+
+
+
+
+.btn-reply {
+    background-color: #fb07e7; /* Button color */
+    color: white; /* Button text color */
+    padding: 1px 13px; /* Padding for button */
+    border: none; /* No border */
+    border-radius: 10px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 11px; /* Button font size */
+}
+
+.btn-reply:hover {
+    background-color: #0056b3; /* Darker color on hover */
+}
+
+
+
+/* More replies button */
+.more-replies {
+    background-color: #007bff; /* Primary color (Bootstrap blue) */
+    color: white; /* Text color */
+    padding: 3px 11px; /* Vertical and horizontal padding */
+    border: none; /* No border */
+    border-radius: 10px; /* Slightly rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 10px; /* Font size */
+    margin-top: 1px; /* Space above the button */
+    margin-left: 800px;
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+    display: inline-block; /* Inline-block to fit content */
+}
+
+.more-replies:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+    text-decoration: underline; /* Underline text on hover */
+}
+
+.more-replies:focus {
+    outline: none; /* Remove the default outline */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add a subtle shadow for focus */
+}
+
+
+
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    /* Adjust container padding */
+    .container {
+        padding: 10px; /* Reduce padding for smaller screens */
     }
 
-   
-    /* Comment Form Styles */
-    .comment-form-container {
-        display: flex; /* Use flexbox for layout */
-        padding: 5px; /* Add padding for spacing */
-        margin-left: -30px; /* Adjust left margin as needed */
-        margin-top: 5px; /* Adjust top margin as needed */
-    }
-    
-    .comment-form {
-        width: 99%; /* Set to 90% for responsiveness */
-        display: flex; /* Use flexbox for inner layout */
+    /* Flex layout for header */
+    .intro-header {
         flex-direction: column; /* Stack elements vertically */
     }
-    
+
+    /* Content and sidebar */
+    .content {
+        padding: 10px; /* Maintain padding */
+        order: 1; /* Ensure content comes first */
+        flex: 1 0 auto; /* Allow content to grow and fill space */
+        line-height: 1.6;
+        font-size: 1.5rem;
+    }
+
+    .sidebar {
+        order: 2; /* Sidebar comes after content */
+        position: static; /* Make sidebar static for smaller screens */
+        margin-top: 20px; /* Add space above sidebar */
+    }
+
+    /* Main image */
+    .main-image img {
+        max-width: 100%; /* Ensure the image is responsive */
+        height: auto; /* Maintain aspect ratio */
+    }
+
+
+    .side-images {
+        display: none; /* Hide sidebar images on small screens */
+    }
+
+    /* Optionally, show a placeholder or alternative content */
+    #sidebar { 
+        display: none; /* Hides the sidebar */
+    }
+
+    .sidebar.active .side-images {
+        display: flex; /* Show images when sidebar is active */
+    }
+
+    /* Comment section adjustments */
+    .comment-section {
+        margin-top: 30px; /* Increase space above comment section */
+    }
+
+    .comment-form-container {
+        flex-direction: column; /* Stack form elements vertically */
+        margin-left: 0; /* Reset left margin */
+    }
+
     .comment-form input[type="text"],
     .comment-form textarea {
-        height: 50px; /* Set height for input field */
-        padding: 5px; /* Add padding */
-        font-size: 14px; /* Set font size */
-        border: 1px solid #ccc; /* Light border */
-        border-radius: 12px; /* Rounded corners */
-        width: 100%; /* Full width */
-        box-sizing: border-box; /* Include padding and border in total width */
-        margin-bottom: -10px; /* Space below input field */
-    }
-    
-    .comment-form textarea {
-        height: 35px; /* Adjust height for textarea */
-        resize: none; /* Disable resizing */
-    }
-    
-    .comment-form button {
-        padding: 5px;
-        background-color: #fa1de7; /* Button background color */
-        height: 23px;
-        width: 80px;
-        color: white; /* Button text color */
-        border: none; /* No border */
-        border-radius: 10px; /* Rounded corners */
-        cursor: pointer; /* Pointer cursor */
-        transition: background-color 0.3s ease; /* Transition for hover effect */
-    }
-    
-    .comment-form button:hover {
-        background-color: #0056b3; /* Darker shade on hover */
+        height: 33px; /* Auto height for smaller screens */
     }
 
-
-    .btn-comment {
-        background-color: #fb28ea;
-        color: white;
-        padding: 1px 3px;
+    /* Button sizes */
+    .like-btn {
+        background-color: #007bff;
+        color: #fff;
         border: none;
-        border-radius: 8px;
+        padding: 1px 6px;
+        border-radius: 12px;
         cursor: pointer;
-        font-size: 10px; /* Font size */
-        transition: background-color 0.3s; /* Smooth transition for background color */
+        font-size: 1.0rem;
+        height: 18x;
+        width: 55px;
     }
 
-    .btn-comment:hover {
-        background-color: #fb2845; /* Darker shade on hover */
-    }
 
-   
+
+    /* Comment Box */
     .comment-box {
-        width: 1190px; /* Fixed width for larger screens */
-        background-color: #f8f9fa; /* Light gray background */
-        border: 1.0px solid #001fff; /* Border color */
-        border-radius: 10px; /* Rounded corners */
-        padding: 10px; /* Increased padding for better spacing */
-        display: flex;
-        margin-bottom: -13px; /* Space between comments */
-        line-height: 1.2; /* Adjust line height for better readability */
-        float: left;
-        margin-left: -55px;
-    
-        /* Box Shadow */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow */
+        width: 100%; /* Full width on smaller screens */
+        margin-left: 0; /* Reset left margin */
+        margin-bottom: 5px; /* Space below each comment */
+        padding: 5px; /* Keep padding */
+        box-shadow: none; /* Remove shadow for simplicity */
     }
 
     /* Comment Header */
     .comment-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-weight: bold; /* Make the author's name bold */
-        color: #3e72fa; /* Change color to match theme */
-        font-size: 1rem; /* Set font size */
-        margin-top: -1px;
+        flex-direction: column; /* Stack header elements vertically */
+        align-items: flex-start; /* Align items to the start */
+        margin-bottom: 5px; /* Space below the header */
     }
 
+    /* Media Body */
     .media-body {
-        display: flex;
-        flex-direction: column; /* Stack children vertically */
-        justify-content: flex-start; /* Align items at the start */
+        flex-direction: column; /* Stack content vertically */
+        align-items: flex-start; /* Align items to the start */
+        width: 100%; /* Full width for the body */
     }
-
 
     /* Comment Content */
     .comment-content {
-        font-weight: bold; /* Make the author's name bold */
-        font-size: 13px; /* Slightly larger font size */
-        color: #69696a; /* Change color to match theme */
-        line-height: 1.1;
-        margin-top: -6px;
+        font-size: 12px; /* Slightly smaller font size */
+        line-height: 1.4; /* Adjust line height for readability */
+        margin-top: 0; /* Reset margin */
     }
+
+
+    
 
     /* Reply Button */
-    /* Reply form button  */
     .reply-btn {
-        background-color: #7e00c6; /* Make background transparent */
-        color: #08f302; /* Text color */
-        text-decoration: none; /* Remove underline */
-        font-size: 12px; /* Adjust font size to be smaller */
-        font-weight: bold; /* Make the author's name bold */
-        padding: 0; /* Remove padding to use height for centering */
-        width: 55px; /* Set desired width */
-        height: 22px; /* Set desired height */
-        border: 1px solid #000500; /* Add a border */
-        border-radius: 12px; /* Slightly rounded corners */
-        cursor: pointer; /* Pointer cursor on hover */
-        transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effects */
-        margin-left: auto; /* Push the button to the right */
-        /* Centering text */
-        display: flex; /* Use flexbox */
-        align-items: center; /* Center vertically */
-        justify-content: center; /* Center horizontally */
+        width: 15%; /* Full width for the button */
+        height: auto; /* Auto height for better touch targets */
+        margin-top: 5px; /* Space above the button */
+        margin-left: 0; /* Reset left margin */
     }
 
-    .reply-btn:hover {
-        background-color: #007bff; /* Change background on hover */
-        color: white; /* Change text color on hover */
+    /* Reply Form Container */
+    .reply-form-container {
+        flex-direction: column; /* Stack input and textarea vertically */
+        width: 100%; /* Full width */
     }
-
-    /* Reply container styles */
-
 
     .reply-form-container input[type="text"],
     .reply-form-container textarea {
-        height: 25px; /* Set a specific height for the input field */
-        padding: -15px; /* Add some padding for better text visibility */
-        font-size: 13px; /* Set the font size */
+        width: 100%; /* Full width for inputs */
+        margin-bottom: -15px; /* Space below inputs */
+        height: 34px; /* Set a specific height for the input field */
+        padding: 1px; /* Add some padding for better text visibility */
+        font-size: 12px; /* Set the font size */
         border: 1px solid #ccc; /* Light border for the input field */
         border-radius: 12px; /* Slightly rounded corners */
-        width: 100%; /* Make the input field take full width */
         box-sizing: border-box; /* Include padding and border in the element's total width and height */
-        margin-bottom: -10px; /* Space below the input field */
-    }
-
-    .reply-form-container textarea {
-        height: 33px; /* Adjust height for textarea if needed */
-        resize: none; /* Disable resizing if you want to keep it a fixed size */
-    }
-
-    .reply-form-container {
-        margin-top: -10px;
-        padding-left: 1px; /* Indent the reply form */
-        max-width: 1060px; /* Set a maximum width for the reply form */
     }
 
 
-    .reply-container {
-        margin-top: 5px; /* Space above the reply container */
-    }
-
-
-
-    
-
-
-    .hidden-reply {
-        display: none; /* Initially hide the replies */
-    }
-    
-    .reply-box {
-        background-color: #e9ecef; /* Slightly darker gray for replies */
-        margin-left: 300px;
-        margin-top: 3px;
-        padding: 1px; /* Reduced padding for a more compact appearance */
-        border: 1px solid #ced4da; /* Border for reply box */
-        border-radius: 12px; /* Slightly rounded corners */
-        display: flex; /* Flexbox for alignment */
-        line-height: 0.9; /* Adjust line height for better readability */
-        max-width: 800px; /* Set a maximum width for reply boxes */
-    }
-    
-    
-   
-    
-    .reply-content {
-        font-weight: bold; /* Normal weight for reply content */
-        font-size: 12px; /* Adjust font size as needed */
-        line-height: 1.2; /* Adjust line height for better readability */
-        color: #585867; /* Color for reply content */
-        white-space: normal; /* Allow text to wrap */
-        overflow-wrap: break-word; /* Break long words to prevent overflow */
-    }
-
-
-    
-    .profile-pic {
-        width: 30px; /* Fixed size for profile picture */
-        height: 30px; /* Fixed size for profile picture */
-        border-radius: 50%; /* Make it circular */
-        border: 1.6px solid #2b33fa;
-        margin-right: 15px; /* Space between image and text */
-        margin-bottom: -50px;
-    }
-    
-   
-    
-    .reply-header {
-        display: flex; /* Use flexbox for header alignment */
-        justify-content: space-between; /* Space between author and timestamp */
-        align-items: center; /* Center align items vertically */
-        margin-bottom: -10px; /* Space below the header */
-    }
-    
-    
-    .created-at {
-        font-size: 10px; /* Smaller font for timestamp */
-        color: #0d09f5; /* Color for timestamp */
-    }
-    
-    
-   
-    
     .btn-reply {
         background-color: #fb07e7; /* Button color */
         color: white; /* Button text color */
-        padding: 1px 13px; /* Padding for button */
+        padding: 3px 10px; /* Padding for button */
         border: none; /* No border */
         border-radius: 10px; /* Rounded corners */
         cursor: pointer; /* Pointer cursor on hover */
-        font-size: 11px; /* Button font size */
+        font-size: 8px; /* Button font size */
+        width: 15%;
+        height: auto;
     }
     
     .btn-reply:hover {
         background-color: #0056b3; /* Darker color on hover */
     }
 
-    
+    /* Reply Container */
+    .reply-container {
+        margin-left: -150px; /* Reset left margin */
+        margin-top: 10px; /* Space above replies */
+    }
 
-    /* More replies button */
+    /* Reply Box */
+    .reply-box {
+        width: 130%; /* Full width for replies */
+        padding: 5px; /* Adjust padding for compact appearance */
+    }
+
+    /* Profile Picture */
+    .profile-pic {
+        width: 25px; /* Slightly larger for better visibility */
+        height: 25px; /* Slightly larger for better visibility */
+        margin-bottom: 10px; /* Space below profile picture */
+    }
+
+    /* More Replies Button */
     .more-replies {
-        background-color: #007bff; /* Primary color (Bootstrap blue) */
-        color: white; /* Text color */
-        padding: 3px 11px; /* Vertical and horizontal padding */
-        border: none; /* No border */
-        border-radius: 10px; /* Slightly rounded corners */
-        cursor: pointer; /* Pointer cursor on hover */
-        font-size: 10px; /* Font size */
-        margin-top: 5px; /* Space above the button */
-        transition: background-color 0.3s ease; /* Smooth transition for background color */
-        display: inline-block; /* Inline-block to fit content */
-        float: right;
-    }
-    
-    .more-replies:hover {
-        background-color: #0056b3; /* Darker shade on hover */
-        text-decoration: underline; /* Underline text on hover */
-    }
-    
-    .more-replies:focus {
-        outline: none; /* Remove the default outline */
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add a subtle shadow for focus */
+        margin-left: 590px; /* Reset left margin */
+        width: 20%; /* Full width for button */
+        text-align: center; /* Center text */
     }
 
-
-/* Responsive Styles for 768px */
-@media (max-width: 768px) {
-    .main-image {
-        width: 520px;
-        height: 330px;
-        overflow: hidden;
-        border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0.2, 0.4); 
-        margin-top: 60px;
-        position: relative;
-        aspect-ratio: 16 / 9; /* Adjust based on your image aspect ratio */
-        border: 2px solid #24fc08; /* Add border with color */
-    }
-
-    .main-image img {
-        width: 520px;
-        height: 330px;
-        object-fit: fill; /* Changed to cover for better image fitting */
-        border-radius: 8px;
-    }
-
-    /* Section Heading */
-    .section-heading {
-        font-size: 3rem;
-        margin-top: 10px;
-        color: #4249f3;
-    }
-
-    /* Blog Content */
-    .blog-content {
-        font-size: 1.6rem;
-        line-height: 1.2;
-        color: #000000;
-        text-align: justify;
-        margin: 0 1.5rem;
-        word-spacing: 0.1rem;
-        padding: 0;
-        margin-left: 5px;
-        width: 510px;
-    }
-
-    /* Post Meta Information */
-    .post-meta {
-        font-size: 1.1rem;
-        color: #ff07e8;
-        margin-top: 10px;
-        margin-left: 3px;
-    }
-
-    /* Sidebar Image Styles */
-    .side-images {
-        display: flex;
-        flex-direction: column;
-        margin-top: -660px;
-        margin-left: -60px;
-    }
-
-    .related-image {
-        width: 100%;
-        height: 180px;
-        overflow: hidden;
-        margin-bottom: 10px;
-        border-radius: 12px;
-        border: 2px solid #bd01fc; /* Add border with color */
-        box-shadow: 0 2px 10px rgba(0, 0, 0.2, 0.4); 
-    }
-
-    .related-image img {
-        width: 125%;
-        height: 105%;
-        object-fit: fill;
-        border-radius: 4px;
-    }
-
-    /* Sidebar and Content Layout */
-    .sidebar {
-        width: 20%;
-        float: right;
-        margin-left: 50px;
-    }
-
-    /* CSS for image transition */
-    #main-image, #sidebar-images img {
-        transition: opacity 0.5s ease-in-out; /* Adjust duration and easing as needed */
-        opacity: 1; /* Start fully visible */
-    }
-
-
-    .main-image:hover {
-        border-color: #ff07e8; /* Change border color on hover */
-    }
-    
-    .related-image:hover {
-        border-color: #46fc01; /* Change border color on hover */
-    }
-
-
-    .like-btn, .comment-toggle-btn {
-        width: 15%; /* Full width buttons */
-        font-size: 1rem; /* Smaller font size */
-    }
-
-
-    .comment-toggle-btn {
-        width: 15%; /* Full width on smaller screens */
-        margin-right: -1px; /* Reset margin for alignment */
-        margin-top: 10px; /* Adjust margin for better spacing */
-    }
-
-    .comment-form-container {
-        margin-left: 0; /* Reset margin for alignment */
-        margin-top: 10px;
-        padding: 20px; /* Increase padding for touch devices */
-    }
-
-    .comment-form {
-        width: 100%; /* Full width on smaller screens */
-    }
-
-    .comment-form input[type="text"],
-    .comment-form textarea {
-        height: 28px; /* Adjust height for smaller screens */
-        font-size: 10px; /* Decrease font size */
-    }
-
-    .comment-form button {
-        width: 13%; /* Full width for button */
-        height: 20px; /* Adjust height for button */
-        font-size: 10px; /* Decrease font size */
-    }
-
-
-    .reply-form-container {
-        max-width: 100%; /* Make the reply form full width on smaller screens */
-        padding-left: 5px; /* Adjust padding for better spacing */
-        margin-top: 10px;
-    }
-
-    .reply-form-container input[type="text"],
-    .reply-form-container textarea {
-        height: 35px; /* Increase height for better usability on touch devices */
-        font-size: 12px; /* Decrease font size for smaller screens */
-    }
-
-    .reply-btn {
-        width: 15%; /* Full width on smaller screens */
-        height: 20px; /* Adjust height for button */
-        font-size: 10px; /* Adjust font size for smaller screens */
-    }
-
-    
-
-    
-
-    
-
-    .reply-btn, .btn-reply, .more-replies {
-        width: 15%; /* Full width buttons */
-        font-size: 10px; /* Smaller font size */
-    }
-
-    .comment-box {
-        width: 100%; /* Full width on smaller screens */
-        margin-left: 0; /* Reset margin for alignment */
-        padding: 15px; /* Increased padding for better spacing */
-        box-shadow: none; /* Remove shadow for simplicity */
-    }
-
-    .reply-box {
-        margin-left: 20px; /* Adjust margin for replies on smaller screens */
-        width: calc(100% - 20px); /* Full width minus margin */
-        padding: 5px; /* Adjust padding for smaller screens */
-    }
 }
 
-/* Responsive Styles for 520px */
-/* Responsive Styles for 520px */
-@media (max-width: 520px) {
-    .main-image {
-        width: 330px;
-        height: 220px;
-        overflow: hidden;
-        border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0.2, 0.4); 
-        margin-top: 60px;
-        position: relative;
-        aspect-ratio: 16 / 9; /* Adjust based on your image aspect ratio */
-        border: 2px solid #24fc08; /* Add border with color */
-    }
-
-    .main-image img {
-        width: 330px;
-        height: 220px;
-        object-fit: fill; /* Changed to cover for better image fitting */
-        border-radius: 8px;
-    }
-
-    /* Section Heading */
-    .section-heading {
-        font-size: 3rem;
-        margin-top: 10px;
-        color: #4249f3;
-    }
-
-    /* Blog Content */
-    .blog-content {
-        font-size: 1.6rem;
-        line-height: 1.2;
-        color: #000000;
-        text-align: justify;
-        margin: 0 1.5rem;
-        word-spacing: 0.1rem;
-        padding: 0;
-        margin-left: 5px;
-        width: 320px;
-    }
-
-    /* Post Meta Information */
-    .post-meta {
-        font-size: 1.1rem;
-        color: #ff07e8;
-        margin-top: 10px;
-        margin-left: 3px;
-    }
-
-    /* Sidebar Image Styles */
-    .side-images {
-        display: flex;
-        flex-direction: column;
-        margin-top: -710px;
-        margin-left: -40px;
-    }
-
-    .related-image {
-        width: 100%;
-        height: 145px;
-        overflow: hidden;
-        margin-bottom: 10px;
-        border-radius: 12px;
-        border: 2px solid #bd01fc; /* Add border with color */
-        box-shadow: 0 2px 10px rgba(0, 0, 0.2, 0.4); 
-    }
-
-    .related-image img {
-        width: 100%%;
-        height: 145px;
-        object-fit: fill;
-        border-radius: 4px;
-    }
-
-    /* Sidebar and Content Layout */
-    .sidebar {
-        width: 20%;
-        float: right;
-        margin-left: 50px;
-    }
-
-    /* CSS for image transition */
-    #main-image, #sidebar-images img {
-        transition: opacity 0.5s ease-in-out; /* Adjust duration and easing as needed */
-        opacity: 1; /* Start fully visible */
-    }
-
-
-    .main-image:hover {
-        border-color: #ff07e8; /* Change border color on hover */
-    }
     
-    .related-image:hover {
-        border-color: #46fc01; /* Change border color on hover */
-    }
-
-
-    .like-btn, .comment-toggle-btn {
-        width: 15%; /* Full width buttons */
-        font-size: 1rem; /* Smaller font size */
-    }
-
-
-    .comment-toggle-btn {
-        width: 15%; /* Full width on smaller screens */
-        margin-right: -1px; /* Reset margin for alignment */
-        margin-top: -2px; /* Adjust margin for better spacing */
-    }
-
-    .comment-form-container {
-        margin-left: 0; /* Reset margin for alignment */
-        margin-top: 10px;
-        padding: 10px; /* Increase padding for touch devices */
-    }
-
-    .comment-form {
-        width: 100%; /* Full width on smaller screens */
-    }
-
-    .comment-form input[type="text"],
-    .comment-form textarea {
-        height: 28px; /* Adjust height for smaller screens */
-        font-size: 10px; /* Decrease font size */
-    }
-
-    .comment-form button {
-        width: 17%; /* Full width for button */
-        height: 16px; /* Adjust height for button */
-        font-size: 8px; /* Decrease font size */
-    }
-
-
-    .reply-form-container {
-        max-width: 100%; /* Make the reply form full width on smaller screens */
-        padding-left: 5px; /* Adjust padding for better spacing */
-        margin-top: 10px;
-    }
-
-    .reply-form-container input[type="text"],
-    .reply-form-container textarea {
-        height: 30px; /* Increase height for better usability on touch devices */
-        font-size: 10px; /* Decrease font size for smaller screens */
-    }
-
-    .reply-btn {
-        width: 25%; /* Full width on smaller screens */
-        height: 18px; /* Adjust height for button */
-        font-size: 7px; /* Adjust font size for smaller screens */
-    }
-
-    
-
-    
-    .like-btn, .comment-toggle-btn {
-        width: 20%; /* Full width buttons */
-        font-size: 0.9rem; /* Smaller font size */
-    }
-
-
-    
-
-    
-
-    .comment-box {
-        width: 100%; /* Full width on smaller screens */
-        margin-left: 0; /* Reset margin for alignment */
-        margin-bottom: 90px;
-        padding: 10px; /* Decreased padding for compactness */
-        box-shadow: none; /* Remove shadow for simplicity */
-    }
-
-    .reply-box {
-        margin-left: 0; /* Remove left margin for replies */
-        width: 100%; /* Full width */
-        padding: 5px; /* Adjust padding for smaller screens */
-    }
-
-
-    /* Responsive Styles for 375px */
-@media (max-width: 480px) {
-    .main-image {
-        width: 280px; /* Adjusted width for smaller screens */
-        height: 175px; /* Adjusted height for smaller screens */
-        overflow: hidden;
-        border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
-        margin-top: 40px; /* Reduced margin for smaller screens */
-        position: relative;
-        aspect-ratio: 16 / 9; /* Maintain aspect ratio */
-        border: 2px solid #24fc08; /* Border color */
-    }
-
-    .main-image img {
-        width: 280px; /* Adjusted width for smaller screens */
-        height: 175px; /* Adjusted height for smaller screens */
-        object-fit: cover; /* Changed to cover for better image fitting */
-        border-radius: 8px;
-    }
-
-    /* Section Heading */
-    .section-heading {
-        font-size: 2.5rem; /* Smaller font size */
-        margin-top: 10px;
-        color: #4249f3;
-    }
-
-    /* Blog Content */
-    .blog-content {
-        font-size: 1.4rem; /* Smaller font size */
-        line-height: 1.2;
-        color: #000000;
-        text-align: justify;
-        margin: 0 1rem; /* Adjusted margin */
-        word-spacing: 0.1rem;
-        padding: 0;
-        width: 270px; /* Adjusted width */
-    }
-
-    /* Post Meta Information */
-    .post-meta {
-        font-size: 1rem; /* Smaller font size */
-        color: #ff07e8;
-        margin-top: 10px;
-        margin-left: 3px;
-    }
-
-    /* Sidebar Image Styles */
-    .side-images {
-        display: flex;
-        flex-direction: column;
-        margin-top: -500px; /* Adjusted for smaller screens */
-        margin-left: -20px; /* Adjusted for smaller screens */
-    }
-
-    .related-image {
-        width: 100%;
-        height: 120px; /* Adjusted height */
-        overflow: hidden;
-        margin-bottom: 10px;
-        border-radius: 12px;
-        border: 2px solid #bd01fc; /* Add border with color */
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); 
-    }
-
-    .related-image img {
-        width: 100%; /* Ensure it fits */
-        height: 120px; /* Adjusted height */
-        object-fit: cover; /* Changed to cover for better image fitting */
-        border-radius: 4px;
-    }
-
-    /* Sidebar and Content Layout */
-    .sidebar {
-        width: 100%; /* Full width on smaller screens */
-        float: none; /* Reset float */
-        margin-left: 0; /* Reset margin */
-    }
-
-    /* CSS for image transition */
-    #main-image, #sidebar-images img {
-        transition: opacity 0.5s ease-in-out; /* Adjust duration and easing as needed */
-        opacity: 1; /* Start fully visible */
-    }
-
-    .main-image:hover {
-        border-color: #ff07e8; /* Change border color on hover */
-    }
-    
-    .related-image:hover {
-        border-color: #46fc01; /* Change border color on hover */
-    }
-
-    .like-btn, .comment-toggle-btn {
-        width: 40%; /* Adjusted width for smaller screens */
-        font-size: 0.9rem; /* Smaller font size */
-    }
-
-    .comment-toggle-btn {
-        margin-right: -1px; /* Reset margin for alignment */
-        margin-top: 5px; /* Adjust margin for better spacing */
-    }
-
-    .comment-form-container {
-        margin-left: 0; /* Reset margin for alignment */
-        margin-top: 10px;
-        padding: 10px; /* Increased padding for touch devices */
-    }
-
-    .comment-form {
-        width: 100%; /* Full width on smaller screens */
-    }
-
-    .comment-form input[type="text"],
-    .comment-form textarea {
-        height: 28px; /* Adjust height for smaller screens */
-        font-size: 10px; /* Decrease font size */
-    }
-
-    .comment-form button {
-        width: 30%; /* Adjusted width for button */
-        height: 20px; /* Adjusted height for button */
-        font-size: 8px; /* Decrease font size */
-    }
-
-    .reply-form-container {
-        max-width: 100%; /* Make the reply form full width on smaller screens */
-        padding-left: 5px; /* Adjust padding for better spacing */
-        margin-top: 10px;
-    }
-
-    .reply-form-container input[type="text"],
-    .reply-form-container textarea {
-        height: 30px; /* Increase height for better usability on touch devices */
-        font-size: 10px; /* Decrease font size for smaller screens */
-    }
-
-    .reply-btn {
-        width: 25%; /* Full width on smaller screens */
-        height: 18px; /* Adjust height for button */
-        font-size: 7px; /* Adjust font size for smaller screens */
-    }
-
-    .reply-btn, .btn-reply, .more-replies {
-        width: 25%; /* Full width buttons */
-        font-size: 7px; /* Smaller font size */
-    }
-
-    .comment-box {
-        width: 100%; /* Full width on smaller screens */
-        margin-left: 0; /* Reset margin for alignment */
-        margin-bottom: 90px; /* Adjust margin for bottom spacing */
-        padding: 10px; /* Decreased padding for compactness */
-        box-shadow: none; /* Remove shadow for simplicity */
-    }
-
-    .reply-box {
-        margin-left: 0; /* Remove left margin for replies */
-        width: 100%; /* Full width */
-        padding: 5px; /* Adjust padding for smaller screens */
-    }
-}
-
-   
-}
-
-/* Responsive Styles for 480px */
-
 
 </style>
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 
     // JavaScript to change main and sidebar images at different intervals
@@ -1314,9 +937,6 @@
         });
     });
 </script>
-
-
-</body>
 
 
 {% endblock main_content %}
