@@ -121,9 +121,7 @@
             height: 100%; /* Make sure html and body take full height */
             margin: 0; /* Remove default margin */
         }
-
-
-
+        
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
@@ -137,7 +135,7 @@
         h1 {
             text-align: center;
             color: #333;
-            margin-bottom: 20px 0; /* Add some space below the title */
+            margin-bottom: 20px; /* Add some space below the title */
         }
         
         #messages {
@@ -180,7 +178,6 @@
             line-height: 1.0; /* Adjust line-height for better spacing */
         }
         
-        
         .user-image {
             width: 30px; /* Smaller image */
             height: 30px; /* Smaller image */
@@ -218,6 +215,80 @@
         button:hover {
             background-color: #0056b3;
         }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            #messages {
+                max-width: 90%; /* Make messages container wider on smaller screens */
+                height: calc(100% - 100px); /* Adjust height for smaller screens */
+            }
+        
+            #message-input {
+                width: 70%; /* Reduce width of input */
+                height: 30px; /* Increase height for easier tapping */
+                font-size: 16px; /* Increase font size */
+            }
+        
+            button {
+                padding: 5px 8px; /* Adjust button padding */
+                font-size: 16px; /* Increase button font size */
+            }
+        
+            h1 {
+                font-size: 1.5em; /* Adjust heading size */
+            }
+        
+            .message-content {
+                max-width: 90%; /* Allow messages to take more width */
+                font-size: 12px; /* Reduce font size for messages */
+            }
+        
+            .user-image {
+                width: 25px; /* Smaller image for user */
+                height: 25px; /* Smaller image for user */
+            }
+        }
+        
+        @media (max-width: 480px) {
+            #messages {
+                max-width: 100%; /* Full width for messages container */
+                height: calc(100% - 80px); /* Further adjust height for very small screens */
+            }
+        
+            #message-input {
+                width: 60%; /* Further reduce width of input */
+                height: 35px; /* Increase height for easier tapping */
+                font-size: 14px; /* Adjust font size */
+            }
+        
+            button {
+                padding: 5px 8px; /* Maintain button padding */
+                font-size: 14px; /* Adjust button font size */
+            }
+        
+            h1 {
+                font-size: 1.2em; /* Further adjust heading size */
+            }
+        
+            .message-content {
+                max-width: 95%; /* Allow messages to take almost full width */
+                font-size: 12px; /* Keep font size manageable */
+            }
+        
+            .message {
+                flex-direction: column; /* Stack user image and message vertically */
+                align-items: flex-start; /* Align items to the start */
+            }
+        
+            .user-message {
+                justify-content: flex-end; /* Keep user messages aligned to the right */
+            }
+        
+            .other-message {
+                justify-content: flex-start; /* Keep other messages aligned to the left */
+            }
+        }
+
     </style>
     
 </body>
