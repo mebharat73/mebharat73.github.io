@@ -1,0 +1,13 @@
+.like-button {
+  font-size: 1.2rem; /* adjust font size */
+  color: #337ab7; /* adjust color */
+  text-decoration: none; /* remove underline */
+}
+
+.like-button:hover {
+  color: #23527c; /* adjust hover color */
+}
+
+.fa-thumbs-up {
+  margin-right: 0.5rem; /* add space between icon and text */
+}

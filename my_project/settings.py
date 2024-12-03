@@ -127,7 +127,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'defaultdb',  # Your database name
         'USER': 'avnadmin',    # Your username
-        'PASSWORD': os.getenv('AIVEN_SERVICE_PASSWORD'),  # Load from environment variable
+        'PASSWORD': 'AVNS_Y1ZzeMjHtdoe5p2VcL_',  # Load from environment variable
         'HOST': 'bharatkarki-mebharat73-4e98.e.aivencloud.com',  # Your host
         'PORT': '23616',  # Your port
         'OPTIONS': {
