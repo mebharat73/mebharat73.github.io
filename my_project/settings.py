@@ -120,11 +120,11 @@ database_url = os.environ.get('DATABASE_URL')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'bharatkarki',
-        'USER': 'bharatkarki_user',
-        'PASSWORD': 'iKU6AASm7IBhwCMNDNYEBIAwAzdxmGCu',
-        'HOST': 'dpg-csuru35umphs739mkirg-a.oregon-postgres.render.com',  # Often 'localhost', '127.0.0.1', or the actual database URL
-        'PORT': '5432',  # Default PostgreSQL port
+        'NAME': 'defaultdb',
+        'USER': 'avnadmin',
+        'PASSWORD': 'AVNS_Y1ZzeMjHtdoe5p2VcL_',
+        'HOST': 'bharatkarki-mebharat73-4e98.e.aivencloud.com',  # Often 'localhost', '127.0.0.1', or the actual database URL
+        'PORT': '23616',  # Default PostgreSQL port
     }
 }
 
