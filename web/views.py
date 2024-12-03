@@ -29,6 +29,48 @@ from web.models import BlogImage  # Ensure this is the correct import
 from .forms import PostForm, PostImageForm
 
 
+
+
+
+
+from django.shortcuts import render, redirect
+from .forms import ProfileForm
+from .models import Profile
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def upload_profile_picture(request):
+    profile = Profile.objects.get(user=request.user)
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')  # Redirect to a profile view after upload
+    else:
+        form = ProfileForm(instance=profile)
+
+    return render(request, 'main/upload_profile_picture.html', {'form': form})
+
+@login_required
+def view_profile(request):
+    profile = Profile.objects.get(user=request.user)
+    return render(request, 'main/view_profile.html', {'profile': profile})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @login_required
 def create_room(request):
     if request.method == 'POST':

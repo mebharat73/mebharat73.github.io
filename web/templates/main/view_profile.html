@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Profile</title>
+</head>
+<body>
+    <h1>Your Profile</h1>
+    <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" style="width: 200px; height: auto;">
+    <p>Username: {{ profile.user.username }}</p>
+    <a href="{% url 'upload_profile_picture' %}">Upload New Profile Picture</a>
+</body>
+</html>

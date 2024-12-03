@@ -8,7 +8,13 @@ from web.models import BlogImage  # Ensure this import is correct
 
 
 
+from django import forms
+from .models import Profile
 
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['profile_picture']
 
 
 class CategoryForm(forms.ModelForm):

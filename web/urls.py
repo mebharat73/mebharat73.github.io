@@ -1,13 +1,12 @@
 from django.urls import path
 from .import views
-from web.views import create_post  # Adjust the import based on your project structure
-from .views import profile_view, settings_view 
+from .views import upload_profile_picture, view_profile
 
 
 urlpatterns= [
     path('accounts/login/', views.login_view, name="login_page"),
-    path('profile/', profile_view, name='profile_page'),  # Ensure this line exists
-    path('settings/', settings_view, name='settings_page'),  # Ensure this line exists
+    path('upload_profile_picture/', upload_profile_picture, name='upload_profile_picture'),
+    path('profile/', view_profile, name='profile'),
     path('accounts/logout/', views.logout_view, name="logout_page"),
     path('accounts/signup/', views.signup_view, name="signup_page"),
     path('accounts/post/', views.post_view, name="post_page"),
