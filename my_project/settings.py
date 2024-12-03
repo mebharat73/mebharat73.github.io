@@ -114,23 +114,27 @@ TEMPLATES = [
 
 
 # Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-database_url = os.environ.get('DATABASE_URL')
+
+
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Load environment variables from .env file
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'defaultdb',  # Replace with your database name
-        'USER': 'avnadmin',    # Replace with your username
-        'PASSWORD': 'AVNS_Y1ZzeMjHtdoe5p2VcL_',  # Replace with your password
-        'HOST': 'bharatkarki-mebharat73-4e98.e.aivencloud.com',  # Replace with your host
-        'PORT': '23616',  # Replace with your port
+        'NAME': 'defaultdb',  # Your database name
+        'USER': 'avnadmin',    # Your username
+        'PASSWORD': os.getenv('AIVEN_SERVICE_PASSWORD'),  # Ensure this is not hardcoded
+        'HOST': 'bharatkarki-mebharat73-4e98.e.aivencloud.com',  # Your host
+        'PORT': '23616',  # Your port
         'OPTIONS': {
             'sslmode': 'require',  # Ensure SSL is used
         },
     }
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
