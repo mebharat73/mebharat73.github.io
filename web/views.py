@@ -115,18 +115,31 @@ def send_message(request):
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
+import datetime
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from .models import Message
+
 @login_required
-def get_messages(request, room_name, last_timestamp=None):
-    # Convert last_timestamp to a datetime object if provided
+def get_messages(request, room_name):
+    last_timestamp = request.GET.get('last_timestamp')
+    first_timestamp = request.GET.get('first_timestamp')
+
+    # Convert timestamps to datetime objects if provided
     if last_timestamp:
         last_timestamp = datetime.datetime.fromisoformat(last_timestamp)
+    if first_timestamp:
+        first_timestamp = datetime.datetime.fromisoformat(first_timestamp)
 
-    # Fetch messages for the specified room, ordered by timestamp
+    # Fetch messages for the specified room
     messages = Message.objects.filter(room__name=room_name)
 
-    # Filter messages if last_timestamp is provided
+    # Filter messages if last_timestamp is provided (for new messages)
     if last_timestamp:
         messages = messages.filter(timestamp__gt=last_timestamp)
+    # Filter messages if first_timestamp is provided (for older messages)
+    elif first_timestamp:
+        messages = messages.filter(timestamp__lt=first_timestamp)
 
     # Limit the number of messages fetched (e.g., last 10 messages)
     messages = messages.order_by('-timestamp')[:10]  # Adjust the number as needed
@@ -146,7 +159,6 @@ def get_messages(request, room_name, last_timestamp=None):
     messages_data.reverse()
 
     return JsonResponse(messages_data, safe=False)
-
 
 
 

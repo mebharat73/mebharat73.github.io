@@ -27,6 +27,7 @@
     <script type="text/javascript">
         const roomName = "{{ room.name }}"; // Get room name from Django template
         let lastTimestamp = null; // Variable to store the last message timestamp
+        let firstTimestamp = null; // Variable to store the first message timestamp for loading older messages
     
         // Function to fetch messages from the server
         function fetchMessages() {
@@ -42,6 +43,9 @@
                             appendMessage(msg);
                         });
                         lastTimestamp = data[data.length - 1].timestamp;
+                        if (firstTimestamp === null) {
+                            firstTimestamp = data[0].timestamp; // Set first timestamp on initial fetch
+                        }
                     }
                     // Poll again after a short delay
                     setTimeout(fetchMessages, 500); // Adjust this for a faster response
@@ -53,7 +57,7 @@
                 }
             });
         }
-        
+    
         // Start the first fetch
         fetchMessages();
     
@@ -64,7 +68,7 @@
             const isDuplicate = Array.from(existingMessages).some(existingMsg => {
                 return $(existingMsg).text().includes(message.message);
             });
-        
+    
             // Append the message only if it's not a duplicate
             if (!isDuplicate) {
                 const messageClass = message.user === '{{ request.user.username }}' ? 'user-message' : 'other-message';
@@ -80,6 +84,45 @@
                 $('#messages').scrollTop($('#messages')[0].scrollHeight); // Scroll to the bottom
             }
         }
+    
+        // Function to fetch older messages
+        // Function to fetch older messages
+        function fetchOlderMessages() {
+            $.ajax({
+                url: `/get_messages/${roomName}/`,
+                method: 'GET',
+                data: {
+                    first_timestamp: firstTimestamp // Send the first timestamp to get older messages
+                },
+                success: function(data) {
+                    if (data.length > 0) {
+                        data.reverse().forEach(msg => {
+                            appendMessage(msg);
+                        });
+                        firstTimestamp = data[data.length - 1].timestamp; // Update firstTimestamp to the last fetched message's timestamp
+                    }
+                },
+                error: function(xhr) {
+                    console.error('Error fetching older messages:', xhr.responseText);
+                }
+            });
+        }
+
+
+        // Add this code after the existing jQuery code for sending a message
+        $('#message-input').on('keydown', function(event) {
+            if (event.key === 'Enter') { // Check if the pressed key is Enter
+                event.preventDefault(); // Prevent the default action (new line)
+                $('#send-button').click(); // Trigger the click event on the send button
+            }
+        });
+
+        // Scroll event to load older messages
+        $('#messages').on('scroll', function() {
+            if ($(this).scrollTop() === 0) { // Check if scrolled to the top
+                fetchOlderMessages(); // Fetch older messages
+            }
+        });
     
         // Sending a message
         $('#send-button').click(function() {
@@ -105,235 +148,138 @@
                         console.error('Error sending message:', xhr.responseText);
                     },
                     complete: function() {
-                        // Re-enable the send button after the request completes
-                        $('#send-button').prop('disabled', false);
-                    }
-                });
+                    // Re-enable the send button after the request completes
+                    $('#send-button').prop('disabled', false);
+                }
+            });
+        }
+
+        const chatContainer = document.querySelector('.chat-container');
+
+        chatContainer.addEventListener('scroll', function() {
+            if (chatContainer.scrollTop === 0) { // Check if scrolled to the top
+                fetchOlderMessages(); // Call the function to fetch older messages
             }
         });
-    
-        
+        });
     </script>
     
     <style>
 
-                /* General Reset */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
 
-        /* Body Styles */
+        html, body {
+            height: 100%; /* Ensure html and body take full height */
+            margin: 0; /* Remove default margin */
+        }
+        
         body {
             font-family: Arial, sans-serif;
-            background-color: transparent;
+            background-color: #f0f0f0;
             padding: 0; /* Remove padding */
             background-image: url("{% static 'main/image/nature3.jpg' %}");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            height: 100vh; /* Make body take full height */
-            display: flex; /* Use flexbox for centering */
-            flex-direction: column; /* Stack items vertically */
-            align-items: center; /* Center items horizontally */
         }
-
-        /* Header Styles */
+        
         h1 {
             text-align: center;
             color: #333;
-            margin-bottom: 20px; /* Add some space below the title */
+            margin-bottom: 20px; /* Space below the title */
         }
-
-        /* Messages Container */
+        
         #messages {
-            flex: 1; /* Allow messages container to grow and fill space */
-            max-width: 600px; /* Set a maximum width for the messages box */
-            width: 100%; /* Set a width for the message box */
-            margin: 1px auto; /* Center the messages container */
-            padding: 20px; /* Increase padding for better touch target */
-            background-color: rgba(0, 0, 0, 0.3); /* Slightly darker background for contrast */
-            border-radius: 10px; /* Slightly larger border radius */
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Slightly larger shadow */
-            overflow-y: auto;
+            max-width: 500px;
+            margin: 20px auto; /* Center the messages container */
+            padding: 10px; /* Increased padding for better spacing */
+            background-color: rgba(255, 255, 255, 0.8); /* Lighter background for contrast */
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            overflow-y: auto; /* Allow vertical scrolling */
+            height: 540px; /* Fixed height for the messages container */
         }
-
-        /* Input Container */
-        #message-form {
-            display: flex;
-            justify-content: space-between; /* Space between input and button */
-            max-width: 600px; /* Match the width of the messages container */
-            width: 100%; /* Ensure it takes full width */
-            margin: 10px auto; /* Center the form */
+        
+        /* Hide scrollbars */
+        #messages::-webkit-scrollbar {
+            display: none; /* Hides the scrollbar for WebKit browsers */
         }
-
-        /* Message Input Box */
-        #message-input {
-            width: calc(100% - 80px); /* Adjust width to allow space for button */
-            height: 40px; /* Increased height for better touch target */
-            padding: 10px; /* Add some padding */
-            border: 2px solid #b300fe; /* Add a border */
-            border-radius: 12px; /* Round corners */
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+        
+        #messages {
+            scrollbar-width: none; /* Hides the scrollbar for Firefox */
+            -ms-overflow-style: none; /* Hides the scrollbar for IE and Edge */
         }
-
-        /* Message Styles */
+        
+        .user-message {
+            justify-content: flex-end;
+        }
+        
+        .other-message {
+            justify-content: flex-start;
+        }
+        
         .message {
             display: flex;
-            margin: 2px 0; /* Increased margin for better spacing */
+            margin: 5px 0; /* Slightly increased margin */
             align-items: center;
-            max-width: 80%; /* Limit the width of messages */
         }
-
+        
         .message-content {
-            background-color: rgba(0, 0, 0, 0.2); /* Background color */
+            background-color: rgba(0, 0, 0, 0.1); /* Softer background color */
             border-radius: 8px; /* Rounded corners */
-            padding: 10px; /* Increased padding */
-            margin-left: 10px; /* Space between image and message */
+            padding: -5px; /* Reduced padding for a smaller height */
+            margin-left: 5px; /* Space between image and message */
             flex: 1; /* Allow it to take available space */
-            min-height: 18px; /* Set a minimum height for single-line messages */
-            max-height: 140px; /* Set a maximum height for longer messages */
-            overflow: auto; /* Allow scrolling if content exceeds max-height */
+            max-width: 70%; /* Set a maximum width for the message box */
+            min-height: 20px; /* Minimum height for single-line messages */
+            max-height: 100px; /* Increased maximum height for longer messages */
+            overflow-y: auto; /* Allow vertical scrolling if content exceeds max-height */
+            overflow-x: hidden; /* Hide horizontal overflow */
             word-wrap: break-word; /* Allow words to break */
+            font-size: 0.8rem; /* Keep the font size the same */
+            line-height: 1.0; /* Adjust line-height for better spacing */
         }
-
-
-        .user-message {
-            justify-content: flex-end; /* Align user messages to the right */
-        }
-
-        .other-message {
-            justify-content: flex-start; /* Align other messages to the left */
-        }
-
-        /* Adjustments for user messages */
-        .user-message .message-content {
-            background-color: rgba(223, 255, 0, 0.1); /* Different background for user messages */
-            color: white; /* Text color for user messages */
-        }
-
-        /* Adjustments for other messages */
-        .other-message .message-content {
-            background-color: rgba(0, 0, 0, 0.2); /* Background color for others */
-            color: black; /* Text color for others */
-        }
-
-
-
-
-        /* User Image Styles */
+        
         .user-image {
-            width: 30px; /* Increased image size */
-            height: 30px; /* Increased image size */
+            width: 30px; /* Slightly larger image */
+            height: 30px; /* Slightly larger image */
             border-radius: 50%;
-            border: 2px solid #bd01fa;
-            margin-left: 10px; /* Space between image and message */
+            border: 2px solid #9ef86a;
         }
-
-        /* Button next to the input */
+        
+        #message-form {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        
+        #message-input {
+            width: 450px; /* Width for the input */
+            height: 25px; /* Increased height for better usability */
+            padding: 5px; /* Reduced padding */
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-right: 10px; /* Space between input and button */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            font-size: 12px; /* Smaller font size */
+        }
+        
         button {
-            height: 35px; /* Match button height with input */
-            width: 80px; /* Increased width for better touch target */
-            padding: 5px; /* Increased padding */
+            padding: 1px 10px; /* Increased padding for better clickability */
             background-color: #007bff;
             color: white;
-            border-radius: 12px; /* Round corners */
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
-            margin-top: 3px;
-            border: 2px solid #bd01fa; /* Add a border */
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+            transition: background-color 0.3s, transform 0.2s; /* Added transform for button effect */
         }
-
+        
         button:hover {
             background-color: #0056b3;
+            transform: scale(1.05); /* Slightly enlarge button on hover */
         }
 
-        /* Media Queries for Mobile Devices */
-        /* Media Queries for Mobile Devices */
-@media (max-width: 600px) {
-    #messages {
-        padding: 15px; /* Increase padding for better touch target */
-        max-width: 100%; /* Allow messages container to take full width */
-        height: auto; /* Set a height that allows for a larger view */
-    }
-
-    /* Adjust the message input box */
-    #message-input {
-        width: calc(100% - 90px); /* Adjust width to allow space for button */
-        height: auto; /* Increase height for better touch target */
-        padding: 10px; /* Maintain padding */
-        font-size: 16px; /* Increase font size for readability */
-    }
-
-    /* Adjust button size */
-    button {
-        height: 60px; /* Increase height for better touch target */
-        width: 90px; /* Adjust width for better fit */
-        font-size: 16px; /* Increase font size for readability */
-    }
-
-    /* Increase message box size for better readability */
-    .message {
-        max-width: 100%; /* Allow messages to take more width */
-        margin: 10px 0; /* Maintain margin for spacing */
-    }
-
-    /* Adjust user image size */
-    .user-image {
-        width: 30px; /* Maintain image size */
-        height: 30px; /* Maintain image size */
-    }
-
-    /* Adjust message content for better readability */
-    .message-content {
-        padding: 10px; /* Increase padding for better touch target */
-        font-size: 16px; /* Increase font size for readability */
-    }
-}
-
-/* Media Queries for Small Devices (max-width: 380px) */
-@media (max-width: 380px) {
-    #messages {
-        padding: 10px; /* Maintain padding for small screens */
-        max-width: 100%; /* Ensure it takes full width */
-        height: auto; /* Set a height that allows for a larger view */
-    }
-
-    /* Adjust the message input box */
-    #message-input {
-        width: calc(100% - 80px); /* Adjust width to allow space for button */
-        height: auto; /* Increase height for better touch target */
-        padding: 10px; /* Maintain padding */
-        font-size: 15px; /* Slightly decrease font size for better fit */
-    }
-
-    /* Adjust button size */
-    button {
-        height: 55px; /* Increase height for better touch target */
-        width: 80px; /* Adjust width for better fit */
-        font-size: 15px; /* Slightly decrease font size for better fit */
-    }
-
-    /* Increase message box size for better readability */
-    .message {
-        max-width: 100%; /* Allow messages to take more width */
-        margin: 8px 0; /* Reduce margin for spacing */
-    }
-
-    /* Adjust user image size */
-    .user-image {
-        width: 35px; /* Decrease image size for better fit */
-        height: 35px; /* Decrease image size for better fit */
-    }
-
-    /* Adjust message content for better readability */
-    .message-content {
-        padding: 8px; /* Decrease padding for better fit */
-        font-size: 15px; /* Decrease font size for better fit */
-    }
-}
+       
+       
     </style>
     
 </body>
