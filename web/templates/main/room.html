@@ -181,10 +181,46 @@
         /* Message Styles */
         .message {
             display: flex;
-            margin: 10px 0; /* Increased margin for better spacing */
+            margin: 2px 0; /* Increased margin for better spacing */
             align-items: center;
             max-width: 80%; /* Limit the width of messages */
         }
+
+        .message-content {
+            background-color: rgba(0, 0, 0, 0.2); /* Background color */
+            border-radius: 8px; /* Rounded corners */
+            padding: 10px; /* Increased padding */
+            margin-left: 10px; /* Space between image and message */
+            flex: 1; /* Allow it to take available space */
+            min-height: 18px; /* Set a minimum height for single-line messages */
+            max-height: 140px; /* Set a maximum height for longer messages */
+            overflow: auto; /* Allow scrolling if content exceeds max-height */
+            word-wrap: break-word; /* Allow words to break */
+        }
+
+
+        .user-message {
+            justify-content: flex-end; /* Align user messages to the right */
+        }
+
+        .other-message {
+            justify-content: flex-start; /* Align other messages to the left */
+        }
+
+        /* Adjustments for user messages */
+        .user-message .message-content {
+            background-color: rgba(65, 105, 225, 0.3); /* Different background for user messages */
+            color: white; /* Text color for user messages */
+        }
+
+        /* Adjustments for other messages */
+        .other-message .message-content {
+            background-color: rgba(0, 0, 0, 0.2); /* Background color for others */
+            color: black; /* Text color for others */
+        }
+
+
+
 
         /* User Image Styles */
         .user-image {
@@ -215,85 +251,89 @@
         }
 
         /* Media Queries for Mobile Devices */
-        @media (max-width: 600px) {
-            #messages {
-                padding: 10px; /* Reduce padding for smaller screens */
-                max-width: 100%; /* Allow messages container to take full width */
-            }
+        /* Media Queries for Mobile Devices */
+@media (max-width: 600px) {
+    #messages {
+        padding: 15px; /* Increase padding for better touch target */
+        max-width: 100%; /* Allow messages container to take full width */
+        height: calc(100vh - 150px); /* Set a height that allows for a larger view */
+    }
 
-            /* Adjust the message input box */
-            #message-input {
-                width: calc(100% - 90px); /* Adjust width to allow space for button */
-                height: 50px; /* Maintain height for better touch target */
-                padding: 10px; /* Maintain padding */
-            }
+    /* Adjust the message input box */
+    #message-input {
+        width: calc(100% - 90px); /* Adjust width to allow space for button */
+        height: 60px; /* Increase height for better touch target */
+        padding: 10px; /* Maintain padding */
+        font-size: 16px; /* Increase font size for readability */
+    }
 
-            /* Adjust button size */
-            button {
-                height: 50px; /* Maintain height */
-                width: 90px; /* Adjust width for better touch target */
-            }
+    /* Adjust button size */
+    button {
+        height: 60px; /* Increase height for better touch target */
+        width: 90px; /* Adjust width for better fit */
+        font-size: 16px; /* Increase font size for readability */
+    }
 
-            /* Increase message box size for better readability */
-            .message {
-                max-width: 95%; /* Allow messages to take more width */
-                margin: 10px 0; /* Maintain margin for spacing */
-            }
+    /* Increase message box size for better readability */
+    .message {
+        max-width: 95%; /* Allow messages to take more width */
+        margin: 10px 0; /* Maintain margin for spacing */
+    }
 
-            /* Adjust user image size */
-            .user-image {
-                width: 40px; /* Maintain image size */
-                height: 40px; /* Maintain image size */
-            }
+    /* Adjust user image size */
+    .user-image {
+        width: 40px; /* Maintain image size */
+        height: 40px; /* Maintain image size */
+    }
 
-            /* Adjust message content for better readability */
-            .message-content {
-                padding: 10px; /* Increase padding for better touch target */
-                font-size: 16px; /* Increase font size for readability */
-            }
-        }
+    /* Adjust message content for better readability */
+    .message-content {
+        padding: 10px; /* Increase padding for better touch target */
+        font-size: 16px; /* Increase font size for readability */
+    }
+}
 
-        /* Media Queries for Small Devices (max-width: 380px) */
-        @media (max-width: 380px) {
-            #messages {
-                padding: 5px; /* Further reduce padding for very small screens */
-                max-width: 100%; /* Ensure it takes full width */
-            }
+/* Media Queries for Small Devices (max-width: 380px) */
+@media (max-width: 380px) {
+    #messages {
+        padding: 10px; /* Maintain padding for small screens */
+        max-width: 100%; /* Ensure it takes full width */
+        height: calc(100vh - 120px); /* Set a height that allows for a larger view */
+    }
 
-            /* Adjust the message input box */
-            #message-input {
-                width: calc(100% - 70px); /* Adjust width to allow space for button */
-                height: 45px; /* Slightly reduce height for better fit */
-                padding: 8px; /* Maintain padding */
-                font-size: 14px; /* Decrease font size for better fit */
-            }
+    /* Adjust the message input box */
+    #message-input {
+        width: calc(100% - 80px); /* Adjust width to allow space for button */
+        height: 55px; /* Increase height for better touch target */
+        padding: 10px; /* Maintain padding */
+        font-size: 15px; /* Slightly decrease font size for better fit */
+    }
 
-            /* Adjust button size */
-            button {
-                height: 45px; /* Maintain height */
-                width: 70px; /* Adjust width for better fit */
-                font-size: 14px; /* Decrease font size for better fit */
-            }
+    /* Adjust button size */
+    button {
+        height: 55px; /* Increase height for better touch target */
+        width: 80px; /* Adjust width for better fit */
+        font-size: 15px; /* Slightly decrease font size for better fit */
+    }
 
-            /* Increase message box size for better readability */
-            .message {
-                max-width: 95%; /* Allow messages to take more width */
-                margin: 8px 0; /* Reduce margin for spacing */
-            }
+    /* Increase message box size for better readability */
+    .message {
+        max-width: 95%; /* Allow messages to take more width */
+        margin: 8px 0; /* Reduce margin for spacing */
+    }
 
-            /* Adjust user image size */
-            .user-image {
-                width: 30px; /* Decrease image size for better fit */
-                height: 30px; /* Decrease image size for better fit */
-            }
+    /* Adjust user image size */
+    .user-image {
+        width: 35px; /* Decrease image size for better fit */
+        height: 35px; /* Decrease image size for better fit */
+    }
 
-            /* Adjust message content for better readability */
-            .message-content {
-                padding: 8px; /* Decrease padding for better fit */
-                font-size: 14px; /* Decrease font size for better fit */
-            }
-        }
-    
+    /* Adjust message content for better readability */
+    .message-content {
+        padding: 8px; /* Decrease padding for better fit */
+        font-size: 15px; /* Decrease font size for better fit */
+    }
+}
     </style>
     
 </body>
