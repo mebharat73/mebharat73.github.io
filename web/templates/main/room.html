@@ -117,7 +117,7 @@
     
     <style>
 
-            /* General Reset */
+                /* General Reset */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -171,76 +171,42 @@
         /* Message Input Box */
         #message-input {
             width: calc(100% - 80px); /* Adjust width to allow space for button */
-            height: 37px; /* Set a specific height */
-            padding: 5px; /* Add some padding */
+            height: 40px; /* Increased height for better touch target */
+            padding: 10px; /* Add some padding */
             border: 2px solid #b300fe; /* Add a border */
             border-radius: 12px; /* Round corners */
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
         }
 
         /* Message Styles */
-        /* Message Styles */
         .message {
             display: flex;
-            margin: 1px 0; /* Increased margin for better spacing */
+            margin: 10px 0; /* Increased margin for better spacing */
             align-items: center;
             max-width: 80%; /* Limit the width of messages */
         }
 
-        .user-message {
-            justify-content: flex-end; /* Align user messages to the right */
-        }
-
-        .other-message {
-            justify-content: flex-start; /* Align other messages to the left */
-        }
-
-        .message-content {
-            background-color: rgba(0, 0, 0, 0.2); /* Background color */
-            border-radius: 8px; /* Rounded corners */
-            padding: 10px; /* Increased padding */
-            margin-left: 10px; /* Space between image and message */
-            flex: 1; /* Allow it to take available space */
-            min-height: 18px; /* Set a minimum height for single-line messages */
-            max-height: 140px; /* Set a maximum height for longer messages */
-            overflow: auto; /* Allow scrolling if content exceeds max-height */
-            word-wrap: break-word; /* Allow words to break */
-        }
-
         /* User Image Styles */
         .user-image {
-            width: 32px; /* Increased image size */
-            height: 32px; /* Increased image size */
+            width: 30px; /* Increased image size */
+            height: 30px; /* Increased image size */
             border-radius: 50%;
             border: 2px solid #bd01fa;
             margin-left: 10px; /* Space between image and message */
         }
 
-        /* Adjustments for user messages */
-        .user-message .message-content {
-            background-color: rgba(65, 105, 225, 0.3); /* Different background for user messages */
-            color: white; /* Text color for user messages */
-        }
-
-        /* Adjustments for other messages */
-        .other-message .message-content {
-            background-color: rgba(0, 0, 0, 0.2); /* Background color for others */
-            color: black; /* Text color for others */
-        }
-
         /* Button next to the input */
         button {
-            height: 30px; /* Match button height with input */
-            width: 70px;
-            padding: 2px 10px; /* Reduced padding */
+            height: 35px; /* Match button height with input */
+            width: 80px; /* Increased width for better touch target */
+            padding: 5px; /* Increased padding */
             background-color: #007bff;
             color: white;
-            border-radius: 5px;
+            border-radius: 12px; /* Round corners */
             cursor: pointer;
             transition: background-color 0.3s;
             margin-top: 3px;
             border: 2px solid #bd01fa; /* Add a border */
-            border-radius: 12px; /* Round corners */
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
         }
 
@@ -248,47 +214,86 @@
             background-color: #0056b3;
         }
 
-        /* Responsive Styles */
-        @media (max-width: 768px) {
+        /* Media Queries for Mobile Devices */
+        @media (max-width: 600px) {
             #messages {
-                padding: 15px; /* Reduce padding for smaller screens */
-                max-width: 90%; /* Allow more width on smaller screens */
+                padding: 10px; /* Reduce padding for smaller screens */
+                max-width: 100%; /* Allow messages container to take full width */
             }
 
-            #message-form {
-                flex-direction: column; /* Stack input and button vertically */
-                align-items: stretch; /* Stretch to full width */
-                max-width: 90%; /* Match the width of the messages container */
-            }
-
+            /* Adjust the message input box */
             #message-input {
-                width: 100%; /* Full width for the input box */
-                margin-bottom: 10px; /* Space between input and button */
+                width: calc(100% - 90px); /* Adjust width to allow space for button */
+                height: 50px; /* Maintain height for better touch target */
+                padding: 10px; /* Maintain padding */
             }
 
+            /* Adjust button size */
             button {
-                width: 100%; /* Full width for the button */
-                height: 40px; /* Increase height for better touch target */
+                height: 50px; /* Maintain height */
+                width: 90px; /* Adjust width for better touch target */
+            }
+
+            /* Increase message box size for better readability */
+            .message {
+                max-width: 95%; /* Allow messages to take more width */
+                margin: 10px 0; /* Maintain margin for spacing */
+            }
+
+            /* Adjust user image size */
+            .user-image {
+                width: 40px; /* Maintain image size */
+                height: 40px; /* Maintain image size */
+            }
+
+            /* Adjust message content for better readability */
+            .message-content {
+                padding: 10px; /* Increase padding for better touch target */
+                font-size: 16px; /* Increase font size for readability */
             }
         }
 
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.5em; /* Adjust header size for smaller screens */
-            }
-
-            #message-input {
-                height: 35px; /* Adjust height for smaller screens */
-            }
-
-            button {
-                height: 35px; /* Adjust button height */
-            }
-
+        /* Media Queries for Small Devices (max-width: 380px) */
+        @media (max-width: 380px) {
             #messages {
-                padding: 10px; /* Further reduce padding */
+                padding: 5px; /* Further reduce padding for very small screens */
+                max-width: 100%; /* Ensure it takes full width */
+            }
+
+            /* Adjust the message input box */
+            #message-input {
+                width: calc(100% - 70px); /* Adjust width to allow space for button */
+                height: 45px; /* Slightly reduce height for better fit */
+                padding: 8px; /* Maintain padding */
+                font-size: 14px; /* Decrease font size for better fit */
+            }
+
+            /* Adjust button size */
+            button {
+                height: 45px; /* Maintain height */
+                width: 70px; /* Adjust width for better fit */
+                font-size: 14px; /* Decrease font size for better fit */
+            }
+
+            /* Increase message box size for better readability */
+            .message {
+                max-width: 95%; /* Allow messages to take more width */
+                margin: 8px 0; /* Reduce margin for spacing */
+            }
+
+            /* Adjust user image size */
+            .user-image {
+                width: 30px; /* Decrease image size for better fit */
+                height: 30px; /* Decrease image size for better fit */
+            }
+
+            /* Adjust message content for better readability */
+            .message-content {
+                padding: 8px; /* Decrease padding for better fit */
+                font-size: 14px; /* Decrease font size for better fit */
             }
         }
+    
     </style>
     
 </body>
