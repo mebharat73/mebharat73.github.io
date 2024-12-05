@@ -53,7 +53,11 @@
                   {% if request.user.is_authenticated %}
                       <li class="dropdown">
                           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            <img src="{{ request.user.profile.profile_picture.url }}" alt="Profile Picture" class="navbar-profile-pic">
+                              {% if request.user.profile.profile_picture %}
+                                  <img src="{{ request.user.profile.profile_picture.url }}" alt="Profile Picture" class="navbar-profile-pic">
+                              {% else %}
+                                  <img src="{% static 'main/image/6.jpg' %}" alt="Default Profile Picture" class="navbar-profile-pic">
+                              {% endif %}
                               {{ request.user.username }} <span class="caret"></span>
                           </a>
                           <ul class="dropdown-menu">

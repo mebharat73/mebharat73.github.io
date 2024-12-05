@@ -45,18 +45,12 @@ def upload_profile_picture(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            # Check if the profile picture is being changed
-            if profile.profile_picture and profile.profile_picture.name != 'default.jpg':
-                # Delete the old profile picture
-                profile.profile_picture.delete(save=False)
             form.save()
             return redirect('profile')  # Redirect to a profile view after upload
     else:
         form = ProfileForm(instance=profile)
 
     return render(request, 'main/upload_profile_picture.html', {'form': form})
-
-
 
 @login_required
 def view_profile(request):
