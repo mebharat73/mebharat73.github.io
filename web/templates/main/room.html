@@ -340,12 +340,12 @@
                 padding: 5px; /* Adjusted padding for better spacing */
                 flex: 1; /* Allow it to take available space */
                 max-width: 100%; /* Set a maximum width for the message box */
-                min-height: 20px; /* Minimum height for single-line messages */
+                min-height: 25px; /* Minimum height for single-line messages */
                 overflow-y: auto; /* Allow vertical scrolling if content exceeds max-height */
                 overflow-x: hidden; /* Hide horizontal overflow */
                 word-wrap: break-word; /* Allow words to break */
-                font-size: 1.2rem; /* Keep the font size the same */
-                line-height: 1.2; /* Adjust line-height for better spacing */
+                font-size: 1.3rem; /* Keep the font size the same */
+                line-height: 1.5; /* Adjust line-height for better spacing */
             }
         
             #message-form {
@@ -356,12 +356,24 @@
         
             #message-input {
                 width: calc(100% - 80px); /* Full width minus button width */
-                height: 50px; /* Increased height for better usability */
+                height: 60px; /* Increased height for better usability */
                 border-radius: 10px;
                 border: 2px solid #326aff;
                 margin-right: 10px; /* Space between input and button */
                 box-shadow: 0 0 5px rgba(0, 0.1, 0.2, 0.4);
-                font-size: 14px; /* Smaller font size */
+                font-size: 20px; /* Smaller font size */
+            }
+
+            /* Adjustments for user messages */
+            .user-message .message-content {
+                background-color: rgba(255, 0, 0, 0.1); /* Different background for user messages */
+                color: black; /* Text color for user messages */
+            }
+
+            /* Adjustments for other messages */
+            .other-message .message-content {
+                background-color: rgba(255, 0, 255, 0.1); /* Background color for others */
+                color: black; /* Text color for others */
             }
         
             button {
@@ -370,6 +382,7 @@
                 color: white;
                 border: none;
                 border-radius: 5px;
+                height: 55px;
                 cursor: pointer;
                 transition: background-color 0.3s, transform 0.2s; /* Added transform for button effect */
             }
