@@ -201,6 +201,9 @@
             margin-bottom: -10px; /* Space below the title */
             margin-top: -1px;
         }
+
+
+
         
         #messages {
             max-width: 700px;
@@ -309,26 +312,22 @@
 
        
 
-        @media (max-width: 400px) {
+        @media (max-width: 1080px) {
             html, body {
-                height: 80%; /* Ensure html and body take full height */
+                height: 100%; /* Ensure html and body take full height */
                 margin: 0; /* Remove default margin */
                 background-color: transparent; /* Background color */
             }
+
+
+
         
             #messages {
-                width: 100%; /* Full width for the messages container */
-                padding: 10px; /* Reduced padding for better fit */
-                background-color: rgba(255, 255, 255, 0.8); /* Lighter background for contrast */
-                border-radius: 8px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-                overflow-y: auto; /* Allow vertical scrolling */
-                height: calc(100vh - 200px); /* Adjust height to fit the screen */
-                min-height: 100px; /* Minimum height for the chat container */
-                margin: 10px; /* Margin around the container */
-                max-height: 200px; /* Set a maximum height to limit visible messages */
+                max-width: 100%; /* Full width for smaller screens */
+                padding: 10px; /* Reduced padding for smaller screens */
+                height: calc(100vh - 250px); /* Adjust height for smaller screens */
             }
-        
+                
             .message {
                 display: flex;
                 margin: 5px 0; /* Slightly increased margin */
