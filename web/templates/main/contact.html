@@ -8,13 +8,10 @@
 
 <body>
 
-
-    <!-- Page Header -->
-    <!-- Set your background image for this header on the line below. -->
     <header class="intro-header">
         <div class="slider-container">
             <div class="slides">
-                <img src="{% static 'main/image/6.jpg' %}" alt="Image 1">
+                <img src="{% static 'main/image/6.jpg' %}" alt="Image 1" class="active">
                 <img src="{% static 'main/image/11.jpg' %}" alt="Image 2">
                 <img src="{% static 'main/image/33.jpg' %}" alt="Image 3">
                 <img src="{% static 'main/image/7.jpg' %}" alt="Image 4">
@@ -32,14 +29,12 @@
             </div>
         </div>
     </header>
+    
     <!-- Main Content -->
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 move-up-section">
                 <p>Want to get in touch with us? Fill out the form below to send us a message and we will try to get back to you within 24 hours!</p>
-                <!-- Contact Form - Enter your email address on line 19 of the mail/contact_me.php file to make this form work. -->
-                <!-- WARNING: Some web hosts do not allow emails to be sent through forms to common mail hosts like Gmail or Yahoo. It's recommended that you use a private domain email address! -->
-                <!-- NOTE: To use the contact form, your site must be on a live web host with PHP! The form will not work locally! -->
                 <div class="row">
                     <div class="col-lg-9">
                         <form action="{% url 'contact_us' %}" method="post" class="move-up">
@@ -77,20 +72,6 @@
                             </div>
                         </form>
                     </div>
-            
-                    <!-- ... (rest of the code remains the same) -->
-
-                    <!-- Contact Form - Enter your email address on line 19 of the mail/contact_me.php file to make this form work. -->
-                    <!-- WARNING: Some web hosts do not allow emails to be sent through forms to common mail hosts like Gmail or Yahoo. It's recommended that you use a private domain email address! -->
-                    <!-- NOTE: To use the contact form, your site must be on a live web host with PHP! The form will not work locally! -->
-                    <div class="row">
-                        <div class="col-lg-9">
-                            <form action="{% url 'contact_us' %}" method="post">
-                                <!-- ... (rest of the form code remains the same) -->
-                            </form>
-                        </div>
-                        
-                    <!-- ... (rest of the code remains the same) -->
                 </div>
                 {% if success %}
                 <p>Thank you for contacting us, {{ name }}! We will get back to you soon.</p>
@@ -98,50 +79,18 @@
             </div>
         </div>
     </div>
-        <!-- Chat Icon -->
-        <a href="{% url 'index' %}">
-            <div class="chat-icon" id="chat-icon">
-                <i class="fa fa-comment" aria-hidden="true"></i>
-            </div>
-        </a>
-
-          
     
+    <!-- Chat Icon -->
+    <!-- Chat Icon -->
+    <a href="{% url 'index' %}" id="chat-link">
+        <canvas id="chatCanvas" width="75" height="75"></canvas>
+    </a>
+
+
+
+
+
     <style>
-        .custom-button {
-            background-color: #4CAF50; /* Green */
-            color: #ffffff; /* White text */
-            border-radius: 12px; /* Rounded corners */
-            cursor: pointer; /* Pointer cursor on hover */
-            padding: 2px 10px; /* Minimal padding */
-            border-width: 2px; /* Thinner border */
-            font-size: 14px; /* Same font size */
-          }
-          
-          .custom-button:hover {
-            background-color: #3e8e41; /* Darker green on hover */
-          }
-
-        
-
-        .chat-icon {
-            position: fixed;
-            bottom: 80px;
-            right: 25px;
-            background-color: #FF00FF;
-            color: #45ff14;
-            border-radius: 20%;
-            padding: 7px;
-            font-size: 35px;
-            cursor: pointer;
-        }
-    
-        .chat-icon:hover {
-            background-color: #e714ff;
-        }
-
-
-
         .intro-header {
             position: relative;
             height: 83vh; /* Adjust height as needed */
@@ -158,7 +107,6 @@
             border: 1px solid #e714ff; /* Border width, style, and color */
             border-radius: 6px; /* Rounded corners */
             box-shadow: 0 4px 15px rgba(0, 0, 0.2, 0.4); /* Optional shadow for depth */
-    
         }
         
         .slides {
@@ -185,43 +133,163 @@
             text-align: center; /* Center text */
             margin-top: 100px;
         }
-
+    
         .move-up {
             margin-top: -20px; /* Adjust this value to move the form upwards */
         }
-
+    
         .move-up-section {
             margin-top: -100px; /* Adjust this value to move the section upwards */
         }
     
+        /* Chat icon styles */
+        #chat-link {
+            position: fixed;
+            bottom: 10px;
+            right: -5px;
+            display: none; /* Initially hidden */
+            cursor: pointer; /* Change cursor to pointer on hover */
+            align-items: center;
+            justify-content: center;
+            animation: pulse 1.5s infinite; /* Add pulsing animation */
+        }
+    
+        #chatCanvas {
+            width: 80px;
+            height: 80px;
+        }
 
-        
+
+        .custom-button {
+            display: flex; /* Use flexbox for centering */
+            align-items: center; /* Center vertically */
+            justify-content: center; /* Center horizontally */
+            height: 25px; /* Set the height of the button */
+            width: 70px; /* Set the width of the button */
+            border: 2px solid #28a745; /* Set the border color and width */
+            border-radius: 12px; /* Optional: rounded corners */
+            background-color: #28a745; /* Background color */
+            color: white; /* Text color */
+            font-size: 14px; /* Font size */
+            transition: background-color 0.3s, border-color 0.3s; /* Smooth transition for hover effects */
+            cursor: pointer; /* Change cursor to pointer */
+        }
+    
+        .custom-button:hover {
+            background-color: white; /* Change background color on hover */
+            color: #28a745; /* Change text color on hover */
+            border-color: #28a745; /* Change border color on hover */
+        }
+    
+        .custom-button:focus {
+            outline: none; /* Remove outline on focus */
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.5); /* Optional: add shadow on focus */
+        }
+    
+        /* Pulsing animation */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .slider-container {
+                width: 90%; /* Increase width for smaller screens */
+                height: 70%; /* Decrease height for smaller screens */
+            }
+    
+            .site-heading {
+                margin-top: 50px; /* Adjust margin for smaller screens */
+                font-size: 1.5em; /* Adjust font size for smaller screens */
+            }
+    
+            #chatCanvas {
+                width: 60px; /* Smaller chat icon */
+                height: 60px; /* Smaller chat icon */
+            }
+        }
+    
+        @media (max-width: 480px) {
+            .slider-container {
+                width: 95%; /* Further increase width for very small screens */
+                height: 60%; /* Further decrease height for very small screens */
+            }
+    
+            .site-heading {
+                margin-top: 30px; /* Further adjust margin for very small screens */
+                font-size: 1.2em; /* Further adjust font size for very small screens */
+            }
+    
+            #chat-link {
+                bottom: 5px; /* Adjust position for smaller screens */
+                right: 5px; /* Adjust position for smaller screens */
+            }
+        }
     </style>
 
+   
+
+
+
     <script>
+        // Slideshow functionality
         let currentIndex = 0;
         const slides = document.querySelectorAll('.slides img');
-    
+
         // Define an array of time intervals for each slide in milliseconds
         const slideIntervals = [6000, 7000, 8000, 9000]; // Adjust these values as needed
-    
+
         function showNextSlide() {
             slides[currentIndex].classList.remove('active');
             currentIndex = (currentIndex + 1) % slides.length;
             slides[currentIndex].classList.add('active');
-    
+
             // Set the timeout for the next slide based on the current slide's interval
             setTimeout(showNextSlide, slideIntervals[currentIndex]);
         }
-    
+
+        // Show the chat icon after a certain time (e.g., 5 seconds)
+        setTimeout(function() {
+            const chatLink = document.getElementById('chat-link');
+            chatLink.style.display = 'flex'; // Show the link
+        }, 5000); // 5000 milliseconds = 5 seconds
+
         // Start the slideshow with the first interval
         setTimeout(showNextSlide, slideIntervals[currentIndex]);
+
+        // Chat icon drawing on canvas
+        const canvas = document.getElementById('chatCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function drawChatBubble() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+            
+            // Change the background color here
+            ctx.fillStyle = '#d524ff'; // Set the fill color for the bubble (green in this case)
+            ctx.beginPath();
+            ctx.arc(30, 30, 25, 0, Math.PI * 2, true); // Draw a circle
+            ctx.fill(); // Fill the circle
+            
+            ctx.fillStyle = 'white'; // Set the color for the text
+            ctx.font = '20px Arial'; // Set the font size and family
+            ctx.fillText('💬', 20, 35); // Add chat icon emoji
+        }
+        // Call the draw function immediately to draw the initial state
+        drawChatBubble();
+
+        // Optionally, you can set an interval to redraw every second for animation effect
+        setInterval(drawChatBubble, 1000); // Redraw every second for animation effect
     </script>
-
-
-
-
-</body>    
+</body>
+</html>
 {% endblock main_content %}
 
 
