@@ -154,6 +154,20 @@
             });
         }
 
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const messages = document.querySelectorAll('.message');
+            const maxMessages = 10;
+    
+            // Hide messages beyond the maxMessages limit
+            if (messages.length > maxMessages) {
+                for (let i = maxMessages; i < messages.length; i++) {
+                    messages[i].style.display = 'none'; // Hide excess messages
+                }
+            }
+        });
+
         const chatContainer = document.querySelector('.chat-container');
 
         chatContainer.addEventListener('scroll', function() {
@@ -173,7 +187,7 @@
         
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: transparent;
             padding: 0; /* Remove padding */
             background-image: url("{% static 'main/image/nature3.jpg' %}");
             background-size: cover;
@@ -192,9 +206,9 @@
             max-width: 700px;
             margin: 20px auto; /* Center the messages container */
             padding: 20px; /* Increased padding for better spacing */
-            background-color: rgba(255, 255, 255, 0.8); /* Lighter background for contrast */
+            background-color: transparent; /* Lighter background for contrast */
             border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 15px rgba(0, 0.1, 0.2, 0.4);
             overflow-y: auto; /* Allow vertical scrolling */
             height: calc(100vh - 180px); /* Adjust this value based on your header/footer height */
         }
@@ -293,130 +307,74 @@
             transform: scale(1.05); /* Slightly enlarge button on hover */
         }
 
-        @media (max-width: 768px) {
-            
+       
+
+        @media (max-width: 400px) {
             html, body {
-                height: 100%; /* Ensure html and body take full height */
+                height: 80%; /* Ensure html and body take full height */
                 margin: 0; /* Remove default margin */
+                background-color: transparent; /* Background color */
             }
-            
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f0f0f0;
-                padding: 0; /* Remove padding */
-                background-image: url("{% static 'main/image/nature3.jpg' %}");
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
-            }
-            
-            h1 {
-                text-align: center;
-                color: #ed0af8;
-                margin-bottom: -10px; /* Space below the title */
-                margin-top: -1px;
-            }
-            
+        
             #messages {
-                max-width: 700px;
-                margin: 20px auto; /* Center the messages container */
-                padding: 20px; /* Increased padding for better spacing */
+                width: 100%; /* Full width for the messages container */
+                padding: 10px; /* Reduced padding for better fit */
                 background-color: rgba(255, 255, 255, 0.8); /* Lighter background for contrast */
                 border-radius: 8px;
-                box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
                 overflow-y: auto; /* Allow vertical scrolling */
-                height: calc(100vh - 180px); /* Adjust this value based on your header/footer height */
+                height: calc(100vh - 200px); /* Adjust height to fit the screen */
+                min-height: 100px; /* Minimum height for the chat container */
+                margin: 10px; /* Margin around the container */
+                max-height: 200px; /* Set a maximum height to limit visible messages */
             }
-            
-            /* Hide scrollbars */
-            #messages::-webkit-scrollbar {
-                display: none; /* Hides the scrollbar for WebKit browsers */
-            }
-            
-            #messages {
-                scrollbar-width: none; /* Hides the scrollbar for Firefox */
-                -ms-overflow-style: none; /* Hides the scrollbar for IE and Edge */
-            }
-            
-            .user-message {
-                justify-content: flex-end;
-            }
-            
-            .other-message {
-                justify-content: flex-start;
-            }
-
-            /* Adjustments for user messages */
-            .user-message .message-content {
-                background-color: rgba(255, 0, 0, 0.1); /* Different background for user messages */
-                color: black; /* Text color for user messages */
-            }
-
-            /* Adjustments for other messages */
-            .other-message .message-content {
-                background-color: rgba(255, 0, 255, 0.1); /* Background color for others */
-                color: black; /* Text color for others */
-            }
-            
+        
             .message {
                 display: flex;
                 margin: 5px 0; /* Slightly increased margin */
                 align-items: center;
             }
-            
+        
             .message-content {
                 background-color: rgba(0, 0, 0, 0.1); /* Softer background color */
                 border-radius: 8px; /* Rounded corners */
                 padding: 5px; /* Adjusted padding for better spacing */
-                margin-left: 5px; /* Space between image and message */
                 flex: 1; /* Allow it to take available space */
-                max-width: 75%; /* Set a maximum width for the message box */
+                max-width: 100%; /* Set a maximum width for the message box */
                 min-height: 10px; /* Minimum height for single-line messages */
-                max-height: 120px; /* Increased maximum height for longer messages */
                 overflow-y: auto; /* Allow vertical scrolling if content exceeds max-height */
                 overflow-x: hidden; /* Hide horizontal overflow */
                 word-wrap: break-word; /* Allow words to break */
-                font-size: 0.9rem; /* Keep the font size the same */
-                line-height: 1.0; /* Adjust line-height for better spacing */
+                font-size: 1.0rem; /* Keep the font size the same */
+                line-height: 1.2; /* Adjust line-height for better spacing */
             }
-            
-            .user-image {
-                width: 30px; /* Slightly larger image */
-                height: 30px; /* Slightly larger image */
-                border-radius: 50%;
-                border: 2px solid #d42afd;
-            }
-            
+        
             #message-form {
                 display: flex;
                 justify-content: center;
-                margin-top: -2px;
+                margin-top: 10px; /* Adjust margin for better spacing */
             }
-            
+        
             #message-input {
-                width: 670px; /* Width for the input */
-                height: 25px; /* Increased height for better usability */
-                padding: -20px; /* Reduced padding */
+                width: calc(100% - 80px); /* Full width minus button width */
+                height: 40px; /* Increased height for better usability */
                 border-radius: 10px;
                 border: 2px solid #326aff;
                 margin-right: 10px; /* Space between input and button */
-                margin-top: -10px;
                 box-shadow: 0 0 5px rgba(0, 0.1, 0.2, 0.4);
-                font-size: 14px; /* Smaller font size */
+                font-size: 15px; /* Smaller font size */
             }
-            
+        
             button {
-                padding: 1px 10px; /* Increased padding for better clickability */
+                padding: 5px 10px; /* Increased padding for better clickability */
                 background-color: #007bff;
                 color: white;
                 border: none;
                 border-radius: 5px;
-                margin-top: -5px;
-                height: 25px;
                 cursor: pointer;
                 transition: background-color 0.3s, transform 0.2s; /* Added transform for button effect */
             }
-            
+        
             button:hover {
                 background-color: #0056b3;
                 transform: scale(1.05); /* Slightly enlarge button on hover */
