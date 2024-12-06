@@ -1,7 +1,6 @@
 from .models import Post, Comment
 from django import forms 
 from .models import Category
-from django_summernote.widgets import SummernoteWidget
 from .models import CommentReply
 from web.models import BlogImage  # Ensure this import is correct
 
@@ -24,21 +23,24 @@ class CategoryForm(forms.ModelForm):
 
 
 
+from django import forms
+from .models import Post  # Make sure to import your Post model
+
 class CreateBlogForm(forms.ModelForm):
-    content = forms.CharField(widget=SummernoteWidget(attrs={'height':400, 'width':700}))
+    # Replace SummernoteWidget with a standard Textarea widget
+    content = forms.CharField(widget=forms.Textarea(attrs={'rows': 10, 'cols': 70}))
+
     class Meta:
         model = Post
         fields = ['title', 'content', 'category']
                   
     def save(self, commit=True, **kwargs):
-        
         blog = super().save(commit=False)
         blog.author = kwargs.get('author')
         if commit:
             blog.save()
         return blog
     
-
 
 from django import forms
 from .models import Post, BlogImage
