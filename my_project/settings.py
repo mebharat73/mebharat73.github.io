@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 import dj_database_url
+from dotenv import load_dotenv
+from decouple import config
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -52,30 +56,27 @@ ASGI_APPLICATION = "my_project.asgi.application"
 # Note: Use a tuple with the host and port for the CHANNEL_LAYERS configuration
 # settings.py
 
-
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django_redis.cache.RedisCache',
-#         'LOCATION': 'rediss://red-csbjk3dds78s73b8pcrg:hN9mjW2HVaa3RTQh9KHwXffkWi2eLVRa@oregon-redis.render.com:6379/0',
-#         'OPTIONS': {
-#             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-#             'SOCKET_CONNECT_TIMEOUT': 5,
-#             'SOCKET_TIMEOUT': 5,
-#             'CONNECTION_POOL_KWARGS': {
-#                 'max_connections': 20,  # Maximum number of connections in the pool
-                
-#             },
-#         }
-#     }
-# }
-
-# settings.py
+REDIS_URL = config('REDIS_URL')
 
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
-    }
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [
+                (REDIS_URL, 6379)
+            ],
+        },
+    },
 }
+
+
+
+
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels.layers.InMemoryChannelLayer',
+#     }
+# }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -116,8 +117,6 @@ WSGI_APPLICATION = 'my_project.wsgi.application'
 
 
 
-import os
-from dotenv import load_dotenv
 
 load_dotenv()  # Load environment variables from .env file
 
@@ -181,7 +180,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-MEDIA_URL = '/media/'
+MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
