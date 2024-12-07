@@ -123,11 +123,14 @@ load_dotenv()  # Load environment variables from .env file
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bharatkarki73$bharatkarki',  # Replace with your actual database name
+        'NAME': 'bharatkarki73$bharatkarki',
         'USER': 'bharatkarki73',
-        'PASSWORD': '9841917694Bk#',  # Replace with your actual password
+        'PASSWORD': '9841917694Bk#',
         'HOST': 'bharatkarki73.mysql.pythonanywhere-services.com',
-        'PORT': '3306',  # Default MySQL port
+        'PORT': '',
+        'OPTIONS': {
+            'init_command': 'SET default_storage_engine=INNODB',
+        },
     }
 }
 
