@@ -119,19 +119,31 @@ WSGI_APPLICATION = 'my_project.wsgi.application'
 
 load_dotenv()  # Load environment variables from .env file
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'defaultdb',  # Your database name
-        'USER': 'avnadmin',    # Your username
-        'PASSWORD': 'AVNS_Y1ZzeMjHtdoe5p2VcL_',  # Load from environment variable
-        'HOST': 'bharatkarki-mebharat73-4e98.e.aivencloud.com',  # Your host
-        'PORT': '23616',  # Your port
-        'OPTIONS': {
-            'sslmode': 'require',  # Ensure SSL is used
-        },
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'bharatkarki73$bharatkarki',  # Replace with your actual database name
+        'USER': 'bharatkarki73',
+        'PASSWORD': '9841917694Bk#',  # Replace with your actual password
+        'HOST': 'bharatkarki73.mysql.pythonanywhere-services.com',
+        'PORT': '3306',  # Default MySQL port
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'defaultdb',  # Your database name
+#         'USER': 'avnadmin',    # Your username
+#         'PASSWORD': 'AVNS_Y1ZzeMjHtdoe5p2VcL_',  # Load from environment variable
+#         'HOST': 'bharatkarki-mebharat73-4e98.e.aivencloud.com',  # Your host
+#         'PORT': '23616',  # Your port
+#         'OPTIONS': {
+#             'sslmode': 'require',  # Ensure SSL is used
+#         },
+#     }
+# }
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
